@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 3 — CSS Layout + Responsive Design</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/slides.css" />
+</head>
+<body>
+<div class="deck">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">03</div>
+      <div>Web + React Bootcamp <small>Day 3 · Layout + Responsive</small></div>
+    </div>
+    <div class="top-meta">
+      <span>Press <span class="kbd">N</span> instructor notes</span>
+      <a href="index.html" style="color:inherit">All days</a>
+    </div>
+  </header>
+  <div class="progress"><span id="bar"></span></div>
+  <main class="viewport">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 3 · 2.5–3 hours</p>
+        <h1 class="display">Today we arrange the page — then make it survive a phone.</h1>
+        <p class="lede">Boxes are styled. Now they must sit in rows, columns, and breakpoints like a real landing page.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Learn</h3><p>Flexbox, Grid, alignment, media queries, mobile-first.</p></div>
+          <div class="card"><h3>Build</h3><p>A responsive café landing: nav, hero, features, cards, footer.</p></div>
+          <div class="card teal"><h3>Mindset</h3><p>Resize the window every few minutes. Layout is a conversation with width.</p></div>
+        </div>
+      </div>
+      <aside class="notes">Ask: “Who’s page is still one long column?” That’s expected. Normalize it. Today’s win is a navbar + card row that wraps.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 3 learning objectives</p>
+        <h2>By the end of today you can…</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <ol class="clean">
+              <li>Lay out a row with Flexbox (nav, buttons, cards)</li>
+              <li>Build a 2–3 column Grid for features</li>
+              <li>Control alignment and gap instead of magic margins</li>
+              <li>Write a mobile-first media query</li>
+              <li>Use DevTools to debug overflow and breakpoints</li>
+            </ol>
+          </div>
+          <div class="card navy">
+            <h3>You will leave with</h3>
+            <p>A responsive landing page skeleton + homework for a fictional business site (2 hours).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Why today matters</p>
+        <h2>Most users are not on your laptop width</h2>
+        <p class="lede">A café site that works on 1440px and clips on 375px loses the customer who wanted to order from a bus.</p>
+        <div class="flow mt">
+          <div class="node">Styled boxes</div><span class="arrow">→</span>
+          <div class="node">Layout</div><span class="arrow">→</span>
+          <div class="node">Breakpoints</div><span class="arrow">→</span>
+          <div class="node">Usable on phones</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Interactive question</p>
+        <div class="q">Why is responsive design important if “most of our classmates use laptops”?</div>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Guess 1</h3><p>“Phones are a later problem.”</p></div>
+          <div class="card"><h3>Guess 2</h3><p>“One width is enough if we zoom.”</p></div>
+          <div class="card"><h3>Guess 3</h3><p>“The web is a range of screens, not one canvas.”</p></div>
+        </div>
+      </div>
+      <aside class="notes">Share a stat if you like, but the story is enough: you browse on your phone tonight. So will their users.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Problem → solution</p>
+        <h2>Floats and absolute positioning do not scale</h2>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Problem</h3>
+            <p>Yesterday’s cards stack. Forcing them with <code>float</code> or <code>position</code> breaks wrapping, centering, and equal heights.</p>
+          </div>
+          <div class="card">
+            <h3>Solution</h3>
+            <p>Layout systems: Flexbox for one direction, Grid for two. Gap for spacing.</p>
+          </div>
+        </div>
+        <p class="callout mt">Technology: Flex + Grid. Result: navbars and card rows that can wrap.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Flexbox</p>
+        <h2>A container that arranges children in one direction</h2>
+        <p class="lede">What: a row or a column with alignment superpowers. Why: navbars, button groups, “logo left / links right”.</p>
+        <pre class="code mt"><span class="t">.nav</span> {
+  <span class="k">display</span>: <span class="s">flex</span>;
+  <span class="k">align-items</span>: <span class="s">center</span>;
+  <span class="k">justify-content</span>: <span class="s">space-between</span>;
+  <span class="k">gap</span>: <span class="s">16px</span>;
+}</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Flex direction</p>
+        <h2>Row is the default. Column is a stacked flex.</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Row</h3>
+            <pre class="code" style="margin-top:10px"><span class="k">flex-direction</span>: <span class="s">row</span>;</pre>
+            <p class="mt">Main axis = left to right. Navbar links.</p>
+          </div>
+          <div class="card">
+            <h3>Column</h3>
+            <pre class="code" style="margin-top:10px"><span class="k">flex-direction</span>: <span class="s">column</span>;</pre>
+            <p class="mt">Main axis = top to bottom. Mobile menu. Card body.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Alignment</p>
+        <h2>Main axis vs cross axis — say it out loud</h2>
+        <table class="compare mt">
+          <tr><th>Property</th><th>Controls</th><th>Common values</th></tr>
+          <tr><td><code>justify-content</code></td><td>Main axis</td><td>flex-start, center, space-between, space-around</td></tr>
+          <tr><td><code>align-items</code></td><td>Cross axis</td><td>stretch, center, flex-start, flex-end</td></tr>
+          <tr><td><code>align-self</code></td><td>One child</td><td>override stretch</td></tr>
+        </table>
+        <p class="q mt">If the nav is a row, which property pushes the logo left and the links right?</p>
+      </div>
+      <aside class="notes">Answer: justify-content: space-between. align-items: center vertically centers the logo with the links.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Spacing</p>
+        <h2>Prefer <code>gap</code> over margin on every child</h2>
+        <div class="grid grid-2 mt">
+          <div class="card amber"><h3>Old habit</h3><p>Each card has <code>margin-right: 16px</code>. The last card still has extra space. Wrapping looks uneven.</p></div>
+          <div class="card"><h3>Better</h3><pre class="code" style="margin-top:10px"><span class="t">.row</span> {
+  <span class="k">display</span>: <span class="s">flex</span>;
+  <span class="k">gap</span>: <span class="s">16px</span>;
+}</pre></div>
+        </div>
+        <p class="callout mt">Gap is spacing <em>between</em> items. Padding is still for air <em>inside</em> a card.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Flex wrap, grow, shrink</p>
+        <h2>Rows must be allowed to break</h2>
+        <pre class="code mt"><span class="t">.features</span> {
+  <span class="k">display</span>: <span class="s">flex</span>;
+  <span class="k">flex-wrap</span>: <span class="s">wrap</span>;
+  <span class="k">gap</span>: <span class="s">16px</span>;
+}
+<span class="t">.card</span> { <span class="k">flex</span>: <span class="s">1 1 240px</span>; } <span class="c">/* grow | shrink | basis */</span></pre>
+        <p class="lede mt">Read <code>1 1 240px</code> as: “try 240px, grow if there is room, shrink if not.”</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Real world · Flexbox</p>
+        <h2>Where you will use flex this week</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Navbar</h3><p>Logo + links + “Order” button on one row.</p></div>
+          <div class="card"><h3>Hero</h3><p>Text column beside a photo (until mobile stacks them).</p></div>
+          <div class="card"><h3>Card footer</h3><p>Price on the left, button on the right.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Instructor live coding</p>
+        <h2>Café navbar in 8 minutes</h2>
+        <ol class="clean mt">
+          <li>HTML: <code>header.nav</code> with logo, <code>nav</code> links, button</li>
+          <li><code>display: flex; align-items: center; justify-content: space-between</code></li>
+          <li>Inner links: nested flex + gap</li>
+          <li>Add padding and a bottom border</li>
+          <li>Shrink the window — notice overflow. We will fix it with wrap or a later breakpoint</li>
+        </ol>
+        <p class="callout mt">Type together. Do not jump to hamburger menus yet.</p>
+      </div>
+      <aside class="notes">Keep HTML semantic: header &gt; brand + nav. The flex is on the header.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Live coding target</p>
+        <pre class="code mt"><span class="t">.nav</span> {
+  <span class="k">display</span>: <span class="s">flex</span>;
+  <span class="k">align-items</span>: <span class="s">center</span>;
+  <span class="k">justify-content</span>: <span class="s">space-between</span>;
+  <span class="k">padding</span>: <span class="s">16px 24px</span>;
+  <span class="k">gap</span>: <span class="s">16px</span>;
+}
+<span class="t">.nav-links</span> {
+  <span class="k">display</span>: <span class="s">flex</span>;
+  <span class="k">gap</span>: <span class="s">20px</span>;
+  <span class="k">list-style</span>: <span class="s">none</span>;
+}</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #1 · 8 minutes</p>
+        <div class="practice">
+          <h2>Flex a mini header + tags</h2>
+          <ul class="clean">
+            <li>Put your name and a button on one row, space-between</li>
+            <li>Put skill tags in a wrapping flex row with gap</li>
+            <li>Center a 40px avatar next to a heading using <code>align-items: center</code></li>
+          </ul>
+          <p class="mt">What happens if you forget <code>flex-wrap</code> on a narrow window?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">CSS Grid</p>
+        <h2>A container that arranges children in two dimensions</h2>
+        <p class="lede">What: rows and columns at once. Why: feature sections, photo galleries, “equal height cards in a grid”.</p>
+        <pre class="code mt"><span class="t">.features</span> {
+  <span class="k">display</span>: <span class="s">grid</span>;
+  <span class="k">grid-template-columns</span>: <span class="s">1fr 1fr 1fr</span>;
+  <span class="k">gap</span>: <span class="s">16px</span>;
+}</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Grid tracks</p>
+        <h2><code>fr</code> is a share of leftover space</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <pre class="code"><span class="k">grid-template-columns</span>: <span class="s">repeat(3, 1fr)</span>;
+<span class="k">grid-template-columns</span>: <span class="s">200px 1fr</span>;
+<span class="k">grid-template-rows</span>: <span class="s">auto 1fr auto</span>;</pre>
+          </div>
+          <div class="card navy">
+            <h3>How</h3>
+            <p>Sidebar 200px, main takes the rest. Header / content / footer rows: auto, 1fr, auto.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Grid alignment</p>
+        <h2>The grid has its own justify and align</h2>
+        <table class="compare mt">
+          <tr><th>Property</th><th>Use</th></tr>
+          <tr><td><code>justify-items</code> / <code>align-items</code></td><td>How each cell’s content sits</td></tr>
+          <tr><td><code>justify-content</code> / <code>align-content</code></td><td>How the whole grid sits if tracks don’t fill the container</td></tr>
+          <tr><td><code>place-items: center</code></td><td>Shortcut for both axes — hero badges, empty states</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Flex vs Grid</p>
+        <h2>One direction vs two. Not a rivalry.</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <span class="tag">Flexbox</span>
+            <h3 class="mt">Content-driven row/column</h3>
+            <p>Nav, toolbars, aligning an icon with a label.</p>
+          </div>
+          <div class="card navy">
+            <span class="tag">Grid</span>
+            <h3 class="mt">Layout-driven areas</h3>
+            <p>Page regions, card matrices, overlapping hero art later.</p>
+          </div>
+        </div>
+        <p class="q mt">Would you build a 3-column “Our drinks” section with Flex or Grid first? Why?</p>
+      </div>
+      <aside class="notes">Either works. Prefer Grid for equal columns. Flex wrap + basis is the fallback they already know.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Common layout patterns</p>
+        <h2>Steal these shapes, not random CSS</h2>
+        <div class="grid grid-4 mt">
+          <div class="card"><h3>Nav bar</h3><p>Flex, space-between</p></div>
+          <div class="card"><h3>Hero split</h3><p>Grid 1fr 1fr → 1 col on small</p></div>
+          <div class="card"><h3>Card grid</h3><p>Repeat auto-fit minmax</p></div>
+          <div class="card"><h3>Footer</h3><p>Flex wrap or 4-col grid</p></div>
+        </div>
+        <pre class="code mt"><span class="k">grid-template-columns</span>: <span class="s">repeat(auto-fit, minmax(240px, 1fr))</span>;</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Responsive problem</p>
+        <h2>A 3-column grid on a 360px screen is cruelty</h2>
+        <p class="lede">Solution: change the number of columns when the viewport crosses a breakpoint. Technology: media queries.</p>
+        <div class="flow mt">
+          <div class="node">1 column</div><span class="arrow">→</span>
+          <div class="node">2 columns</div><span class="arrow">→</span>
+          <div class="node">3 columns</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Media queries</p>
+        <h2>CSS that only applies when a condition is true</h2>
+        <pre class="code mt"><span class="t">.features</span> {
+  <span class="k">display</span>: <span class="s">grid</span>;
+  <span class="k">grid-template-columns</span>: <span class="s">1fr</span>;
+  <span class="k">gap</span>: <span class="s">16px</span>;
+}
+<span class="k">@media</span> (min-width: <span class="s">768px</span>) {
+  <span class="t">.features</span> { <span class="k">grid-template-columns</span>: <span class="s">1fr 1fr 1fr</span>; }
+}</pre>
+        <p class="callout mt">Put the query after the base rule. Inside the query, only write what changes.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mobile-first</p>
+        <h2>Write the small layout as the default</h2>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Desktop-first</h3>
+            <p>Start with 3 columns, then <code>max-width</code> queries to smash them. Easy to forget a phone.</p>
+          </div>
+          <div class="card teal">
+            <h3>Mobile-first</h3>
+            <p>Start with 1 column. Enhance with <code>min-width</code>. The phone always works.</p>
+          </div>
+        </div>
+        <p class="mt muted">This course uses mobile-first. It matches how we will write Tailwind prefixes tomorrow.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Desktop vs mobile</p>
+        <h2>Same content. Different arrangement. Rarely a second website.</h2>
+        <table class="compare mt">
+          <tr><th></th><th>Mobile</th><th>Desktop</th></tr>
+          <tr><td>Nav</td><td>Stacked or simplified links</td><td>Horizontal</td></tr>
+          <tr><td>Hero</td><td>Image below headline</td><td>Side by side</td></tr>
+          <tr><td>Features</td><td>1 card per row</td><td>3 per row</td></tr>
+          <tr><td>Type</td><td>Slightly smaller headings</td><td>Display sizes</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Breakpoints we will use</p>
+        <h2>Pick a few. Do not invent 12.</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>~640px</h3><p>Large phones / small tablets. Optional.</p></div>
+          <div class="card teal"><h3>~768px</h3><p>Our main “now we can do 2–3 columns”.</p></div>
+          <div class="card"><h3>~1024px</h3><p>Comfortable desktop padding and max-width.</p></div>
+        </div>
+        <p class="callout mt">Also set <code>max-width</code> on the page (1100–1200px) and center it. Giant screens should not stretch text to 2000px.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">The viewport meta</p>
+        <h2>Without this tag, phones pretend they are 980px wide</h2>
+        <pre class="code mt">&lt;<span class="k">meta</span> <span class="t">name</span>=<span class="s">"viewport"</span>
+      <span class="t">content</span>=<span class="s">"width=device-width, initial-scale=1.0"</span>&gt;</pre>
+        <p class="lede mt">You already used this on Day 1. If a “responsive” page looks zoomed-out on a phone, this line is missing.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Developer tools</p>
+        <h2>Layout is debugged, not guessed</h2>
+        <ol class="clean mt" style="font-size:20px">
+          <li>Right-click → Inspect. Toggle device toolbar (phone icon).</li>
+          <li>Watch the width number as you drag.</li>
+          <li>Select a flex/grid container — Chrome draws the tracks.</li>
+          <li>Look for overflow: a child with a fixed width is usually the villain.</li>
+          <li>Uncheck properties live. If the bug vanishes, you found it.</li>
+        </ol>
+      </div>
+      <aside class="notes">Demo device mode on the live navbar. Show 375, 768, 1280. Show the overflow scrollbar as a “you failed this width” signal.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Instructor live coding</p>
+        <h2>Hero + feature grid that collapses</h2>
+        <ol class="clean mt">
+          <li>Hero: grid 1 column; at 768px, 1fr 1fr</li>
+          <li>Features: <code>repeat(auto-fit, minmax(220px, 1fr))</code> or a media query</li>
+          <li>Page wrapper: <code>max-width: 1100px; margin: 0 auto; padding: 0 20px</code></li>
+          <li>Device mode: 375, 768, 1200</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Live coding target</p>
+        <pre class="code mt"><span class="t">.hero</span> {
+  <span class="k">display</span>: <span class="s">grid</span>;
+  <span class="k">gap</span>: <span class="s">24px</span>;
+}
+<span class="k">@media</span> (min-width: <span class="s">768px</span>) {
+  <span class="t">.hero</span> { <span class="k">grid-template-columns</span>: <span class="s">1.1fr 0.9fr</span>; <span class="k">align-items</span>: <span class="s">center</span>; }
+}</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #2 · 10 minutes</p>
+        <div class="practice">
+          <h2>Media-query a card row</h2>
+          <ul class="clean">
+            <li>Three feature cards in a grid</li>
+            <li>Default: 1 column</li>
+            <li>From 768px: 3 columns</li>
+            <li>Add 16px gap and equal padding inside cards</li>
+          </ul>
+          <p class="mt">In DevTools, is the query firing at 768? Read the width. Do not guess.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #3 · 8 minutes</p>
+        <div class="practice">
+          <h2>Mobile-first hero</h2>
+          <ol class="clean">
+            <li>Headline, paragraph, button, then image — stacked</li>
+            <li>At 768px, text and image sit side by side</li>
+            <li>Image <code>max-width: 100%</code> so it never overflows</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #4 · 6 minutes</p>
+        <div class="practice">
+          <h2>Overflow hunt</h2>
+          <p>Intentionally set a child to <code>width: 500px</code> on a 375 preview. Find it in DevTools. Fix it with <code>max-width: 100%</code> or by removing the fixed width. Write one sentence: what was overflowing?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project</p>
+        <h2>Responsive café landing page</h2>
+        <p class="lede">Objective: a one-page layout that is usable at 375px and pleasant at 1200px.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Must include</h3>
+            <ul class="clean">
+              <li>Navbar (flex)</li>
+              <li>Hero (headline, text, CTA, image)</li>
+              <li>Features (3+ cards)</li>
+              <li>Menu or product cards</li>
+              <li>Footer with links</li>
+              <li>At least one media query</li>
+            </ul>
+          </div>
+          <div class="card navy">
+            <h3>Folder structure</h3>
+            <pre class="code" style="margin-top:10px">day-03-landing/
+  index.html
+  styles.css
+  images/
+    hero.jpg
+    drink-1.jpg</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project steps</p>
+        <ol class="clean" style="font-size:22px">
+          <li>Write semantic HTML for all sections first. No CSS.</li>
+          <li>Base styles: fonts, colors, card padding (Day 2 skills).</li>
+          <li>Flex the navbar. Grid the features. Wrapper max-width.</li>
+          <li>Add mobile-first queries. Test 375 / 768 / 1280.</li>
+          <li>Fix overflow. Then polish hover on buttons.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Expected result</p>
+        <h2>A landing page, not a long unstyled document</h2>
+        <div class="hero-panel">
+          <p class="small" style="opacity:.7">Fictional café is fine — “Harbor Bean” or similar.</p>
+          <h3 style="color:#fff;margin-top:8px">Nav → Hero → Features → Cards → Footer</h3>
+          <p class="mt">On a phone: one column. On a laptop: hero split + multi-column cards. No horizontal scrollbar.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment</p>
+        <h2>Fictional business landing page</h2>
+        <p><span class="tag">Beginner+</span> &nbsp; Estimated time: 2 hours &nbsp; Difficulty: ★★☆</p>
+        <p class="mt"><b>Objective:</b> Apply Flex, Grid, and mobile-first queries to a business that is not a copy of the in-class café if you can (bakery, gym, tutor, plant shop).</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Requirements</h3>
+            <ul class="clean">
+              <li>Navbar with 4 links + one button</li>
+              <li>Hero with heading, subtext, CTA</li>
+              <li>Features grid (min 3)</li>
+              <li>Product/service cards (min 3) with image, title, price or time</li>
+              <li>Footer with contact line</li>
+              <li>Works at 375px and 1280px</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Expected features</h3>
+            <ul class="clean">
+              <li>External CSS</li>
+              <li>Mobile-first media queries</li>
+              <li>Flex used at least once, Grid at least once</li>
+              <li>Consistent gap/padding scale</li>
+              <li>No horizontal overflow</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment extras</p>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Bonus</h3>
+            <ul class="clean">
+              <li>Sticky header (<code>position: sticky</code>)</li>
+              <li><code>auto-fit</code> + <code>minmax</code> instead of a second breakpoint</li>
+              <li>A simple hover lift on cards</li>
+            </ul>
+          </div>
+          <div class="card navy">
+            <h3>Submission</h3>
+            <p>Folder <code>day03-landing-yourname</code>. Bring it tomorrow — Day 4 rebuilds this page with Tailwind utilities.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Recap</p>
+        <h2>What we learned</h2>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Flexbox</h3><p>One-axis layout, alignment, wrap, gap.</p></div>
+          <div class="card"><h3>Grid</h3><p>Two-axis tracks with <code>fr</code> and repeat.</p></div>
+          <div class="card"><h3>Responsive</h3><p>Mobile-first + <code>min-width</code> queries.</p></div>
+          <div class="card"><h3>DevTools</h3><p>Device mode finds overflow before users do.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Common mistakes</p>
+        <ul class="clean" style="font-size:22px">
+          <li>Using Grid for a simple navbar (Flex is clearer).</li>
+          <li>Forgetting <code>flex-wrap</code> so items squash or overflow.</li>
+          <li>Desktop-first queries and a broken phone layout.</li>
+          <li>Missing viewport meta — “responsive CSS” never engages.</li>
+          <li>Fixed pixel widths on images and cards.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Key takeaways</p>
+        <ol class="clean" style="font-size:24px">
+          <li>Flex = one direction. Grid = rows and columns.</li>
+          <li>Gap beats random child margins.</li>
+          <li>Start from the small screen; enhance upward.</li>
+          <li>A few breakpoints beat a unique rule for every device.</li>
+          <li>Inspect, resize, fix overflow. That is professional layout work.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Quick quiz</p>
+        <div class="grid grid-2 mt">
+          <div class="q">1. Why is responsive design important?</div>
+          <div class="q">2. <code>justify-content</code> vs <code>align-items</code> on a row?</div>
+          <div class="q">3. When would you choose Grid over Flex?</div>
+          <div class="q">4. Why write mobile-first instead of max-width queries only?</div>
+        </div>
+        <p class="mt muted">Pairs, 3 minutes, then share.</p>
+      </div>
+      <aside class="notes">1) Many viewports / real users. 2) main vs cross axis. 3) 2D layout / equal columns. 4) base always works on phones; enhance rather than undo.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Questions & discussion</p>
+        <h2>What still feels fuzzy?</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Prompt</h3><p>Describe Flex vs Grid to a beginner in one sentence each.</p></div>
+          <div class="card"><h3>Prompt</h3><p>How would you test a page without a physical phone?</p></div>
+          <div class="card teal"><h3>Office minutes</h3><p>Stay after for overflow / query debugging.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Tomorrow · Day 4</p>
+        <h1 class="display">Tailwind: the same CSS ideas, much faster to type.</h1>
+        <p class="lede">Utility-first classes for spacing, color, flex, grid, and responsive prefixes. We rebuild today’s landing page.</p>
+        <div class="card teal mt">
+          <h3>Bring to class</h3>
+          <p>Your Day 3 landing HTML. We will restyle it without a long custom stylesheet.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div class="footerbar">
+    <span id="counter"></span>
+    <div class="nav-btns">
+      <button class="nav" id="prev">Back</button>
+      <button class="nav primary" id="next">Next</button>
+    </div>
+  </div>
+</div>
+<script src="assets/slides.js"></script>
+</body>
+</html>

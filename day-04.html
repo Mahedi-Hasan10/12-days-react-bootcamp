@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 4 — Tailwind CSS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/slides.css" />
+</head>
+<body>
+<div class="deck">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">04</div>
+      <div>Web + React Bootcamp <small>Day 4 · Tailwind CSS</small></div>
+    </div>
+    <div class="top-meta">
+      <span>Press <span class="kbd">N</span> instructor notes</span>
+      <a href="index.html" style="color:inherit">All days</a>
+    </div>
+  </header>
+  <div class="progress"><span id="bar"></span></div>
+  <main class="viewport">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 4 · 2.5–3 hours</p>
+        <h1 class="display">Today we style with utilities — same CSS, faster hands.</h1>
+        <p class="lede">You already know padding, flex, and breakpoints. Tailwind is a vocabulary for those properties in class names.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Learn</h3><p>Utility-first CSS, CDN setup, responsive prefixes, hover/focus.</p></div>
+          <div class="card"><h3>Build</h3><p>Rebuild the Day 3 landing page in Tailwind.</p></div>
+          <div class="card teal"><h3>Mindset</h3><p>If you can name the CSS property, you can almost guess the class.</p></div>
+        </div>
+      </div>
+      <aside class="notes">Reassure: this is not a new language. Map p-4 to padding. We use Play CDN for beginners; mention that production apps later use a build step.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 4 learning objectives</p>
+        <h2>By the end of today you can…</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <ol class="clean">
+              <li>Explain utility-first vs a custom stylesheet</li>
+              <li>Add Tailwind via CDN for class demos</li>
+              <li>Style type, color, spacing, flex, grid, borders, shadows</li>
+              <li>Use <code>sm:</code> / <code>md:</code> / <code>lg:</code> prefixes</li>
+              <li>Add hover and focus states without extra CSS files</li>
+            </ol>
+          </div>
+          <div class="card navy">
+            <h3>You will leave with</h3>
+            <p>A Tailwind version of the landing page + homework for a product/service page (2 hours).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Why today matters</p>
+        <h2>Teams ship UI faster when spacing is a shared scale</h2>
+        <p class="lede">Days 2–3 taught the ideas. Tailwind encodes those ideas so you do not invent <code>padding: 17px</code> on every card.</p>
+        <div class="flow mt">
+          <div class="node">CSS knowledge</div><span class="arrow">→</span>
+          <div class="node">Utilities</div><span class="arrow">→</span>
+          <div class="node">Faster UI</div><span class="arrow">→</span>
+          <div class="node">React later</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Interactive question</p>
+        <div class="q">What problem appears when a CSS file grows to 800 lines of <code>.hero-title-alt-2</code>?</div>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Guess 1</h3><p>“Names become meaningless.”</p></div>
+          <div class="card"><h3>Guess 2</h3><p>“You fear deleting unused rules.”</p></div>
+          <div class="card"><h3>Guess 3</h3><p>“Two buttons look almost the same but not quite.”</p></div>
+        </div>
+      </div>
+      <aside class="notes">All three are real. Tailwind’s bet: compose known utilities instead of inventing class names.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Problem → solution</p>
+        <h2>Maintaining large CSS files becomes difficult</h2>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Problem</h3>
+            <p>Custom class names drift. Dead CSS piles up. Two “cards” diverge by 4 pixels.</p>
+          </div>
+          <div class="card">
+            <h3>Solution</h3>
+            <p>Utility-first: small, reusable classes that map 1:1 to CSS properties.</p>
+          </div>
+        </div>
+        <p class="callout mt">Technology: Tailwind CSS. Result: faster, more consistent UI — if you already understand CSS.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What is it?</p>
+        <h2>Tailwind is a utility-first CSS framework</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>What</h3><p>A catalog of classes like <code>mt-4</code>, <code>flex</code>, <code>text-teal-700</code>.</p></div>
+          <div class="card"><h3>Why</h3><p>Style in HTML without inventing a new stylesheet per component.</p></div>
+          <div class="card teal"><h3>How</h3><p>Add the library, then compose classes on elements.</p></div>
+        </div>
+        <p class="mt muted">It does not replace CSS. It generates CSS for you from class names.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Utility-first</p>
+        <h2>One class, one job — then combine</h2>
+        <pre class="code mt">&lt;<span class="k">h1</span> <span class="t">class</span>=<span class="s">"text-3xl font-bold text-teal-800"</span>&gt;
+  Harbor Bean
+&lt;/<span class="k">h1</span>&gt;</pre>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>text-3xl</h3><p>font-size</p></div>
+          <div class="card"><h3>font-bold</h3><p>font-weight</p></div>
+          <div class="card"><h3>text-teal-800</h3><p>color</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Tailwind vs traditional CSS</p>
+        <table class="compare mt">
+          <tr><th></th><th>Traditional</th><th>Tailwind</th></tr>
+          <tr><td>Where styles live</td><td><code>styles.css</code></td><td>Mostly on the element</td></tr>
+          <tr><td>Naming</td><td>You invent <code>.heroBanner</code></td><td>You pick utilities</td></tr>
+          <tr><td>Consistency</td><td>Easy to drift</td><td>Shared spacing/color scale</td></tr>
+          <tr><td>Learning</td><td>You already did Days 2–3</td><td>Map properties → classes</td></tr>
+        </table>
+        <p class="callout mt">HTML looks busier. CSS files stay small. That is the tradeoff — not a moral victory.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Real world</p>
+        <h2>Startups and product teams use this daily</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Marketing pages</h3><p>Hero, pricing, FAQ — assembled from utilities.</p></div>
+          <div class="card"><h3>Dashboards</h3><p>Spacing scale keeps tables and cards aligned.</p></div>
+          <div class="card"><h3>React later</h3><p>Classes sit on components. We will reuse this on Days 8–11.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Setup for beginners</p>
+        <h2>Play CDN — good for class, not the final production story</h2>
+        <pre class="code mt">&lt;<span class="k">script</span> <span class="t">src</span>=<span class="s">"https://cdn.tailwindcss.com"</span>&gt;&lt;/<span class="k">script</span>&gt;</pre>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Why CDN today</h3>
+            <p>No Node install. Refresh and classes work. Matches a beginner laptop lab.</p>
+          </div>
+          <div class="card amber">
+            <h3>Honest caveat</h3>
+            <p>The Play CDN is for development. Real apps later use a Tailwind build so unused CSS is stripped. You will see that around React week.</p>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">Paste the script in head. Confirm network. If blocked, have a local fallback plan. Do not spend 40 minutes on npm today.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Instructor live coding</p>
+        <h2>Wire Tailwind on a blank café page</h2>
+        <ol class="clean mt">
+          <li>Copy Day 3 HTML structure (or a slim version)</li>
+          <li>Add the CDN script in <code>head</code></li>
+          <li>Give <code>body</code> classes: <code>bg-stone-100 text-slate-800</code></li>
+          <li>Style one heading. Refresh. Celebrate the first utility.</li>
+        </ol>
+        <p class="callout mt">If classes do nothing: script order, typos, or offline CDN.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Typography</p>
+        <h2>Size, weight, leading — still the same ideas</h2>
+        <pre class="code mt">&lt;<span class="k">h1</span> <span class="t">class</span>=<span class="s">"text-4xl font-bold tracking-tight"</span>&gt;Harbor Bean&lt;/<span class="k">h1</span>&gt;
+&lt;<span class="k">p</span> <span class="t">class</span>=<span class="s">"mt-3 text-lg leading-relaxed text-slate-600"</span>&gt;
+  Coffee, quiet tables, and wifi that actually works.
+&lt;/<span class="k">p</span>&gt;</pre>
+        <p class="mt muted">Scale: <code>text-sm</code> → <code>text-base</code> → <code>text-xl</code> → <code>text-4xl</code>. Do not jump to 9xl for a café name.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Colors</p>
+        <h2>Palette + shade number. Pick a lane.</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Background</h3><p><code>bg-teal-700</code> <code>bg-stone-50</code></p></div>
+          <div class="card"><h3>Text</h3><p><code>text-slate-900</code> <code>text-teal-800</code></p></div>
+          <div class="card"><h3>Border</h3><p><code>border-stone-200</code></p></div>
+        </div>
+        <p class="callout mt">Shades: 50 is light, 900 is dark. Buttons: darker bg + light text. Body: light bg + dark text.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Spacing</p>
+        <h2>The scale is the product</h2>
+        <pre class="code mt"><span class="c">&lt;!-- p = padding, m = margin, t/r/b/l/x/y --&gt;</span>
+&lt;<span class="k">section</span> <span class="t">class</span>=<span class="s">"px-6 py-16 max-w-5xl mx-auto"</span>&gt;
+  &lt;<span class="k">article</span> <span class="t">class</span>=<span class="s">"p-6 mb-4"</span>&gt;...&lt;/<span class="k">article</span>&gt;
+&lt;/<span class="k">section</span>&gt;</pre>
+        <div class="grid grid-4 mt">
+          <div class="card"><h3>2</h3><p>0.5rem / 8px</p></div>
+          <div class="card"><h3>4</h3><p>1rem / 16px</p></div>
+          <div class="card"><h3>6</h3><p>1.5rem / 24px</p></div>
+          <div class="card"><h3>8</h3><p>2rem / 32px</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Interactive question</p>
+        <div class="q">If <code>p-4</code> is padding on all sides, what do you think <code>px-4</code> and <code>mt-8</code> mean?</div>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>px-4</h3><p>Horizontal padding (left + right).</p></div>
+          <div class="card teal"><h3>mt-8</h3><p>Margin-top on the spacing scale’s 8.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Flexbox in Tailwind</p>
+        <h2>Same navbar. Classes instead of a CSS block.</h2>
+        <pre class="code mt">&lt;<span class="k">header</span> <span class="t">class</span>=<span class="s">"flex items-center justify-between gap-4 px-6 py-4"</span>&gt;
+  &lt;<span class="k">strong</span>&gt;Harbor Bean&lt;/<span class="k">strong</span>&gt;
+  &lt;<span class="k">nav</span> <span class="t">class</span>=<span class="s">"flex gap-5"</span>&gt;...&lt;/<span class="k">nav</span>&gt;
+&lt;/<span class="k">header</span>&gt;</pre>
+        <p class="mt">Map: <code>flex</code> → display:flex · <code>items-center</code> → align-items · <code>justify-between</code> → space-between · <code>gap-4</code> → gap.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Grid in Tailwind</p>
+        <h2>Columns as a class, not a template string you memorize twice</h2>
+        <pre class="code mt">&lt;<span class="k">div</span> <span class="t">class</span>=<span class="s">"grid grid-cols-1 md:grid-cols-3 gap-4"</span>&gt;
+  &lt;<span class="k">article</span> <span class="t">class</span>=<span class="s">"rounded-2xl border border-stone-200 bg-white p-6"</span>&gt;Espresso&lt;/<span class="k">article</span>&gt;
+  &lt;<span class="k">article</span> <span class="t">class</span>=<span class="s">"..."</span>&gt;Pour over&lt;/<span class="k">article</span>&gt;
+  &lt;<span class="k">article</span> <span class="t">class</span>=<span class="s">"..."</span>&gt;Cold brew&lt;/<span class="k">article</span>&gt;
+&lt;/<span class="k">div</span>&gt;</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Borders and radius</p>
+        <h2>Cards need an edge — then a soft corner</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <pre class="code">border
+border-stone-200
+rounded-xl
+rounded-full   <span class="c">/* avatars, pills */</span>
+border-2 border-teal-700</pre>
+          </div>
+          <div class="card navy">
+            <h3>Real world</h3>
+            <p>Menu card: thin stone border + <code>rounded-2xl</code>. Primary button: no border, solid teal fill.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Shadows</p>
+        <h2>Elevation says “this is clickable or floating”</h2>
+        <pre class="code mt">&lt;<span class="k">article</span> <span class="t">class</span>=<span class="s">"rounded-2xl bg-white p-6 shadow-sm"</span>&gt;
+  Latte
+&lt;/<span class="k">article</span>&gt;
+&lt;<span class="k">button</span> <span class="t">class</span>=<span class="s">"shadow-md"</span>&gt;Order&lt;/<span class="k">button</span>&gt;</pre>
+        <p class="callout mt">Use <code>shadow-sm</code> on cards. Huge shadows on every box look like a 2014 tutorial. Restraint is a skill.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Responsive prefixes</p>
+        <h2>Mobile-first, same as yesterday — now in the class list</h2>
+        <pre class="code mt">&lt;<span class="k">h1</span> <span class="t">class</span>=<span class="s">"text-3xl md:text-5xl"</span>&gt;Harbor Bean&lt;/<span class="k">h1</span>&gt;
+&lt;<span class="k">div</span> <span class="t">class</span>=<span class="s">"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"</span>&gt;</pre>
+        <table class="compare mt">
+          <tr><th>Prefix</th><th>Meaning (approx.)</th></tr>
+          <tr><td>(none)</td><td>All sizes — your mobile default</td></tr>
+          <tr><td><code>sm:</code></td><td>~640px and up</td></tr>
+          <tr><td><code>md:</code></td><td>~768px and up</td></tr>
+          <tr><td><code>lg:</code></td><td>~1024px and up</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">How prefixes work</p>
+        <h2>Unprefixed rules apply. Prefixed rules add from that width.</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Think</h3>
+            <p><code>grid-cols-1 md:grid-cols-3</code> equals yesterday’s 1-col default + a min-width 768 query.</p>
+          </div>
+          <div class="card amber">
+            <h3>Trap</h3>
+            <p>Do not start with <code>md:</code> only. Then phones get no layout classes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Hover and focus</p>
+        <h2>States are prefixes too</h2>
+        <pre class="code mt">&lt;<span class="k">a</span> <span class="t">class</span>=<span class="s">"rounded-lg bg-teal-700 px-4 py-2 text-white hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-500"</span>&gt;
+  Order now
+&lt;/<span class="k">a</span>&gt;</pre>
+        <p class="lede mt">Hover is for pointers. Focus is for keyboard users. Never skip focus on buttons and links.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Interactive question</p>
+        <div class="q">A button looks fine until you Tab to it and see no outline. What did the designer probably remove — and what should they add back?</div>
+        <p class="mt muted">Hint: <code>outline-none</code> is only OK if you replace it with a visible <code>focus:ring</code>.</p>
+      </div>
+      <aside class="notes">Many students copy “remove outline”. Make this a hard rule for the rest of the course.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Reusable patterns</p>
+        <h2>You will type these so often they become muscle memory</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Page shell</h3>
+            <p><code>max-w-5xl mx-auto px-6</code></p>
+          </div>
+          <div class="card">
+            <h3>Card</h3>
+            <p><code>rounded-2xl border bg-white p-6 shadow-sm</code></p>
+          </div>
+          <div class="card">
+            <h3>Primary button</h3>
+            <p><code>rounded-lg bg-teal-700 px-4 py-2 text-white hover:bg-teal-800</code></p>
+          </div>
+          <div class="card">
+            <h3>Muted text</h3>
+            <p><code>text-sm text-slate-600</code></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Pattern · Hero</p>
+        <h2>Split on medium screens, stack on phones</h2>
+        <pre class="code mt">&lt;<span class="k">section</span> <span class="t">class</span>=<span class="s">"grid items-center gap-8 md:grid-cols-2"</span>&gt;
+  &lt;<span class="k">div</span>&gt;
+    &lt;<span class="k">h1</span> <span class="t">class</span>=<span class="s">"text-4xl font-bold"</span>&gt;Slow coffee. Fast wifi.&lt;/<span class="k">h1</span>&gt;
+    &lt;<span class="k">a</span> <span class="t">class</span>=<span class="s">"mt-6 inline-block rounded-lg bg-teal-700 px-4 py-2 text-white"</span>&gt;See menu&lt;/<span class="k">a</span>&gt;
+  &lt;/<span class="k">div</span>&gt;
+  &lt;<span class="k">img</span> <span class="t">class</span>=<span class="s">"w-full rounded-2xl"</span> <span class="t">src</span>=<span class="s">"hero.jpg"</span> <span class="t">alt</span>=<span class="s">"Cafe interior"</span>&gt;
+&lt;/<span class="k">section</span>&gt;</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Instructor live coding</p>
+        <h2>Rebuild the landing pieces in utilities</h2>
+        <ol class="clean mt">
+          <li>Navbar: flex + padding + gap</li>
+          <li>Hero: grid + type + button hover</li>
+          <li>Features: <code>grid-cols-1 md:grid-cols-3</code></li>
+          <li>Cards: border, radius, shadow-sm, image <code>w-full</code></li>
+          <li>Footer: muted text, flex wrap</li>
+        </ol>
+        <p class="callout mt">Delete or ignore the old stylesheet. One source of styling today: classes.</p>
+      </div>
+      <aside class="notes">Keep semantic HTML. Do not turn everything into divs. Pause so they can copy class strings accurately.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Live coding target · card</p>
+        <pre class="code mt">&lt;<span class="k">article</span> <span class="t">class</span>=<span class="s">"overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-sm"</span>&gt;
+  &lt;<span class="k">img</span> <span class="t">class</span>=<span class="s">"h-40 w-full object-cover"</span> <span class="t">src</span>=<span class="s">"latte.jpg"</span> <span class="t">alt</span>=<span class="s">"Latte in a ceramic cup"</span>&gt;
+  &lt;<span class="k">div</span> <span class="t">class</span>=<span class="s">"p-5"</span>&gt;
+    &lt;<span class="k">h3</span> <span class="t">class</span>=<span class="s">"text-lg font-semibold"</span>&gt;Honey oat latte&lt;/<span class="k">h3</span>&gt;
+    &lt;<span class="k">p</span> <span class="t">class</span>=<span class="s">"mt-1 text-slate-600"</span>&gt;$4.50&lt;/<span class="k">p</span>&gt;
+  &lt;/<span class="k">div</span>&gt;
+&lt;/<span class="k">article</span>&gt;</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #1 · 8 minutes</p>
+        <div class="practice">
+          <h2>Utility a profile chip</h2>
+          <ul class="clean">
+            <li>Circle image: <code>h-16 w-16 rounded-full object-cover</code></li>
+            <li>Name <code>font-semibold</code>, role <code>text-sm text-slate-600</code></li>
+            <li>Row: <code>flex items-center gap-3</code></li>
+          </ul>
+          <p class="mt">Can you do it without opening a CSS file?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #2 · 10 minutes</p>
+        <div class="practice">
+          <h2>Responsive feature grid</h2>
+          <ol class="clean">
+            <li>Three feature cards with icon/emoji, title, one sentence</li>
+            <li>1 column by default, 3 from <code>md:</code></li>
+            <li>Hover: slightly darker border or <code>hover:shadow-md</code></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #3 · 8 minutes</p>
+        <div class="practice">
+          <h2>Accessible button</h2>
+          <p>Build a primary and a secondary button. Secondary is outline (<code>border border-teal-700 text-teal-800</code>). Both need <code>hover:</code> and <code>focus:ring</code>. Tab through them.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">When not to Tailwind everything</p>
+        <h2>Utilities are a default, not a religion</h2>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Still write CSS when</h3><p>A rare animation, a one-off blog article layout, or a design token you will reuse 40 times as a component later.</p></div>
+          <div class="card navy"><h3>Beginner rule this week</h3><p>Landing pages: utilities. If a class string repeats 5 times, you may extract a small custom class — or wait for React components.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project</p>
+        <h2>Rebuild the landing page in Tailwind</h2>
+        <p class="lede">Objective: same sections as Day 3, styled only with utilities (CDN allowed).</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Must include</h3>
+            <ul class="clean">
+              <li>Navbar with flex + gap</li>
+              <li>Hero with <code>md:grid-cols-2</code></li>
+              <li>Features grid</li>
+              <li>Product/drink cards with image + shadow</li>
+              <li>Footer</li>
+              <li>Hover on primary CTA + focus ring</li>
+            </ul>
+          </div>
+          <div class="card navy">
+            <h3>Folder structure</h3>
+            <pre class="code" style="margin-top:10px">day-04-tailwind-landing/
+  index.html
+  images/
+    hero.jpg
+    drink-1.jpg</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project steps</p>
+        <ol class="clean" style="font-size:22px">
+          <li>Start from Day 3 HTML. Add the Tailwind CDN.</li>
+          <li>Remove (or stop linking) the old CSS file.</li>
+          <li>Shell: max-width + horizontal padding.</li>
+          <li>Section by section: nav, hero, features, cards, footer.</li>
+          <li>Device mode: 375 and 1280. Fix stacks with prefixes.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Expected result</p>
+        <h2>Looks like Day 3 — or better — with no custom stylesheet</h2>
+        <div class="hero-panel">
+          <p class="small" style="opacity:.7">A visitor should not be able to tell you “switched frameworks”.</p>
+          <h3 style="color:#fff;margin-top:8px">Nav → Hero → Features → Cards → Footer, responsive</h3>
+          <p class="mt">Class lists will be long. That is normal. Keep HTML tags semantic.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment</p>
+        <h2>Product / service landing page in Tailwind</h2>
+        <p><span class="tag">Beginner+</span> &nbsp; Estimated time: 2 hours &nbsp; Difficulty: ★★☆</p>
+        <p class="mt"><b>Objective:</b> Design a one-page site for a product or service (headphones, tutoring, plant shop) using Tailwind utilities.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Requirements</h3>
+            <ul class="clean">
+              <li>CDN or documented setup in a comment at the top</li>
+              <li>Navbar + hero + 3 features + 3 product/service cards + footer</li>
+              <li>Mobile-first responsive prefixes</li>
+              <li>Consistent color (one accent + neutrals)</li>
+              <li>Primary and secondary button styles</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Expected features</h3>
+            <ul class="clean">
+              <li>Flex and Grid both used</li>
+              <li>Hover + focus states on CTAs</li>
+              <li>Images with <code>alt</code> and <code>object-cover</code></li>
+              <li>No horizontal overflow at 375px</li>
+              <li>No giant custom CSS file (utilities first)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment extras</p>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Bonus</h3>
+            <ul class="clean">
+              <li>A testimonial quote block</li>
+              <li>Sticky header <code>sticky top-0</code> with a translucent background</li>
+              <li>A simple FAQ using stacked cards</li>
+            </ul>
+          </div>
+          <div class="card navy">
+            <h3>Submission</h3>
+            <p>Folder <code>day04-tailwind-yourname</code>. Bring it to Day 5 — we add JavaScript behavior, not more CSS.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Recap</p>
+        <h2>What we learned</h2>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Utility-first</h3><p>Compose known CSS properties as classes.</p></div>
+          <div class="card"><h3>Scale</h3><p>Spacing and color numbers keep UI consistent.</p></div>
+          <div class="card"><h3>Layout</h3><p>flex, grid, gap — same as Day 3.</p></div>
+          <div class="card"><h3>Responsive + states</h3><p><code>md:</code>, <code>hover:</code>, <code>focus:</code></p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Common mistakes</p>
+        <ul class="clean" style="font-size:22px">
+          <li>Using Tailwind without understanding CSS — then guessing class names forever.</li>
+          <li>Only writing <code>md:</code> classes so mobile has no styles.</li>
+          <li>Removing focus outlines and not replacing them.</li>
+          <li>Fighting utilities by adding a huge extra CSS file on day one.</li>
+          <li>Typos: <code>justfiy-between</code> fails silently.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Key takeaways</p>
+        <ol class="clean" style="font-size:24px">
+          <li>Tailwind is CSS with a shared vocabulary, not magic.</li>
+          <li>Utility-first trades class-name invention for longer HTML.</li>
+          <li>Mobile-first prefixes match yesterday’s media queries.</li>
+          <li>Hover is nice; focus is required.</li>
+          <li>CDN is for learning. Production will use a build later.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Quick quiz</p>
+        <div class="grid grid-2 mt">
+          <div class="q">1. What problem does utility-first CSS try to solve?</div>
+          <div class="q">2. What does <code>md:grid-cols-3</code> do that <code>grid-cols-3</code> alone does not?</div>
+          <div class="q">3. Why keep <code>focus:ring</code> on buttons?</div>
+          <div class="q">4. Map <code>items-center</code> to a CSS property.</div>
+        </div>
+        <p class="mt muted">Pairs, 3 minutes, then share.</p>
+      </div>
+      <aside class="notes">1) Unmaintainable custom CSS / inconsistency. 2) Only from md breakpoint up. 3) Keyboard accessibility. 4) align-items: center.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Questions & discussion</p>
+        <h2>What still feels fuzzy?</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Prompt</h3><p>Would you still write a CSS file for a 3-page café site? Why?</p></div>
+          <div class="card"><h3>Prompt</h3><p>Translate <code>px-6 py-4 flex gap-3</code> into CSS.</p></div>
+          <div class="card teal"><h3>Office minutes</h3><p>Stay after if the CDN did not load.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Tomorrow · Day 5</p>
+        <h1 class="display">JavaScript: make the page do something.</h1>
+        <p class="lede">Variables, logic, and a small calculator. HTML and Tailwind stay. Behavior begins.</p>
+        <div class="card teal mt">
+          <h3>Bring to class</h3>
+          <p>Your Tailwind landing page. We will not restyle it — we will start thinking in values and events.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div class="footerbar">
+    <span id="counter"></span>
+    <div class="nav-btns">
+      <button class="nav" id="prev">Back</button>
+      <button class="nav primary" id="next">Next</button>
+    </div>
+  </div>
+</div>
+<script src="assets/slides.js"></script>
+</body>
+</html>

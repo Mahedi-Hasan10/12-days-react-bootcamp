@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 8 — React.js Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/slides.css" />
+</head>
+<body>
+<div class="deck">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">08</div>
+      <div>Web + React Bootcamp <small>Day 8 · React.js Fundamentals</small></div>
+    </div>
+    <div class="top-meta">
+      <span>Press <span class="kbd">N</span> instructor notes</span>
+      <a href="index.html" style="color:inherit">All days</a>
+    </div>
+  </header>
+  <div class="progress"><span id="bar"></span></div>
+  <main class="viewport">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 8 · 2.5–3 hours</p>
+        <h1 class="display">Stop assembling the UI by hand. Describe it.</h1>
+        <p class="lede">You can select nodes and rewrite innerHTML. Teams outgrow that. React lets you build UIs from components — functions that return markup.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Learn</h3><p>Why React, JSX, props, lists, composition.</p></div>
+          <div class="card"><h3>Build</h3><p>A profile / card app in Vite + React.</p></div>
+          <div class="card teal"><h3>Mindset</h3><p>UI is a function of data. Functional components only.</p></div>
+        </div>
+      </div>
+      <aside class="notes">Ask: “How would you update a shopping cart count with querySelector?” Collect pain. That is the door into React.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Where we are</p>
+        <h2>JavaScript week is over. App week starts.</h2>
+        <div class="flow mt">
+          <div class="node">JS logic</div><span class="arrow">→</span>
+          <div class="node">DOM</div><span class="arrow">→</span>
+          <div class="node">APIs</div><span class="arrow">→</span>
+          <div class="node">React UI</div><span class="arrow">→</span>
+          <div class="node">State (Day 9)</div><span class="arrow">→</span>
+          <div class="node">React + API</div>
+        </div>
+        <p class="callout mt">React is still JavaScript. You did not throw Day 5–7 away.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Why today matters</p>
+        <h2>Manual DOM does not scale</h2>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Problem</h3>
+            <p>Every feature means more querySelector, more innerHTML, more bugs when the list and the counter disagree.</p>
+          </div>
+          <div class="card teal">
+            <h3>Solution</h3>
+            <p>Describe the UI from data. Let a library update the DOM.</p>
+          </div>
+        </div>
+        <p class="lede mt">Technology: React. Result: reusable components, like LEGO blocks for screens.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 8 learning objectives</p>
+        <h2>By the end of today you can…</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <ol class="clean">
+              <li>Explain why React exists</li>
+              <li>Create a Vite React project</li>
+              <li>Write functional components with JSX and props</li>
+              <li>Compose components, render lists, and conditionals</li>
+            </ol>
+          </div>
+          <div class="card navy">
+            <h3>You will leave with</h3>
+            <p>A profile card app in class + a team directory homework (2–3 hours). useState is tomorrow.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Interactive question</p>
+        <div class="q">You have 20 product cards. A price changes. How many DOM updates do you write by hand?</div>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Pain</h3><p>Find each node. Hope you did not miss one.</p></div>
+          <div class="card"><h3>Wish</h3><p>“Re-draw from the products array.”</p></div>
+          <div class="card teal"><h3>React</h3><p>Change the data. Components re-render.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Problems with traditional DOM</p>
+        <h2>It works — until the UI has many moving parts</h2>
+        <ul class="clean" style="font-size:20px">
+          <li>Selectors break when HTML class names change.</li>
+          <li>innerHTML rebuilds too much or not enough.</li>
+          <li>Counter, list, and filters can fall out of sync.</li>
+          <li>Reuse means copy-paste, not a component.</li>
+        </ul>
+        <p class="callout mt">Your Todo was the right training. React is that render() idea, standardized.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What is it?</p>
+        <h2>React is a library for building user interfaces from components</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Why</h3><p>Complex UIs need reuse and a single data → UI story.</p></div>
+          <div class="card"><h3>How</h3><p>You write functions that return JSX. React updates the DOM.</p></div>
+          <div class="card teal"><h3>Real world</h3><p>Facebook created it. Used by countless dashboards, shops, and admin tools.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Architecture</p>
+        <h2>A tree of components, not a pile of scripts</h2>
+        <div class="flow mt">
+          <div class="node">App</div><span class="arrow">→</span>
+          <div class="node">Header</div>
+          <span class="arrow">→</span>
+          <div class="node">ProfileCard</div>
+          <span class="arrow">→</span>
+          <div class="node">SkillList</div>
+        </div>
+        <p class="lede mt">Parent passes data down as props. Children render. Tomorrow, state lives in a parent and flows down too.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mental model</p>
+        <h2>UI = f(data)</h2>
+        <div class="hero-panel">
+          <p class="small" style="opacity:.7">Same render idea as your Todo</p>
+          <h3 style="color:#fff;margin-top:8px">Data in → Component function → JSX out → Screen</h3>
+          <p class="mt">You do not sprinkle DOM patches. You describe the whole piece given the current props.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Components</p>
+        <h2>A component is a reusable piece of UI</h2>
+        <p class="lede">If you would copy-paste a card three times, it wants to be a component.</p>
+        <pre class="code mt"><span class="k">function</span> <span class="t">Hello</span>() {
+  <span class="k">return</span> &lt;h1&gt;Hello, React&lt;/h1&gt;;
+}</pre>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Name</h3><p>Capital letter. <code>ProfileCard</code>, not <code>profileCard</code> as a component.</p></div>
+          <div class="card"><h3>Return</h3><p>One root (or a fragment). Valid JSX.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Functional components</p>
+        <h2>This course uses functions, not class components</h2>
+        <table class="compare mt">
+          <tr><th>We use</th><th>We skip</th></tr>
+          <tr><td><code>function Card(props)</code></td><td><code>class Card extends React.Component</code></td></tr>
+          <tr><td>Hooks tomorrow (<code>useState</code>)</td><td>lifecycle methods as a first language</td></tr>
+        </table>
+        <p class="callout mt">Modern React jobs expect functional components. Learn that dialect.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">JSX</p>
+        <h2>HTML-looking syntax that is really JavaScript</h2>
+        <pre class="code mt"><span class="k">const</span> title = <span class="s">"Team"</span>;
+<span class="k">return</span> (
+  &lt;section className=<span class="s">"p-6"</span>&gt;
+    &lt;h2&gt;{title}&lt;/h2&gt;
+  &lt;/section&gt;
+);</pre>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>className</h3><p>Not <code>class</code> — class is a JS keyword.</p></div>
+          <div class="card"><h3>{"{ }"}</h3><p>JavaScript expressions inside JSX.</p></div>
+          <div class="card"><h3>close tags</h3><p><code>&lt;img /&gt;</code> must be closed.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">JSX is not a string</p>
+        <h2>You are not concatenating HTML anymore</h2>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Day 6</h3>
+            <pre class="code mt">list.innerHTML = tasks.map(...).join(<span class="s">""</span>);</pre>
+          </div>
+          <div class="card teal">
+            <h3>Day 8</h3>
+            <pre class="code mt">{tasks.map((t) =&gt; (
+  &lt;<span class="t">li</span> key={t.id}&gt;{t.text}&lt;/<span class="t">li</span>&gt;
+))}</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Props</p>
+        <h2>Inputs to a component — like function parameters</h2>
+        <pre class="code mt"><span class="k">function</span> <span class="t">ProfileCard</span>({ name, role }) {
+  <span class="k">return</span> (
+    &lt;article className=<span class="s">"rounded-2xl bg-white p-6 shadow"</span>&gt;
+      &lt;h3&gt;{name}&lt;/h3&gt;
+      &lt;p&gt;{role}&lt;/p&gt;
+    &lt;/article&gt;
+  );
+}
+
+&lt;<span class="t">ProfileCard</span> name=<span class="s">"Ada"</span> role=<span class="s">"Engineer"</span> /&gt;</pre>
+        <p class="muted mt">Parent decides the data. Child decides the look. Tailwind classes are welcome now.</p>
+      </div>
+      <aside class="notes">Destructure props in the parameter list. Show both props.name and { name }.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Why props</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>What</h3><p>Read-only data from parent to child.</p></div>
+          <div class="card"><h3>Why</h3><p>One ProfileCard, many people.</p></div>
+          <div class="card teal"><h3>How</h3><p>Attributes in JSX become the props object.</p></div>
+        </div>
+        <p class="callout mt">Do not mutate props. Tomorrow you will learn state for values that change.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Composition</p>
+        <h2>Build screens by nesting components</h2>
+        <pre class="code mt"><span class="k">function</span> <span class="t">App</span>() {
+  <span class="k">return</span> (
+    &lt;main className=<span class="s">"mx-auto max-w-5xl p-8"</span>&gt;
+      &lt;<span class="t">Header</span> title=<span class="s">"Our team"</span> /&gt;
+      &lt;<span class="t">ProfileCard</span> name=<span class="s">"Ada"</span> role=<span class="s">"Engineer"</span> /&gt;
+      &lt;<span class="t">ProfileCard</span> name=<span class="s">"Grace"</span> role=<span class="s">"Lead"</span> /&gt;
+    &lt;/main&gt;
+  );
+}</pre>
+        <p class="lede mt">Small components. App is the table of contents.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Rendering lists</p>
+        <h2>map in JSX — with a key</h2>
+        <pre class="code mt"><span class="k">const</span> members = [
+  { id: <span class="t">1</span>, name: <span class="s">"Ada"</span>, role: <span class="s">"Engineer"</span> },
+  { id: <span class="t">2</span>, name: <span class="s">"Grace"</span>, role: <span class="s">"Lead"</span> }
+];
+
+{members.map((m) =&gt; (
+  &lt;<span class="t">ProfileCard</span> key={m.id} name={m.name} role={m.role} /&gt;
+))}</pre>
+        <p class="callout mt"><code>key</code> must be stable and unique. Do not use array index if the list can reorder.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Conditional rendering</p>
+        <h2>Show UI only when it makes sense</h2>
+        <pre class="code mt"><span class="k">function</span> <span class="t">Badge</span>({ featured }) {
+  <span class="k">return</span> (
+    &lt;div&gt;
+      {featured ? (
+        &lt;span className=<span class="s">"text-teal-800"</span>&gt;Featured&lt;/span&gt;
+      ) : <span class="t">null</span>}
+      {featured &amp;&amp; &lt;span&gt;★&lt;/span&gt;}
+    &lt;/div&gt;
+  );
+}</pre>
+        <p class="small muted mt">Ternary when you have two branches. <code>&amp;&amp;</code> when you show or nothing. Avoid <code>0 &amp;&amp; ...</code> surprises with counts — use a boolean.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">How React gets on the page</p>
+        <h2>One HTML node. React owns the tree inside it.</h2>
+        <pre class="code mt"><span class="c">// index.html</span>
+&lt;div id=<span class="s">"root"</span>&gt;&lt;/div&gt;
+
+<span class="c">// src/main.jsx</span>
+<span class="k">import</span> { createRoot } <span class="k">from</span> <span class="s">"react-dom/client"</span>;
+<span class="k">import</span> <span class="t">App</span> <span class="k">from</span> <span class="s">"./App.jsx"</span>;
+
+createRoot(document.getElementById(<span class="s">"root"</span>)).render(&lt;<span class="t">App</span> /&gt;);</pre>
+        <p class="muted mt">You still have HTML — but only as a mount point. The UI lives in components.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Creating a React project</p>
+        <h2>Vite is the fast modern starter</h2>
+        <pre class="code mt">npm create vite@latest team-profiles -- --template react
+cd team-profiles
+npm install
+npm run dev</pre>
+        <p class="lede mt">Vite serves your app locally with hot reload. You edit a component; the browser updates.</p>
+      </div>
+      <aside class="notes">Install Node before class if possible. Walk the first student through the terminal. Open the localhost URL together.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Project structure</p>
+        <h2>Know the folders before you invent new ones</h2>
+        <pre class="code mt">team-profiles/
+  index.html          <span class="c">// mounts the app</span>
+  src/
+    main.jsx          <span class="c">// ReactDOM.createRoot</span>
+    App.jsx           <span class="c">// your tree</span>
+    App.css
+    components/       <span class="c">// you create this</span>
+      ProfileCard.jsx
+  package.json</pre>
+        <p class="callout mt">Do not dump ten components in <code>main.jsx</code>. App composes. components/ holds pieces.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Live coding · 12 minutes</p>
+        <h2>From Vite hello-world to a card</h2>
+        <ol class="clean" style="font-size:20px">
+          <li>Create the project. Run <code>npm run dev</code>.</li>
+          <li>Clear demo CSS noise enough to think.</li>
+          <li>Create <code>ProfileCard.jsx</code> with name, role, image URL props.</li>
+          <li>Import it in <code>App.jsx</code> and render two cards.</li>
+          <li>Add Tailwind-like utility classes if the project has Tailwind — or simple CSS modules / App.css.</li>
+        </ol>
+        <p class="muted mt">If Tailwind is not in this Vite template, use App.css. After Day 4, students may add Tailwind to Vite later.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Live coding · JSX rules</p>
+        <h2>The errors you will hit in the first hour</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Must wrap</h3>
+            <pre class="code mt"><span class="c">// return &lt;h1/&gt;&lt;p/&gt;  // error</span>
+<span class="k">return</span> (
+  &lt;&gt;
+    &lt;h1&gt;Team&lt;/h1&gt;
+    &lt;p&gt;Hello&lt;/p&gt;
+  &lt;/&gt;
+);</pre>
+          </div>
+          <div class="card">
+            <h3>self-close</h3>
+            <pre class="code mt">&lt;img src={url} alt={name} /&gt;
+&lt;<span class="t">ProfileCard</span> name=<span class="s">"Ada"</span> /&gt;</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">children</p>
+        <h2>Composition can pass markup, not only strings</h2>
+        <pre class="code mt"><span class="k">function</span> <span class="t">Card</span>({ children }) {
+  <span class="k">return</span> (
+    &lt;article className=<span class="s">"rounded-2xl bg-white p-6 shadow"</span>&gt;
+      {children}
+    &lt;/article&gt;
+  );
+}
+
+&lt;<span class="t">Card</span>&gt;
+  &lt;h3&gt;Ada&lt;/h3&gt;
+  &lt;p&gt;Engineer&lt;/p&gt;
+&lt;/<span class="t">Card</span>&gt;</pre>
+        <p class="callout mt">Layout shells (Page, Card, Header) often wrap children. Profile data still arrives as named props.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Practice 1 · 6 minutes</p>
+        <div class="practice">
+          <h3>HelloName</h3>
+          <p>A component that takes <code>name</code> and returns <code>&lt;p&gt;Hello, {name}&lt;/p&gt;</code>. Render three of them in App with different names.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Practice 2 · 8 minutes</p>
+        <div class="practice">
+          <h3>SkillList</h3>
+          <p>Props: <code>skills</code> (array of strings). Map to <code>&lt;li&gt;</code>. Use a key. Nest SkillList inside ProfileCard.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Practice 3 · 7 minutes</p>
+        <div class="practice">
+          <h3>Conditional badge</h3>
+          <p>If <code>available === true</code>, show a green “Open to work” pill. Otherwise show nothing (or “Busy”).</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Practice 4 · discuss</p>
+        <div class="q">Should the array of members live in ProfileCard or in App? Why?</div>
+        <p class="mt muted">Think: who owns the list? Who is just a view of one person?</p>
+      </div>
+      <aside class="notes">App (or a data file) owns the list. ProfileCard is presentational. This prepares Day 9 state lifting.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project</p>
+        <h2>React Profile / Card app</h2>
+        <p class="lede">Objective: a small React app that shows at least three profile cards from a members array, using real components and props — not one giant App.jsx of copied HTML.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Requirements</h3>
+            <ul class="clean">
+              <li>Vite React app</li>
+              <li>Functional components only</li>
+              <li>ProfileCard with props: name, role, photo, bio</li>
+              <li>List rendered with map + key</li>
+              <li>At least one nested component (e.g. SkillList)</li>
+            </ul>
+          </div>
+          <div class="card teal">
+            <h3>UI features</h3>
+            <p>Card layout, image, name, role, short bio. Tailwind utilities if available: <code>rounded-2xl</code>, <code>shadow</code>, <code>grid</code>, <code>gap-6</code>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project · steps</p>
+        <ol class="clean" style="font-size:22px">
+          <li>Scaffold with Vite. Confirm the page loads.</li>
+          <li>Add <code>src/data/members.js</code> exporting an array.</li>
+          <li>Build <code>ProfileCard</code> and optional <code>Header</code>.</li>
+          <li>Map members in <code>App</code>.</li>
+          <li>Add a featured flag and conditional badge.</li>
+          <li>Tidy layout with CSS or Tailwind.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project · files</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Suggested folders</h3>
+            <pre class="code" style="margin-top:10px">src/
+  App.jsx
+  main.jsx
+  data/members.js
+  components/
+    Header.jsx
+    ProfileCard.jsx
+    SkillList.jsx</pre>
+          </div>
+          <div class="hero-panel" style="margin-top:0">
+            <p class="small" style="opacity:.7">Expected result</p>
+            <h3 style="color:#fff;margin-top:8px">A responsive grid of people cards</h3>
+            <p class="mt">Changing one object in members.js updates that card. No querySelector.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment</p>
+        <h2>Team / Member Profile app</h2>
+        <p><span class="tag">Intermediate</span> &nbsp; Estimated time: 2–3 hours &nbsp; Difficulty: ★★★</p>
+        <p class="mt"><b>Objective:</b> A React directory for a team you invent (startup, club, film crew) — new data, not the in-class array.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Requirements</h3>
+            <ul class="clean">
+              <li>At least 6 members in a JS data file</li>
+              <li>Reusable ProfileCard + at least 2 other components</li>
+              <li>Props for all varying content</li>
+              <li>map + unique keys</li>
+              <li>Conditional UI (featured, available, or department)</li>
+              <li>Functional components only</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Expected features</h3>
+            <ul class="clean">
+              <li>Page header and short intro</li>
+              <li>Skills or social links as a nested list</li>
+              <li>Clean layout (Tailwind or CSS)</li>
+              <li>No class components, no Redux, no useState required yet</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment extras</p>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Bonus challenge</h3>
+            <ul class="clean">
+              <li>Filter chips by department (still can be static sections today)</li>
+              <li>A Footer component</li>
+              <li>Extract a <code>Badge</code> component</li>
+            </ul>
+          </div>
+          <div class="card navy">
+            <h3>Submission</h3>
+            <p>Project folder <code>day08-team-yourname</code>. Run <code>npm run dev</code> in class on Day 9. Do not commit <code>node_modules</code>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Recap</p>
+        <h2>What we learned</h2>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Why React</h3><p>Describe UI from data; stop fragile DOM patches.</p></div>
+          <div class="card"><h3>Components</h3><p>Functions that return JSX.</p></div>
+          <div class="card"><h3>Props</h3><p>Parent-to-child configuration.</p></div>
+          <div class="card"><h3>Lists</h3><p>map, keys, conditionals, composition, Vite structure.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Common mistakes</p>
+        <ul class="clean" style="font-size:22px">
+          <li>Lowercase component names — React treats them as HTML tags.</li>
+          <li>Missing <code>key</code> on lists (or using index carelessly).</li>
+          <li><code>class</code> instead of <code>className</code>.</li>
+          <li>Returning two sibling elements without a wrapper.</li>
+          <li>Trying to use <code>document.querySelector</code> inside React as the main strategy.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Key takeaways</p>
+        <ol class="clean" style="font-size:24px">
+          <li>React exists because manual DOM does not scale.</li>
+          <li>A component is a function returning JSX.</li>
+          <li>Props are inputs. Do not mutate them.</li>
+          <li>Lists need map and stable keys.</li>
+          <li>Vite is how we start a real React project.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Quick quiz</p>
+        <div class="grid grid-2 mt">
+          <div class="q">1. Why was React created if we already have the DOM API?</div>
+          <div class="q">2. What is JSX?</div>
+          <div class="q">3. What are props?</div>
+          <div class="q">4. Why do list items need a key?</div>
+        </div>
+        <p class="mt muted">Discuss in pairs for 3 minutes, then share.</p>
+      </div>
+      <aside class="notes">1) Reusable UI from data, fewer sync bugs. 2) JS syntax for describing UI. 3) Data from parent. 4) React identity when the list updates.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Questions & discussion</p>
+        <h2>What still feels fuzzy?</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Prompt</h3><p>Compare Todo <code>render()</code> with a React component.</p></div>
+          <div class="card"><h3>Prompt</h3><p>Where should the members array live?</p></div>
+          <div class="card teal"><h3>Office minutes</h3><p>Vite / Node install issues — stay after class.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Tomorrow · Day 9</p>
+        <h1 class="display">useState: data that changes over time.</h1>
+        <p class="lede">Props are inputs from parents. State is memory inside a component: clicks, forms, and a React Todo. Bring today’s profile app.</p>
+        <div class="card teal mt">
+          <h3>Preview</h3>
+          <p><code>const [count, setCount] = useState(0)</code> — the missing piece from today’s static cards.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div class="footerbar">
+    <span id="counter"></span>
+    <div class="nav-btns">
+      <button class="nav" id="prev">Back</button>
+      <button class="nav primary" id="next">Next</button>
+    </div>
+  </div>
+</div>
+<script src="assets/slides.js"></script>
+</body>
+</html>

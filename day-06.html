@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 6 — JavaScript DOM + Modern JS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/slides.css" />
+</head>
+<body>
+<div class="deck">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">06</div>
+      <div>Web + React Bootcamp <small>Day 6 · DOM + Modern JavaScript</small></div>
+    </div>
+    <div class="top-meta">
+      <span>Press <span class="kbd">N</span> instructor notes</span>
+      <a href="index.html" style="color:inherit">All days</a>
+    </div>
+  </header>
+  <div class="progress"><span id="bar"></span></div>
+  <main class="viewport">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 6 · 2.5–3 hours</p>
+        <h1 class="display">Yesterday the Console. Today the page.</h1>
+        <p class="lede">You already know variables and functions. Now JavaScript will find buttons, read inputs, and update the UI.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Learn</h3><p>DOM, events, modern array tools, arrows, spread.</p></div>
+          <div class="card"><h3>Build</h3><p>A Todo list in HTML, CSS, and JS.</p></div>
+          <div class="card teal"><h3>Mindset</h3><p>Every click is a conversation between the user and your code.</p></div>
+        </div>
+      </div>
+      <aside class="notes">Warm-up: open yesterday’s calculator. Ask “how would a user run this without opening Console?” That pain is today’s lesson.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Why today matters</p>
+        <h2>Logic in a file is invisible</h2>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Problem</h3>
+            <p>Users do not open DevTools. They click, type, and expect the page to change.</p>
+          </div>
+          <div class="card teal">
+            <h3>Solution</h3>
+            <p>Treat the page as a tree of objects you can select, update, and listen to.</p>
+          </div>
+        </div>
+        <p class="lede mt">Technology: the DOM + event listeners. Result: Todo apps, forms, counters — and later, React.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 6 learning objectives</p>
+        <h2>By the end of today you can…</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <ol class="clean">
+              <li>Explain what the DOM is in plain language</li>
+              <li>Select elements and change text, HTML, and styles</li>
+              <li>Handle click, input, and form submit</li>
+              <li>Use map, filter, find, forEach, destructuring, spread, arrows, template literals</li>
+            </ol>
+          </div>
+          <div class="card navy">
+            <h3>You will leave with</h3>
+            <p>An in-class Todo + homework: add, delete, complete, and a task counter (1.5–2.5 hours).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Interactive question</p>
+        <div class="q">When you click “Add to cart”, what actually changes on the page?</div>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Guess</h3><p>“The HTML file on disk is rewritten.”</p></div>
+          <div class="card"><h3>Guess</h3><p>“A new website is downloaded.”</p></div>
+          <div class="card teal"><h3>Reality</h3><p>JavaScript updates the live document in memory — the DOM.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What is it?</p>
+        <h2>The DOM is the live tree of your page</h2>
+        <p class="lede">DOM means Document Object Model. The browser turns HTML into objects you can read and change with JavaScript.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Why</h3><p>Without a model of the page, JS cannot find the button you clicked.</p></div>
+          <div class="card"><h3>How</h3><p>HTML → parse → tree of nodes → your script walks the tree.</p></div>
+          <div class="card teal"><h3>Real world</h3><p>Changing a like count without refreshing Instagram.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Picture the tree</p>
+        <h2>HTML is nested. The DOM is nested.</h2>
+        <div class="flow mt">
+          <div class="node">document</div><span class="arrow">→</span>
+          <div class="node">html</div><span class="arrow">→</span>
+          <div class="node">body</div><span class="arrow">→</span>
+          <div class="node">form</div><span class="arrow">→</span>
+          <div class="node">input / button</div>
+        </div>
+        <p class="callout mt">You never edit the .html file at click time. You edit the tree the browser already built.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Selecting elements</p>
+        <h2>Find the node before you change it</h2>
+        <pre class="code mt"><span class="k">const</span> title = document.querySelector(<span class="s">"#title"</span>);
+<span class="k">const</span> items = document.querySelectorAll(<span class="s">".task"</span>);
+<span class="k">const</span> input = document.getElementById(<span class="s">"task-input"</span>);</pre>
+        <table class="compare mt">
+          <tr><th>Tool</th><th>Returns</th><th>Use when</th></tr>
+          <tr><td><code>querySelector</code></td><td>First match</td><td>One button, one title</td></tr>
+          <tr><td><code>querySelectorAll</code></td><td>List of matches</td><td>Every task row</td></tr>
+          <tr><td><code>getElementById</code></td><td>One id</td><td>Fast, unique ids</td></tr>
+        </table>
+      </div>
+      <aside class="notes">Ids must be unique. Prefer querySelector with #id and .class — same mental model as CSS.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Changing content</p>
+        <h2>The page is not frozen</h2>
+        <pre class="code mt">title.textContent = <span class="s">"My Todos"</span>;
+title.innerHTML = <span class="s">"My &lt;em&gt;Todos&lt;/em&gt;"</span>;
+input.value = <span class="s">""</span>; <span class="c">// clear the field</span></pre>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>textContent</h3><p>Safe for user text. No HTML parsing.</p></div>
+          <div class="card amber"><h3>innerHTML</h3><p>Parses tags. Do not dump untrusted user input here.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Changing styles</p>
+        <h2>Classes beat inline spaghetti</h2>
+        <pre class="code mt">item.classList.add(<span class="s">"done"</span>);
+item.classList.remove(<span class="s">"done"</span>);
+item.classList.toggle(<span class="s">"done"</span>);
+<span class="c">// last resort:</span>
+item.style.color = <span class="s">"green"</span>;</pre>
+        <p class="callout mt">Put look in CSS. Use JS to turn classes on and off. That is how a completed todo gets a strike-through.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Live coding · 8 minutes</p>
+        <h2>Select, rewrite, restyle</h2>
+        <div class="grid grid-2 mt">
+          <pre class="code">&lt;h1 id=<span class="s">"title"</span>&gt;Hello&lt;/h1&gt;
+&lt;p class=<span class="s">"status"</span>&gt;Ready&lt;/p&gt;
+&lt;button id=<span class="s">"go"</span>&gt;Go&lt;/button&gt;</pre>
+          <pre class="code"><span class="k">const</span> title = document.querySelector(<span class="s">"#title"</span>);
+title.textContent = <span class="s">"Welcome, builder"</span>;
+document.querySelector(<span class="s">".status"</span>)
+  .classList.add(<span class="s">"ok"</span>);</pre>
+        </div>
+        <p class="practice mt"><b>Do together:</b> Change the heading. Add a CSS class that turns the status green.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Events</p>
+        <h2>The browser tells you when something happens</h2>
+        <p class="lede">An event is a signal: click, input, submit, keydown. Your job is to listen and respond.</p>
+        <div class="flow mt">
+          <div class="node">User action</div><span class="arrow">→</span>
+          <div class="node">Event</div><span class="arrow">→</span>
+          <div class="node">Listener</div><span class="arrow">→</span>
+          <div class="node">Your function</div><span class="arrow">→</span>
+          <div class="node">DOM update</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Event listeners</p>
+        <h2>addEventListener is the standard tool</h2>
+        <pre class="code mt"><span class="k">const</span> btn = document.querySelector(<span class="s">"#go"</span>);
+
+btn.addEventListener(<span class="s">"click"</span>, <span class="k">function</span> () {
+  console.log(<span class="s">"clicked"</span>);
+});</pre>
+        <p class="callout mt">Do not put JS in HTML <code>onclick="..."</code> for this course. Keep behavior in the script file.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Click events</p>
+        <h2>The simplest interactive app</h2>
+        <pre class="code mt"><span class="k">let</span> count = <span class="t">0</span>;
+<span class="k">const</span> label = document.querySelector(<span class="s">"#count"</span>);
+
+document.querySelector(<span class="s">"#plus"</span>)
+  .addEventListener(<span class="s">"click"</span>, () =&gt; {
+    count += <span class="t">1</span>;
+    label.textContent = count;
+  });</pre>
+        <p class="muted mt">Pattern you will reuse forever: update data, then update the UI.</p>
+      </div>
+      <aside class="notes">Build this counter live. It is the mental model for Todo and later useState.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Input handling</p>
+        <h2>Read what the user typed</h2>
+        <pre class="code mt"><span class="k">const</span> input = document.querySelector(<span class="s">"#task-input"</span>);
+<span class="k">const</span> preview = document.querySelector(<span class="s">"#preview"</span>);
+
+input.addEventListener(<span class="s">"input"</span>, () =&gt; {
+  preview.textContent = input.value;
+});</pre>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3><code>input</code> event</h3><p>Fires on every keystroke. Great for live preview.</p></div>
+          <div class="card"><h3><code>change</code> event</h3><p>Fires when the field loses focus (or select changes).</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Forms</p>
+        <h2>Stop the refresh. Handle submit yourself.</h2>
+        <pre class="code mt">form.addEventListener(<span class="s">"submit"</span>, (event) =&gt; {
+  event.preventDefault();
+  <span class="k">const</span> text = input.value.trim();
+  <span class="k">if</span> (!text) <span class="k">return</span>;
+  addTask(text);
+  input.value = <span class="s">""</span>;
+});</pre>
+        <p class="callout mt"><code>preventDefault</code> is not optional. Without it, the browser posts the form and your list vanishes.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Practice 1 · 6 minutes</p>
+        <div class="practice">
+          <h3>Name greeter</h3>
+          <p>An input, a button, a heading. On click, set the heading to <code>Hello, NAME</code>.</p>
+          <p class="mt">If the input is empty, set the heading to <code>Please type a name</code>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Modern JS · why now</p>
+        <h2>Shorter tools for the same ideas</h2>
+        <p class="lede">You already loop and build strings. Modern syntax makes the next apps (and React) readable.</p>
+        <div class="grid grid-4 mt">
+          <div class="card"><h3>Arrows</h3><p>Short functions</p></div>
+          <div class="card"><h3>Templates</h3><p>Strings with holes</p></div>
+          <div class="card"><h3>Spread</h3><p>Copy lists/objects</p></div>
+          <div class="card"><h3>map/filter</h3><p>Transform lists</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Arrow functions</p>
+        <h2>A compact function expression</h2>
+        <pre class="code mt"><span class="k">const</span> double = (n) =&gt; n * <span class="t">2</span>;
+<span class="k">const</span> greet = (name) =&gt; {
+  <span class="k">return</span> <span class="s">`Hi, ${name}`</span>;
+};
+
+btn.addEventListener(<span class="s">"click"</span>, () =&gt; {
+  console.log(<span class="s">"clicked"</span>);
+});</pre>
+        <p class="small muted mt">Same idea as <code>function</code>. You will see arrows everywhere in React.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Template literals</p>
+        <h2>Backticks, not plus signs</h2>
+        <pre class="code mt"><span class="k">const</span> name = <span class="s">"Nila"</span>;
+<span class="k">const</span> left = <span class="t">3</span>;
+<span class="k">const</span> msg = <span class="s">`${name} has ${left} tasks left`</span>;</pre>
+        <p class="callout mt">Use <code>${expression}</code> inside backticks. Great for list item HTML you build in JS.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Destructuring</p>
+        <h2>Unpack values by name or position</h2>
+        <pre class="code mt"><span class="k">const</span> task = { id: <span class="t">1</span>, text: <span class="s">"Study JS"</span>, done: <span class="t">false</span> };
+<span class="k">const</span> { text, done } = task;
+
+<span class="k">const</span> marks = [<span class="t">80</span>, <span class="t">90</span>, <span class="t">70</span>];
+<span class="k">const</span> [math, english] = marks;</pre>
+        <p class="muted mt">Why: stop writing <code>task.text</code> ten times when you only need two fields.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Spread operator</p>
+        <h2>Copy, then change — do not mutate blindly</h2>
+        <pre class="code mt"><span class="k">const</span> tasks = [<span class="s">"Read"</span>, <span class="s">"Code"</span>];
+<span class="k">const</span> next = [...tasks, <span class="s">"Rest"</span>];
+
+<span class="k">const</span> user = { name: <span class="s">"Ada"</span>, role: <span class="s">"dev"</span> };
+<span class="k">const</span> updated = { ...user, role: <span class="s">"lead"</span> };</pre>
+        <p class="callout mt">React later prefers new arrays/objects instead of silent mutation. Learn the habit now.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">forEach</p>
+        <h2>Do something for every item</h2>
+        <pre class="code mt">tasks.forEach((task) =&gt; {
+  console.log(task.text);
+});</pre>
+        <p class="lede mt">Use forEach for side effects: logging, appending DOM nodes. Use map when you want a new array back.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">map</p>
+        <h2>Turn every item into something else</h2>
+        <pre class="code mt"><span class="k">const</span> names = [<span class="s">"ada"</span>, <span class="s">"nila"</span>];
+<span class="k">const</span> labels = names.map((n) =&gt; n.toUpperCase());
+<span class="c">// ["ADA", "NILA"]</span></pre>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Why</h3><p>UI lists are data mapped into HTML or components.</p></div>
+          <div class="card teal"><h3>Real world</h3><p>Products → cards. Todos → list items.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">filter and find</p>
+        <h2>Keep some items. Find one item.</h2>
+        <pre class="code mt"><span class="k">const</span> open = tasks.filter((t) =&gt; !t.done);
+<span class="k">const</span> one = tasks.find((t) =&gt; t.id === <span class="t">3</span>);</pre>
+        <table class="compare mt">
+          <tr><th></th><th>filter</th><th>find</th></tr>
+          <tr><td>Returns</td><td>New array (0–many)</td><td>First match or undefined</td></tr>
+          <tr><td>Use</td><td>Active todos, search results</td><td>The todo you just clicked</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Live coding · 10 minutes</p>
+        <h2>Data in, list on the page</h2>
+        <pre class="code mt"><span class="k">const</span> tasks = [
+  { id: <span class="t">1</span>, text: <span class="s">"Learn DOM"</span>, done: <span class="t">false</span> },
+  { id: <span class="t">2</span>, text: <span class="s">"Build Todo"</span>, done: <span class="t">true</span> }
+];
+
+<span class="k">const</span> html = tasks
+  .map((t) =&gt; <span class="s">`&lt;li&gt;${t.text}&lt;/li&gt;`</span>)
+  .join(<span class="s">""</span>);
+
+document.querySelector(<span class="s">"#list"</span>).innerHTML = html;</pre>
+        <p class="muted mt">map builds strings. join glues them. One assignment paints the list.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Practice 2 · 7 minutes</p>
+        <div class="practice">
+          <h3>Filter the class</h3>
+          <p>Array of student objects with <code>name</code> and <code>score</code>. Filter scores <code>&gt;= 40</code>. Map remaining names to uppercase. Log the result.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Practice 3 · 8 minutes</p>
+        <div class="practice">
+          <h3>Click to complete</h3>
+          <p>Render three list items. Clicking a row toggles a <code>done</code> class. Use <code>classList.toggle</code>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Practice 4 · predict</p>
+        <div class="q">After submit without preventDefault, what happens to a Todo you just added?</div>
+        <p class="mt muted">Talk it through: form default behavior vs staying on the same page.</p>
+      </div>
+      <aside class="notes">Page reloads, JS memory resets, list is gone. Hammer this before the mini project.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project</p>
+        <h2>Todo List (HTML · CSS · JS)</h2>
+        <p class="lede">Objective: add tasks from a form and show them in a list. In class we nail add + render. Homework adds delete, complete, and a counter.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Requirements</h3>
+            <ul class="clean">
+              <li>Input + submit button in a form</li>
+              <li>Tasks stored in an array of objects</li>
+              <li>Re-render the list after every change</li>
+              <li>Ignore empty / whitespace-only text</li>
+            </ul>
+          </div>
+          <div class="card teal">
+            <h3>UI features</h3>
+            <p>Clear input after add. Each row shows the task text. Optional: basic Tailwind or CSS so it looks like a card.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project · steps</p>
+        <ol class="clean" style="font-size:22px">
+          <li>Build the HTML shell: form, <code>ul#list</code>, empty state text.</li>
+          <li>Create <code>let tasks = []</code> and <code>function render()</code>.</li>
+          <li>On submit: preventDefault, push a new <code>{ id, text, done }</code>.</li>
+          <li>Use <code>map</code> + template literals inside <code>render</code>.</li>
+          <li>Give each task a unique <code>id</code> (<code>Date.now()</code> is fine today).</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project · files</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Suggested folders</h3>
+            <pre class="code" style="margin-top:10px">day-06-todo/
+  index.html
+  styles.css
+  app.js</pre>
+          </div>
+          <div class="hero-panel" style="margin-top:0">
+            <p class="small" style="opacity:.7">Expected result</p>
+            <h3 style="color:#fff;margin-top:8px">Type a task, press Enter, see it in the list</h3>
+            <p class="mt">Refresh still clears the list (no backend yet). That is OK.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment</p>
+        <h2>Full Todo List</h2>
+        <p><span class="tag">Beginner+</span> &nbsp; Estimated time: 1.5–2.5 hours &nbsp; Difficulty: ★★☆</p>
+        <p class="mt"><b>Objective:</b> Own the full loop: add, delete, complete, and count — without copying the instructor file blindly.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Requirements</h3>
+            <ul class="clean">
+              <li>Add task from a form</li>
+              <li>Delete a task</li>
+              <li>Mark complete (toggle)</li>
+              <li>Show a counter (all / remaining)</li>
+              <li>Use array methods in render or updates</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Expected features</h3>
+            <ul class="clean">
+              <li>Completed tasks look different (class)</li>
+              <li>Empty state: “No tasks yet”</li>
+              <li>Cannot add blank tasks</li>
+              <li>Clean HTML / CSS / JS split</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment extras</p>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Bonus challenge</h3>
+            <ul class="clean">
+              <li>Filter buttons: All / Active / Done</li>
+              <li>“Clear completed”</li>
+              <li>Save to <code>localStorage</code> (optional research)</li>
+            </ul>
+          </div>
+          <div class="card navy">
+            <h3>Submission</h3>
+            <p>Folder <code>day06-todo-yourname</code>. Bring a working add/delete/complete demo to Day 7.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Recap</p>
+        <h2>What we learned</h2>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>DOM</h3><p>The live tree. Select, then change.</p></div>
+          <div class="card"><h3>Events</h3><p>Listen, preventDefault on forms, update UI.</p></div>
+          <div class="card"><h3>Modern JS</h3><p>Arrows, templates, destructuring, spread.</p></div>
+          <div class="card"><h3>Arrays</h3><p>forEach, map, filter, find — data → UI.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Common mistakes</p>
+        <ul class="clean" style="font-size:22px">
+          <li>Script in <code>&lt;head&gt;</code> without <code>defer</code> — elements are null.</li>
+          <li>Forgetting <code>preventDefault</code> on submit.</li>
+          <li>Updating the array but never calling <code>render()</code>.</li>
+          <li>Using <code>innerHTML</code> with raw user text unsafely.</li>
+          <li>Mutating arrays in confusing ways instead of filter/map.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Key takeaways</p>
+        <ol class="clean" style="font-size:24px">
+          <li>The DOM is the page as objects.</li>
+          <li>Select → listen → update data → render.</li>
+          <li>Forms need <code>preventDefault</code>.</li>
+          <li>map/filter/find replace many manual loops.</li>
+          <li>This pattern is what React will later automate.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Quick quiz</p>
+        <div class="grid grid-2 mt">
+          <div class="q">1. What is the DOM?</div>
+          <div class="q">2. Why do we call preventDefault on a form?</div>
+          <div class="q">3. map vs filter — which returns a same-length transformed list?</div>
+          <div class="q">4. Why keep tasks in an array, not only in the HTML?</div>
+        </div>
+        <p class="mt muted">Discuss in pairs for 3 minutes, then share.</p>
+      </div>
+      <aside class="notes">1) Live object tree. 2) Stop reload. 3) map. 4) Data is the source of truth; HTML is a view.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Questions & discussion</p>
+        <h2>What still feels fuzzy?</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Prompt</h3><p>Draw the click → listener → render loop on paper.</p></div>
+          <div class="card"><h3>Prompt</h3><p>When is filter the right tool vs find?</p></div>
+          <div class="card teal"><h3>Office minutes</h3><p>Stay for null selector bugs — 90% of “it doesn’t work.”</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Tomorrow · Day 7</p>
+        <h1 class="display">Talking to the internet: APIs, fetch, async.</h1>
+        <p class="lede">Your apps will load data from a server: JSON, GET requests, loading states, and errors. Mini project: User Search with a public API.</p>
+        <div class="card teal mt">
+          <h3>Bring to class</h3>
+          <p>Your Todo. We will compare “data in memory” with “data from a URL.”</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div class="footerbar">
+    <span id="counter"></span>
+    <div class="nav-btns">
+      <button class="nav" id="prev">Back</button>
+      <button class="nav primary" id="next">Next</button>
+    </div>
+  </div>
+</div>
+<script src="assets/slides.js"></script>
+</body>
+</html>

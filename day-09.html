@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 9 — React State + Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/slides.css" />
+</head>
+<body>
+<div class="deck">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">09</div>
+      <div>Web + React Bootcamp <small>Day 9 · React State + Events</small></div>
+    </div>
+    <div class="top-meta">
+      <span>Press <span class="kbd">N</span> instructor notes</span>
+      <a href="index.html" style="color:inherit">All days</a>
+    </div>
+  </header>
+  <div class="progress"><span id="bar"></span></div>
+  <main class="viewport">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 9 · 2.5–3 hours</p>
+        <h1 class="display">Today React remembers — and reacts to clicks.</h1>
+        <p class="lede">Props pass data in. State holds data that can change. Events update that state. The UI follows.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Learn</h3><p>useState, events, controlled forms, lists.</p></div>
+          <div class="card"><h3>Build</h3><p>A React Todo: add, complete, delete, filter.</p></div>
+          <div class="card teal"><h3>Mindset</h3><p>Do not poke the DOM. Change state. Let React render.</p></div>
+        </div>
+      </div>
+      <aside class="notes"><b>Instructor:</b> Open yesterday’s profile app. Click around: nothing “remembers.” Ask: “How would you keep a like count?” Collect answers, then promise: by lunch they will have a working Todo.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Where we are</p>
+        <h2>Components were the nouns. Today we add verbs.</h2>
+        <div class="flow mt">
+          <div class="node">Day 8 · JSX + props</div><span class="arrow">→</span>
+          <div class="node">Day 9 · state + events</div><span class="arrow">→</span>
+          <div class="node">Day 10 · APIs</div><span class="arrow">→</span>
+          <div class="node">Shop + deploy</div>
+        </div>
+        <p class="callout mt">A profile card is a photograph. A Todo app is a conversation with the user.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 9 learning objectives</p>
+        <h2>By the end of today you can…</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <ol class="clean">
+              <li>Explain state vs props in one sentence</li>
+              <li>Create and update state with <code>useState</code></li>
+              <li>Handle clicks, submits, and input changes</li>
+              <li>Build controlled form fields</li>
+              <li>Show UI based on conditions and lists</li>
+              <li>Lift state so sibling components can talk</li>
+            </ol>
+          </div>
+          <div class="card navy">
+            <h3>You will leave with</h3>
+            <p>A React Todo app in class + a homework extension (edit, localStorage, extra filters) in 1–2 hours.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Interactive question</p>
+        <div class="q">If a child component needs to change a number that lives in the parent, who should “own” that number?</div>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Guess A</h3><p>The child. It is closer to the button.</p></div>
+          <div class="card"><h3>Guess B</h3><p>The parent. Data flows down; events flow up.</p></div>
+          <div class="card"><h3>Guess C</h3><p>Both copies, kept in sync by hand.</p></div>
+        </div>
+        <p class="mt muted">We will prove the answer with a counter, then a Todo list.</p>
+      </div>
+      <aside class="notes">Vote with hands. Correct: B — lift state to the nearest common parent. C is a classic bug (two sources of truth). A works only if no sibling needs the number.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What is it?</p>
+        <h2>State is data a component remembers over time</h2>
+        <p class="lede">When state changes, React re-renders that component and its children. The screen is a snapshot of state.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Why we need it</h3><p>Clicks, typing, and filters must survive past one render.</p></div>
+          <div class="card"><h3>How it works</h3><p>You call a setter. React schedules a new render with the new value.</p></div>
+          <div class="card teal"><h3>Real world</h3><p>Cart count, dark mode, open/closed menu, form drafts.</p></div>
+        </div>
+      </div>
+      <aside class="notes">Analogy: props are a letter someone handed you. State is a notebook you write in. You do not scribble on the letter.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Why props are not enough</p>
+        <h2>Props come from outside. State lives inside.</h2>
+        <table class="compare mt">
+          <tr><th></th><th>Props</th><th>State</th></tr>
+          <tr><td>Who sets it?</td><td>Parent</td><td>The component itself</td></tr>
+          <tr><td>Can it change?</td><td>Parent can pass a new value</td><td>Yes, via the setter</td></tr>
+          <tr><td>Direction</td><td>Down only</td><td>Local, then passed down as props</td></tr>
+          <tr><td>Example</td><td><code>title="Inbox"</code></td><td><code>const [open, setOpen] = useState(false)</code></td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">How React re-renders</p>
+        <h2>Event → setState → new UI</h2>
+        <div class="flow mt">
+          <div class="node">User action</div><span class="arrow">→</span>
+          <div class="node">setCount</div><span class="arrow">→</span>
+          <div class="node">Re-render</div><span class="arrow">→</span>
+          <div class="node">Updated screen</div>
+        </div>
+        <p class="callout mt">You never write <code>document.querySelector</code> to change the number. You change <code>count</code>. React paints the rest.</p>
+      </div>
+      <aside class="notes">Contrast with Day 6 DOM todo: they mutated <code>ul.innerHTML</code>. Today that is the anti-pattern.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What is it?</p>
+        <h2><code>useState</code> is the hook that gives you memory</h2>
+        <p class="lede">A hook is a function whose name starts with <code>use</code>. Call it at the top of a component — not inside loops or ifs.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Why</h3><p>Function components would otherwise forget everything after each render.</p></div>
+          <div class="card"><h3>How</h3><p>Returns a pair: current value + a setter function.</p></div>
+          <div class="card teal"><h3>Rule</h3><p>Same order of hooks every render. Keep them at the top.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Simple example</p>
+        <h2>A counter in eight lines</h2>
+        <pre class="code mt"><span class="k">import</span> { useState } <span class="k">from</span> <span class="s">"react"</span>;
+
+<span class="k">function</span> <span class="t">Counter</span>() {
+  <span class="k">const</span> [count, setCount] = useState(<span class="s">0</span>);
+  <span class="k">return</span> (
+    &lt;<span class="k">button</span> <span class="t">onClick</span>={() =&gt; setCount(count + <span class="s">1</span>)}&gt;
+      Clicked {count} times
+    &lt;/<span class="k">button</span>&gt;
+  );
+}</pre>
+        <p class="mt muted"><code>0</code> is the initial value — used only on the first render.</p>
+      </div>
+      <aside class="notes">Live-type this in Vite. Click twice. Ask: “Did we touch the DOM?” Pause on the array destructuring: first item is the value, second is the updater.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">State updates</p>
+        <h2>Treat state as read-only. Replace it.</h2>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Do not mutate</h3>
+            <pre class="code" style="margin-top:10px">tasks.push(newTask);
+setTasks(tasks); <span class="c">// same array</span></pre>
+          </div>
+          <div class="card">
+            <h3>Create a new value</h3>
+            <pre class="code" style="margin-top:10px">setTasks([...tasks, newTask]);
+setTasks(tasks.filter(t =&gt; t.id !== id));</pre>
+          </div>
+        </div>
+        <p class="callout mt">React compares the new reference. If you mutate the old array, React may skip the update.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Safer updates</p>
+        <h2>When the next value depends on the previous one</h2>
+        <pre class="code mt">setCount(count + <span class="s">1</span>);
+setCount(count + <span class="s">1</span>); <span class="c">// still +1 — both saw the same count</span>
+
+setCount(c =&gt; c + <span class="s">1</span>);
+setCount(c =&gt; c + <span class="s">1</span>); <span class="c">// +2 — each uses the latest queued value</span></pre>
+        <p class="mt">Use the function form for counters, toggles, and “add one more item.”</p>
+      </div>
+      <aside class="notes">Demo two buttons: one with count+1 twice in the same handler, one with functional updates. Students remember this when they double-click Add.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What is it?</p>
+        <h2>Events in React are named in camelCase</h2>
+        <p class="lede">You pass a function. React calls it when the user acts. The first argument is the event object.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>onClick</h3><p>Buttons, cards, icons.</p></div>
+          <div class="card"><h3>onChange</h3><p>Inputs, selects, textareas.</p></div>
+          <div class="card"><h3>onSubmit</h3><p>Forms. Call <code>preventDefault()</code>.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">How events work</p>
+        <h2>Pass the function. Do not call it in JSX.</h2>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Runs immediately (wrong)</h3>
+            <pre class="code" style="margin-top:10px">&lt;<span class="k">button</span> <span class="t">onClick</span>={handleDelete()}&gt;</pre>
+          </div>
+          <div class="card">
+            <h3>Runs on click (right)</h3>
+            <pre class="code" style="margin-top:10px">&lt;<span class="k">button</span> <span class="t">onClick</span>={handleDelete}&gt;
+&lt;<span class="k">button</span> <span class="t">onClick</span>={() =&gt; handleDelete(id)}&gt;</pre>
+          </div>
+        </div>
+        <p class="mt muted">Need an argument? Wrap in an arrow function.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Instructor live coding</p>
+        <h2>We build a counter together</h2>
+        <ol class="clean mt">
+          <li>Vite app already running from Day 8, or <code>npm create vite@latest</code></li>
+          <li>Create <code>Counter.jsx</code> with <code>useState(0)</code></li>
+          <li>Add Increment, Decrement, Reset</li>
+          <li>Disable Decrement when count is 0</li>
+          <li>Show a message when count is 10: “Nice streak”</li>
+        </ol>
+        <p class="callout mt">Instructor types. Students type along. Pause after each button works.</p>
+      </div>
+      <aside class="notes">Keep Tailwind optional here. Focus on state. Conditional message is a sneak peek at conditional UI.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Live coding target</p>
+        <pre class="code mt"><span class="k">function</span> <span class="t">Counter</span>() {
+  <span class="k">const</span> [count, setCount] = useState(<span class="s">0</span>);
+  <span class="k">return</span> (
+    &lt;<span class="k">div</span>&gt;
+      &lt;<span class="k">p</span>&gt;{count}&lt;/<span class="k">p</span>&gt;
+      &lt;<span class="k">button</span> <span class="t">onClick</span>={() =&gt; setCount(c =&gt; c + <span class="s">1</span>)}&gt;+&lt;/<span class="k">button</span>&gt;
+      &lt;<span class="k">button</span> <span class="t">onClick</span>={() =&gt; setCount(c =&gt; Math.max(<span class="s">0</span>, c - <span class="s">1</span>))}&gt;-&lt;/<span class="k">button</span>&gt;
+      &lt;<span class="k">button</span> <span class="t">onClick</span>={() =&gt; setCount(<span class="s">0</span>)}&gt;Reset&lt;/<span class="k">button</span>&gt;
+      {count === <span class="s">10</span> &amp;&amp; &lt;<span class="k">p</span>&gt;Nice streak&lt;/<span class="k">p</span>&gt;}
+    &lt;/<span class="k">div</span>&gt;
+  );
+}</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #1 · 8 minutes</p>
+        <div class="practice">
+          <h2>Make the counter yours</h2>
+          <ul class="clean">
+            <li>Add a “+5” button using a functional update</li>
+            <li>Show “Low”, “OK”, or “High” based on count ranges</li>
+            <li>What do you think will happen if you write <code>onClick={setCount(0)}</code>? Try it, then fix it.</li>
+          </ul>
+        </div>
+      </div>
+      <aside class="notes">Walk the room. The last bullet usually produces an infinite loop / crash. Celebrate the error: that is the lesson.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What is it?</p>
+        <h2>A controlled input lets React own the value</h2>
+        <p class="lede">The input’s <code>value</code> comes from state. <code>onChange</code> writes back. One source of truth.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Why</h3><p>You can validate, disable Submit, and reset the field from code.</p></div>
+          <div class="card"><h3>How</h3><p><code>value={text}</code> plus <code>onChange={e =&gt; setText(e.target.value)}</code>.</p></div>
+          <div class="card teal"><h3>Real world</h3><p>Search boxes, login forms, checkout fields.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Simple example</p>
+        <h2>Name field that React can read</h2>
+        <pre class="code mt"><span class="k">function</span> <span class="t">NameForm</span>() {
+  <span class="k">const</span> [name, setName] = useState(<span class="s">""</span>);
+  <span class="k">function</span> <span class="t">handleSubmit</span>(e) {
+    e.preventDefault();
+    alert(<span class="s">"Hello "</span> + name);
+    setName(<span class="s">""</span>);
+  }
+  <span class="k">return</span> (
+    &lt;<span class="k">form</span> <span class="t">onSubmit</span>={handleSubmit}&gt;
+      &lt;<span class="k">input</span> <span class="t">value</span>={name} <span class="t">onChange</span>={e =&gt; setName(e.target.value)} /&gt;
+      &lt;<span class="k">button</span> <span class="t">type</span>=<span class="s">"submit"</span>&gt;Save&lt;/<span class="k">button</span>&gt;
+    &lt;/<span class="k">form</span>&gt;
+  );
+}</pre>
+      </div>
+      <aside class="notes">Show what happens without preventDefault (page reload). Show an uncontrolled input with defaultValue vs controlled — students feel the difference when you try to clear the box.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Conditional UI</p>
+        <h2>The screen is a function of state</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Ternary</h3><pre class="code" style="margin-top:10px">{isOn ? <span class="s">"On"</span> : <span class="s">"Off"</span>}</pre></div>
+          <div class="card"><h3>And</h3><pre class="code" style="margin-top:10px">{error &amp;&amp; &lt;<span class="k">p</span>&gt;{error}&lt;/<span class="k">p</span>&gt;}</pre></div>
+          <div class="card"><h3>Early return</h3><pre class="code" style="margin-top:10px"><span class="k">if</span> (!open) <span class="k">return</span> <span class="k">null</span>;</pre></div>
+        </div>
+        <p class="q mt">Why is <code>{count &amp;&amp; &lt;p&gt;Items&lt;/p&gt;}</code> a trap when count is 0?</p>
+        <p class="mt muted">Because <code>0</code> is rendered on the page. Prefer <code>count &gt; 0 &amp;&amp;</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Rendering dynamic data</p>
+        <h2>Lists come from arrays, not copy-pasted JSX</h2>
+        <pre class="code mt">{tasks.map(task =&gt; (
+  &lt;<span class="k">li</span> <span class="t">key</span>={task.id}&gt;
+    {task.title}
+  &lt;/<span class="k">li</span>&gt;
+))}</pre>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Why keys?</h3><p>React matches old items to new ones. Stable ids beat array index when you delete or reorder.</p></div>
+          <div class="card navy"><h3>Shape</h3><p>Each task: <code>id</code>, <code>title</code>, <code>done</code>. Generate ids with <code>crypto.randomUUID()</code> or a counter.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Component communication</p>
+        <h2>State down. Events up.</h2>
+        <div class="flow mt">
+          <div class="node">App state</div><span class="arrow">→</span>
+          <div class="node">props</div><span class="arrow">→</span>
+          <div class="node">TodoItem</div><span class="arrow">→</span>
+          <div class="node">onToggle(id)</div><span class="arrow">→</span>
+          <div class="node">setTasks</div>
+        </div>
+        <p class="lede mt">Siblings do not talk sideways. They share a parent who holds the list.</p>
+      </div>
+      <aside class="notes">Draw this on the board before coding Todo. Students who skip lifting state will put tasks inside the input component and wonder why the list cannot see them.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">How lifting looks in code</p>
+        <pre class="code mt"><span class="c">// App.jsx owns tasks</span>
+&lt;<span class="t">TodoForm</span> <span class="t">onAdd</span>={addTask} /&gt;
+&lt;<span class="t">TodoList</span> <span class="t">tasks</span>={tasks} <span class="t">onToggle</span>={toggle} <span class="t">onDelete</span>={remove} /&gt;
+
+<span class="c">// TodoItem.jsx never calls useState for the list</span>
+&lt;<span class="k">button</span> <span class="t">onClick</span>={() =&gt; onDelete(task.id)}&gt;Delete&lt;/<span class="k">button</span>&gt;</pre>
+        <p class="callout mt">If two children need the same data, move that data up one level.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Instructor live coding</p>
+        <h2>Form + list: the Todo core</h2>
+        <ol class="clean mt">
+          <li>State: <code>tasks</code> array and <code>text</code> string</li>
+          <li>Submit adds <code>{ id, title, done: false }</code></li>
+          <li>Map tasks to list items</li>
+          <li>Delete with <code>filter</code></li>
+          <li>Toggle <code>done</code> with <code>map</code></li>
+        </ol>
+        <p class="callout mt">Ignore filters until add/delete/toggle are solid.</p>
+      </div>
+      <aside class="notes">Narrate spread and map. If someone mutates with tasks[i].done = true, show that the UI may not update.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Live coding target</p>
+        <pre class="code mt"><span class="k">function</span> <span class="t">addTask</span>(e) {
+  e.preventDefault();
+  <span class="k">const</span> title = text.trim();
+  <span class="k">if</span> (!title) <span class="k">return</span>;
+  setTasks(prev =&gt; [...prev, { id: crypto.randomUUID(), title, done: <span class="k">false</span> }]);
+  setText(<span class="s">""</span>);
+}
+
+<span class="k">function</span> <span class="t">toggle</span>(id) {
+  setTasks(prev =&gt; prev.map(t =&gt; t.id === id ? { ...t, done: !t.done } : t));
+}</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #2 · 8 minutes</p>
+        <div class="practice">
+          <h2>Like button + favorite flag</h2>
+          <ul class="clean">
+            <li>Start from a <code>PostCard</code> with <code>likes</code> state</li>
+            <li>Clicking the heart increments likes and toggles <code>liked</code></li>
+            <li>Show a filled vs empty heart with a ternary</li>
+            <li>Disable extra likes while already liked — or allow unlike</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #3 · 6 minutes</p>
+        <div class="practice">
+          <h2>Filter chips without a library</h2>
+          <p>You have <code>filter</code> state: <code>"all"</code> | <code>"open"</code> | <code>"done"</code>.</p>
+          <ol class="clean">
+            <li>Three buttons that call <code>setFilter</code></li>
+            <li>Highlight the active chip with a class or Tailwind</li>
+            <li>Derive <code>visible = tasks.filter(...)</code> — do not store a second list</li>
+          </ol>
+        </div>
+      </div>
+      <aside class="notes">The derived list is the key insight. Storing filteredTasks separately causes sync bugs.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #4 · 5 minutes</p>
+        <div class="practice">
+          <h2>Empty and full states</h2>
+          <ul class="clean">
+            <li>If there are zero tasks, show “Add your first task”</li>
+            <li>If the filter hides everything, show “Nothing in this view”</li>
+            <li>Show a counter: <code>X remaining</code></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project</p>
+        <h2>React Todo application</h2>
+        <p class="lede">Objective: a list the user can add to, complete, delete, and filter — with a live counter.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Must include</h3>
+            <ul class="clean">
+              <li>Add task (form, no empty titles)</li>
+              <li>Delete task</li>
+              <li>Complete / uncomplete</li>
+              <li>Filter: All / Active / Done</li>
+              <li>Task counter (remaining)</li>
+            </ul>
+          </div>
+          <div class="card navy">
+            <h3>Folder structure</h3>
+            <pre class="code" style="margin-top:10px">day-09-todo/
+  src/
+    App.jsx
+    components/
+      TodoForm.jsx
+      TodoList.jsx
+      TodoItem.jsx
+      FilterBar.jsx
+    index.css</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Component tree</p>
+        <h2>One parent. Four focused children.</h2>
+        <div class="hero-panel">
+          <p class="small" style="opacity:.7">App holds tasks + filter + draft text</p>
+          <h3 style="color:#fff;margin-top:8px">App → TodoForm · FilterBar · TodoList → TodoItem</h3>
+          <p class="mt">TodoItem receives one task and callbacks. It does not own the array.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project steps · 1–3</p>
+        <ol class="clean" style="font-size:22px">
+          <li>Scaffold the Vite folder. Render an empty App shell.</li>
+          <li>Add <code>useState</code> for <code>tasks</code>, <code>text</code>, <code>filter</code>.</li>
+          <li>Build <code>TodoForm</code>: controlled input, submit, trim, reset.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project steps · 4–7</p>
+        <ol class="clean" style="font-size:22px" start="4">
+          <li>Render <code>TodoList</code> from <code>tasks.map</code> with stable keys.</li>
+          <li>Wire delete and toggle in <code>TodoItem</code>.</li>
+          <li>Add <code>FilterBar</code> and derive the visible list.</li>
+          <li>Show remaining count + empty-state copy. Test every path.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Expected result</p>
+        <h2>A Todo that feels like a small product</h2>
+        <div class="hero-panel">
+          <p class="small" style="opacity:.7">Type → Enter → item appears → check → filter → delete</p>
+          <h3 style="color:#fff;margin-top:8px">If a classmate can use it without you speaking, state is doing its job.</h3>
+          <p class="mt">Strike-through completed items. Keep the remaining count honest.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment</p>
+        <h2>Todo Plus — extend, do not copy</h2>
+        <p><span class="tag">Beginner+</span> &nbsp; Estimated time: 1–2 hours &nbsp; Difficulty: ★★☆</p>
+        <p class="mt"><b>Objective:</b> Add features the in-class app does not have, using the same state patterns.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Requirements</h3>
+            <ul class="clean">
+              <li>Edit an existing task (inline or modal)</li>
+              <li>Clear completed button</li>
+              <li>Prevent duplicate titles (case-insensitive)</li>
+              <li>At least three components</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Expected features</h3>
+            <ul class="clean">
+              <li>Controlled inputs everywhere</li>
+              <li>No direct array mutation</li>
+              <li>Empty states for all filters</li>
+              <li>Readable component names</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment extras</p>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Bonus challenge</h3>
+            <ul class="clean">
+              <li>Save tasks to <code>localStorage</code> (read once on first render)</li>
+              <li>Due date field + “overdue” style</li>
+              <li>Dark/light toggle in state</li>
+            </ul>
+          </div>
+          <div class="card navy">
+            <h3>Submission</h3>
+            <p>Folder named <code>day09-todo-yourname</code>. Bring a running <code>npm run dev</code> demo to Day 10. We will fetch live data next.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Recap</p>
+        <h2>What we learned</h2>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>State</h3><p>Memory that triggers a re-render when it changes.</p></div>
+          <div class="card"><h3>useState</h3><p>Value + setter. Replace, do not mutate.</p></div>
+          <div class="card"><h3>Events</h3><p>Pass functions. Prevent default on forms.</p></div>
+          <div class="card"><h3>Lists + lift</h3><p>Map with keys. Parent owns shared data.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Common mistakes to avoid tonight</p>
+        <ul class="clean" style="font-size:22px">
+          <li>Calling the handler in JSX: <code>onClick={fn()}</code>.</li>
+          <li>Mutating arrays and objects, then wondering why the UI is stale.</li>
+          <li>Using array index as a key while deleting items.</li>
+          <li>Keeping two copies of the same list (raw + filtered).</li>
+          <li>Putting list state inside a child that the list cannot see.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Key takeaways</p>
+        <ol class="clean" style="font-size:24px">
+          <li>UI is a snapshot of state.</li>
+          <li>Props go down. Events go up.</li>
+          <li>Controlled inputs make forms predictable.</li>
+          <li>New arrays and objects, not mutations.</li>
+          <li>Derive filtered views. Do not store them twice.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Quick quiz</p>
+        <div class="grid grid-2 mt">
+          <div class="q">1. What does <code>useState</code> return?</div>
+          <div class="q">2. Why do we call <code>preventDefault</code> on submit?</div>
+          <div class="q">3. How do you update one item inside an array of objects?</div>
+          <div class="q">4. Who should own state that two siblings both need?</div>
+        </div>
+        <p class="mt muted">Discuss in pairs for 3 minutes, then share.</p>
+      </div>
+      <aside class="notes">Answers: 1) [value, setter]. 2) Stop full page reload. 3) map + spread a new object. 4) Nearest common parent.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Questions &amp; discussion</p>
+        <h2>What still feels fuzzy?</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Prompt</h3><p>Explain state vs props to a 10-year-old.</p></div>
+          <div class="card"><h3>Prompt</h3><p>When would you not use state?</p></div>
+          <div class="card teal"><h3>Office minutes</h3><p>Stay 10 minutes for hook-order and key bugs.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Tomorrow · Day 10</p>
+        <h1 class="display">useEffect: talking to the outside world.</h1>
+        <p class="lede">State is memory. Effects are side effects: fetch, timers, syncing. We will load products or movies from a public API and handle loading and errors.</p>
+        <div class="card teal mt">
+          <h3>Bring to class</h3>
+          <p>Your Day 9 Todo running locally. We will keep the same “state drives UI” idea — now with network data.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div class="footerbar">
+    <span id="counter"></span>
+    <div class="nav-btns">
+      <button class="nav" id="prev">Back</button>
+      <button class="nav primary" id="next">Next</button>
+    </div>
+  </div>
+</div>
+<script src="assets/slides.js"></script>
+</body>
+</html>

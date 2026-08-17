@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 11 — Real-world React project</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/slides.css" />
+</head>
+<body>
+<div class="deck">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">11</div>
+      <div>Web + React Bootcamp <small>Day 11 · Real-world React project</small></div>
+    </div>
+    <div class="top-meta">
+      <span>Press <span class="kbd">N</span> instructor notes</span>
+      <a href="index.html" style="color:inherit">All days</a>
+    </div>
+  </header>
+  <div class="progress"><span id="bar"></span></div>
+  <main class="viewport">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 11 · 2.5–3 hours · build day</p>
+        <h1 class="display">Today we think like developers, then we ship a shop.</h1>
+        <p class="lede">Not a new syntax dump. Planning, components, folders, state, API, Tailwind, debugging — assembled into one product.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Plan</h3><p>Sketch UI. Name components. Choose state.</p></div>
+          <div class="card"><h3>Build</h3><p>Mini e-commerce: list, search, filter, details, cart.</p></div>
+          <div class="card teal"><h3>Mindset</h3><p>Small vertical slices. Save. Refresh. Repeat.</p></div>
+        </div>
+      </div>
+      <aside class="notes"><b>Instructor:</b> This is a workshop. Lecture is front-loaded (~40 min), then studio time. Pair students. Walk the room. Do not introduce Redux or a router library unless a pair is clearly done.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Why this day exists</p>
+        <h2>Tutorials hide the messy middle</h2>
+        <p class="lede">Real work is: “What screens exist? What data is shared? What can wait?”</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>What</h3><p>A product catalog with a simple cart.</p></div>
+          <div class="card"><h3>Why</h3><p>It uses every skill from Days 1–10 in one folder.</p></div>
+          <div class="card teal"><h3>How</h3><p>Plan on paper, then code in slices — not 400 lines at once.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 11 learning objectives</p>
+        <h2>By the end of today you can…</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <ol class="clean">
+              <li>Turn a UI sketch into a component tree</li>
+              <li>Choose folder structure on purpose</li>
+              <li>Lift cart and product state to App</li>
+              <li>Integrate an API with loading and error</li>
+              <li>Make the shop usable on a phone width</li>
+              <li>Debug with React DevTools and console</li>
+            </ol>
+          </div>
+          <div class="card navy">
+            <h3>You will leave with</h3>
+            <p>A running mini shop. Day 12 is polish, git, deploy, and presentations.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Interactive question</p>
+        <div class="q">You can add to cart from the list and from the details view. Where does <code>cart</code> state live?</div>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>A</h3><p>Inside each ProductCard.</p></div>
+          <div class="card"><h3>B</h3><p>Inside Navbar, because the badge is there.</p></div>
+          <div class="card"><h3>C</h3><p>In App (or a Shop page) — shared parent.</p></div>
+        </div>
+      </div>
+      <aside class="notes">C. Draw it. If they pick A, cart counts will disagree. If B, the list cannot add items.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Think like a developer</p>
+        <h2>Project planning before files</h2>
+        <ol class="clean mt" style="font-size:22px">
+          <li>Who is the user? (a shopper, 60 seconds on a phone)</li>
+          <li>What must work in v1? (the feature list on the next slides)</li>
+          <li>What is out of scope? (payments, auth, real inventory)</li>
+          <li>What can break? (API down, empty search, huge titles)</li>
+        </ol>
+        <p class="callout mt">Write “out of scope” on the board. It protects the clock.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Main project</p>
+        <h2>Mini E-commerce Product App</h2>
+        <p class="lede">Stack: React + JavaScript + Tailwind + a public products API (Fake Store or similar).</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Browse</h3><p>Navbar, listing, cards, search, category filter.</p></div>
+          <div class="card"><h3>Inspect</h3><p>Product details view.</p></div>
+          <div class="card teal"><h3>Cart</h3><p>Add to cart + counter in the navbar.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Feature checklist</p>
+        <h2>v1 is done when all of these work</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <ul class="clean">
+              <li>Navbar with store name + cart count</li>
+              <li>Product listing from API</li>
+              <li>Product cards (image, title, price)</li>
+              <li>Search by title</li>
+              <li>Category filter</li>
+            </ul>
+          </div>
+          <div class="card">
+            <ul class="clean">
+              <li>Details (description, extra info)</li>
+              <li>Add to cart from list and/or details</li>
+              <li>Cart counter updates</li>
+              <li>Loading + error + empty search</li>
+              <li>Responsive layout</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Breaking UI into components</p>
+        <h2>Name boxes on a paper sketch first</h2>
+        <div class="hero-panel">
+          <p class="small" style="opacity:.7">If you cannot name it, you are not ready to code it</p>
+          <h3 style="color:#fff;margin-top:8px">Navbar · SearchBar · CategoryFilter · ProductGrid · ProductCard · ProductDetails · CartBadge</h3>
+          <p class="mt">One job per component. Details can be a panel, a second “page” state, or a simple route if you already know the router.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Component tree</p>
+        <h2>App is the conductor</h2>
+        <pre class="code mt">App
+├─ Navbar
+│  └─ CartBadge
+├─ SearchBar
+├─ CategoryFilter
+├─ StatusMessage
+├─ ProductGrid
+│  └─ ProductCard (many)
+└─ ProductDetails (when selectedId is set)</pre>
+        <p class="mt muted">No router required. <code>selectedId</code> null means “show the grid.”</p>
+      </div>
+      <aside class="notes">Optional: if a pair already used React Router on homework, allow <code>/product/:id</code>. Do not teach the whole router to the room today.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Data flow</p>
+        <h2>State → React → UI</h2>
+        <div class="flow mt">
+          <div class="node">products</div><span class="arrow">→</span>
+          <div class="node">query / category</div><span class="arrow">→</span>
+          <div class="node">derived list</div><span class="arrow">→</span>
+          <div class="node">ProductGrid</div>
+        </div>
+        <p class="lede mt">Cart is separate state. Adding an item does not refetch the catalog.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Data flow</p>
+        <h2>App → API → UI</h2>
+        <div class="flow mt">
+          <div class="node">Mount App</div><span class="arrow">→</span>
+          <div class="node">useEffect fetch</div><span class="arrow">→</span>
+          <div class="node">setProducts</div><span class="arrow">→</span>
+          <div class="node">cards appear</div>
+        </div>
+        <p class="callout mt">Same Day 10 pattern. Copy <code>api.js</code> if you already wrote it. Do not invent a new fetch style.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">State inventory</p>
+        <h2>List every piece of memory before coding</h2>
+        <table class="compare mt">
+          <tr><th>State</th><th>Type</th><th>Owner</th></tr>
+          <tr><td>products</td><td>array</td><td>App</td></tr>
+          <tr><td>loading / error</td><td>boolean / string</td><td>App</td></tr>
+          <tr><td>query, category</td><td>string</td><td>App</td></tr>
+          <tr><td>selectedId</td><td>number | null</td><td>App</td></tr>
+          <tr><td>cart</td><td>array of {id, qty}</td><td>App</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Props</p>
+        <h2>Children stay useful because they stay small</h2>
+        <pre class="code mt">&lt;<span class="t">ProductCard</span>
+  <span class="t">product</span>={p}
+  <span class="t">onAdd</span>={() =&gt; addToCart(p)}
+  <span class="t">onOpen</span>={() =&gt; setSelectedId(p.id)}
+/&gt;</pre>
+        <p class="mt">The card does not import <code>fetch</code>. The badge does not store the cart array — it receives <code>count</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Folder structure</p>
+        <h2>A shop folder that a teammate can open</h2>
+        <pre class="code mt">day-11-shop/
+  src/
+    api/
+      products.js
+    components/
+      Navbar.jsx
+      SearchBar.jsx
+      CategoryFilter.jsx
+      ProductCard.jsx
+      ProductGrid.jsx
+      ProductDetails.jsx
+      StatusMessage.jsx
+    App.jsx
+    index.css</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Reusable components</p>
+        <h2>If you paste JSX twice, extract it</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>StatusMessage</h3><p>Loading, error, empty — one component, different props.</p></div>
+          <div class="card"><h3>ProductCard</h3><p>Grid and “related” later can share it.</p></div>
+          <div class="card teal"><h3>Button styles</h3><p>Tailwind classes on a small <code>Button</code> beat five slightly different teal buttons.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">API integration</p>
+        <h2>Fake Store is enough for v1</h2>
+        <pre class="code mt"><span class="c">// src/api/products.js</span>
+<span class="k">const</span> BASE = <span class="s">"https://fakestoreapi.com"</span>;
+
+<span class="k">export async function</span> <span class="t">fetchProducts</span>() {
+  <span class="k">const</span> res = <span class="k">await</span> fetch(BASE + <span class="s">"/products"</span>);
+  <span class="k">if</span> (!res.ok) <span class="k">throw new</span> Error(<span class="s">"Could not load catalog"</span>);
+  <span class="k">return</span> res.json();
+}</pre>
+        <p class="mt muted">Optional: <code>/products/:id</code> for details, or filter the already-loaded array by id.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Loading and error in a shop</p>
+        <h2>Shoppers should never see a white void</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Skeleton / text</h3><p>“Loading catalog…” is enough for class.</p></div>
+          <div class="card"><h3>Retry</h3><p>Same Day 10 retry pattern.</p></div>
+          <div class="card teal"><h3>Details miss</h3><p>If id is unknown, “Product not found” + back to grid.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Add to cart</p>
+        <h2>Update by id. Do not duplicate lines blindly.</h2>
+        <pre class="code mt"><span class="k">function</span> <span class="t">addToCart</span>(product) {
+  setCart(prev =&gt; {
+    <span class="k">const</span> found = prev.find(i =&gt; i.id === product.id);
+    <span class="k">if</span> (found) {
+      <span class="k">return</span> prev.map(i =&gt; i.id === product.id ? { ...i, qty: i.qty + <span class="s">1</span> } : i);
+    }
+    <span class="k">return</span> [...prev, { id: product.id, title: product.title, qty: <span class="s">1</span> }];
+  });
+}
+
+<span class="k">const</span> cartCount = cart.reduce((n, i) =&gt; n + i.qty, <span class="s">0</span>);</pre>
+      </div>
+      <aside class="notes">Cart drawer / full page is bonus. v1 is counter + optional simple list under the nav. Quantity increment is the teaching point.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Tailwind on a build day</p>
+        <h2>Utilities you will actually need</h2>
+        <div class="grid grid-4 mt">
+          <div class="card"><h3>Layout</h3><p><code>flex</code> <code>grid</code> <code>gap-4</code></p></div>
+          <div class="card"><h3>Responsive</h3><p><code>grid-cols-1 md:grid-cols-3</code></p></div>
+          <div class="card"><h3>Nav</h3><p><code>sticky top-0</code> <code>justify-between</code></p></div>
+          <div class="card teal"><h3>Card</h3><p><code>rounded-xl shadow p-4</code></p></div>
+        </div>
+        <p class="callout mt">Do not restyle for an hour. Make it usable, then pretty.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Responsive UI</p>
+        <h2>Phone first, then add columns</h2>
+        <ul class="clean mt" style="font-size:22px">
+          <li>One column of cards on small screens.</li>
+          <li>Nav stacks or compresses; cart badge stays visible.</li>
+          <li>Details: image on top, text below; side-by-side from <code>md:</code>.</li>
+          <li>Search and filters should not overflow horizontally.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Code organization</p>
+        <h2>Helpers stay out of giant App files</h2>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>filterProducts(products, query, category)</h3><p>Pure function. Easy to reason about. No hooks inside.</p></div>
+          <div class="card navy"><h3>formatPrice(n)</h3><p><code>$</code> + two decimals. Use it on cards and details.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Debugging</p>
+        <h2>A short loop when something is “blank”</h2>
+        <ol class="clean mt" style="font-size:22px">
+          <li>Console: did fetch return an array?</li>
+          <li>React DevTools: is state what you think?</li>
+          <li>Network tab: 200 vs CORS vs 404</li>
+          <li>Conditional UI: are you stuck on loading?</li>
+          <li>Keys and map: is the array empty after filter?</li>
+        </ol>
+      </div>
+      <aside class="notes">Demo DevTools Components panel on a half-built shop. Show cartCount derived vs stored incorrectly.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Common React mistakes on project day</p>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Fetch in render</h3><p>Loops. Put it in <code>useEffect</code>.</p></div>
+          <div class="card"><h3>Mutating cart</h3><p><code>cart.push</code> will haunt you. Spread.</p></div>
+          <div class="card"><h3>Index keys</h3><p>Fine for a static demo; painful when the grid filters.</p></div>
+          <div class="card"><h3>Prop drilling panic</h3><p>For this size, passing props is OK. No context library required.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Instructor live coding</p>
+        <h2>Slice 1 — skeleton + fetch</h2>
+        <ol class="clean mt">
+          <li>Vite + Tailwind project <code>day-11-shop</code></li>
+          <li>Navbar with a fake count of 0</li>
+          <li><code>fetchProducts</code> + loading/error</li>
+          <li>Map titles to prove data arrived</li>
+        </ol>
+        <p class="callout mt">Stop and let the room catch up. Do not jump to cart yet.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Build steps · 1–3</p>
+        <h2>Foundation</h2>
+        <ol class="clean mt" style="font-size:22px">
+          <li>Create the folder tree. Empty components that return a name in a <code>div</code>.</li>
+          <li>Wire Tailwind. Confirm a utility class shows in the browser.</li>
+          <li>Implement <code>api/products.js</code> and mount fetch in <code>App</code>.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Build steps · 4–6</p>
+        <h2>Catalog UI</h2>
+        <ol class="clean mt" style="font-size:22px" start="4">
+          <li>Build <code>ProductCard</code> with image, title, price, Add, View.</li>
+          <li>Build <code>ProductGrid</code> responsive columns.</li>
+          <li>Connect <code>StatusMessage</code> for loading, error, empty.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Build steps · 7–9</p>
+        <h2>Find products</h2>
+        <ol class="clean mt" style="font-size:22px" start="7">
+          <li>Controlled <code>SearchBar</code>. Derive visible list.</li>
+          <li>Category chips from unique <code>product.category</code> values.</li>
+          <li>Combine filters in <code>filterProducts</code>.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Build steps · 10–12</p>
+        <h2>Details + cart</h2>
+        <ol class="clean mt" style="font-size:22px" start="10">
+          <li><code>selectedId</code>: hide grid, show <code>ProductDetails</code>, Back button.</li>
+          <li><code>addToCart</code> with quantity merge. Badge shows <code>cartCount</code>.</li>
+          <li>Optional: simple cart list (title × qty). Responsive pass on a phone width.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #1 · 10 minutes</p>
+        <div class="practice">
+          <h2>Paper component tree</h2>
+          <p>Before more code: sketch the shop. Label each box. Draw arrows for cart count and selected product. Compare with a neighbor. Then match your folders to the sketch.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #2 · 8 minutes</p>
+        <div class="practice">
+          <h2>Filter function in isolation</h2>
+          <p>In the console or a tiny test file, run <code>filterProducts</code> on a fake array of 3 products. Prove search and category before wiring JSX.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #3 · 8 minutes</p>
+        <div class="practice">
+          <h2>Cart merge</h2>
+          <p>Start with <code>cart = []</code>. Call <code>addToCart</code> twice for the same id. You should see <code>qty: 2</code>, not two rows. Then add a different id.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #4 · 6 minutes</p>
+        <div class="practice">
+          <h2>Responsive check</h2>
+          <p>DevTools device mode: 375px width. Fix overflow, tiny tap targets, and images that blow the layout. Navbar badge must remain visible.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Expected result</p>
+        <h2>A shop a classmate can use silently</h2>
+        <div class="hero-panel">
+          <p class="small" style="opacity:.7">Browse → search → filter → details → add → badge increments</p>
+          <h3 style="color:#fff;margin-top:8px">If the API fails, Retry is obvious. If search misses, the empty state is obvious.</h3>
+          <p class="mt">Checkout and login are out of scope. That is discipline, not a missing feature.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment</p>
+        <h2>Shop polish for tomorrow’s review</h2>
+        <p><span class="tag">Build</span> &nbsp; Estimated time: 1–3 hours &nbsp; Difficulty: ★★★</p>
+        <p class="mt"><b>Objective:</b> Finish any incomplete v1 features and add one improvement you can explain.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Requirements</h3>
+            <ul class="clean">
+              <li>All v1 features working</li>
+              <li>README: how to run, API used, your extra feature</li>
+              <li>No secrets in the project</li>
+              <li>Components in separate files</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Expected features</h3>
+            <ul class="clean">
+              <li>Loading / error / empty</li>
+              <li>Cart count matches items</li>
+              <li>Usable at 375px width</li>
+              <li>You can demo in 3 minutes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment extras</p>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Bonus challenge</h3>
+            <ul class="clean">
+              <li>Remove from cart / change quantity</li>
+              <li>Persist cart in <code>localStorage</code></li>
+              <li>Sort by price</li>
+            </ul>
+          </div>
+          <div class="card navy">
+            <h3>Submission</h3>
+            <p>Folder <code>day11-shop-yourname</code>. Day 12: review, git, deploy, and a short presentation. Bring a laptop that can run <code>npm run dev</code>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Recap</p>
+        <h2>What we practiced</h2>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Plan</h3><p>Scope, tree, state list — then files.</p></div>
+          <div class="card"><h3>Compose</h3><p>Reusable cards, filters, status UI.</p></div>
+          <div class="card"><h3>Connect</h3><p>API in, cart events up, UI out.</p></div>
+          <div class="card"><h3>Ship a slice</h3><p>Working beats perfect checkout.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Common mistakes to avoid tonight</p>
+        <ul class="clean" style="font-size:22px">
+          <li>Building the cart before the catalog loads.</li>
+          <li>Copy-pasting 4 slightly different cards.</li>
+          <li>Storing filtered products instead of deriving them.</li>
+          <li>Ignoring mobile until “later.”</li>
+          <li>Scope creep: payments, admin, five extra pages.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Key takeaways</p>
+        <ol class="clean" style="font-size:24px">
+          <li>Developers plan components and state before they type.</li>
+          <li>App owns shared data. Children emit events.</li>
+          <li>API failures are a UI feature.</li>
+          <li>Tailwind is speed — after the structure works.</li>
+          <li>v1 is a checklist, not a dream.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Quick quiz</p>
+        <div class="grid grid-2 mt">
+          <div class="q">1. Why does cart state live in App?</div>
+          <div class="q">2. How do you avoid duplicate cart rows?</div>
+          <div class="q">3. Name two presentational components in the shop.</div>
+          <div class="q">4. What is out of scope for this mini shop?</div>
+        </div>
+        <p class="mt muted">Discuss in pairs for 3 minutes, then share.</p>
+      </div>
+      <aside class="notes">1) Shared by nav, list, details. 2) Merge qty by id. 3) Card, Badge, SearchBar… 4) Payments, auth, real stock.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Questions &amp; discussion</p>
+        <h2>Studio time remaining</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Prompt</h3><p>What will you cut if you have 20 minutes left?</p></div>
+          <div class="card"><h3>Prompt</h3><p>Which bug did React DevTools catch?</p></div>
+          <div class="card teal"><h3>Office minutes</h3><p>Stay for cart merge and filter bugs.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Tomorrow · Day 12</p>
+        <h1 class="display">Review, refactor, git, deploy, present, roadmap.</h1>
+        <p class="lede">We finish like a team: clean up, put the project on GitHub, deploy a React build, and talk about what to learn after this bootcamp.</p>
+        <div class="card teal mt">
+          <h3>Bring to class</h3>
+          <p>A demo-able shop (or your chosen final project). You will present for a few minutes.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div class="footerbar">
+    <span id="counter"></span>
+    <div class="nav-btns">
+      <button class="nav" id="prev">Back</button>
+      <button class="nav primary" id="next">Next</button>
+    </div>
+  </div>
+</div>
+<script src="assets/slides.js"></script>
+</body>
+</html>

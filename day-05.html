@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 5 — JavaScript Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/slides.css" />
+</head>
+<body>
+<div class="deck">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">05</div>
+      <div>Web + React Bootcamp <small>Day 5 · JavaScript Fundamentals</small></div>
+    </div>
+    <div class="top-meta">
+      <span>Press <span class="kbd">N</span> instructor notes</span>
+      <a href="index.html" style="color:inherit">All days</a>
+    </div>
+  </header>
+  <div class="progress"><span id="bar"></span></div>
+  <main class="viewport">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 5 · 2.5–3 hours</p>
+        <h1 class="display">Pages can look good. Today they start thinking.</h1>
+        <p class="lede">HTML structures. CSS styles. JavaScript decides, calculates, and reacts. You will write real logic in class.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Learn</h3><p>Variables, types, logic, arrays, objects, functions.</p></div>
+          <div class="card"><h3>Build</h3><p>A grade calculator that computes a result from marks.</p></div>
+          <div class="card teal"><h3>Mindset</h3><p>Type the code. Guess the output. Then run it.</p></div>
+        </div>
+      </div>
+      <aside class="notes"><b>Instructor:</b> Ask who has used JavaScript. Normalize “never.” Open DevTools Console together in 2 minutes so everyone has a playground before the first concept.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Where we are</p>
+        <h2>The course just became interactive</h2>
+        <div class="flow mt">
+          <div class="node">HTML</div><span class="arrow">→</span>
+          <div class="node">CSS</div><span class="arrow">→</span>
+          <div class="node">Tailwind</div><span class="arrow">→</span>
+          <div class="node">JavaScript</div><span class="arrow">→</span>
+          <div class="node">DOM</div><span class="arrow">→</span>
+          <div class="node">APIs</div><span class="arrow">→</span>
+          <div class="node">React</div>
+        </div>
+        <p class="callout mt">Days 5–7 are the bridge: from static pages to apps. React later is JavaScript with a better UI model.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Why today matters</p>
+        <h2>Pretty pages still cannot decide</h2>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Problem</h3>
+            <p>A form can collect marks, but HTML cannot add them, find an average, or pick a grade.</p>
+          </div>
+          <div class="card teal">
+            <h3>Solution</h3>
+            <p>A programming language that runs in the browser: JavaScript.</p>
+          </div>
+        </div>
+        <p class="lede mt">Technology: JavaScript. Result: calculators, carts, search, logins, and every React app you will build.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 5 learning objectives</p>
+        <h2>By the end of today you can…</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <ol class="clean">
+              <li>Explain why websites need JavaScript</li>
+              <li>Store values with <code>let</code> and <code>const</code></li>
+              <li>Work with strings, numbers, booleans, arrays, objects</li>
+              <li>Use operators, conditionals, loops, and functions</li>
+            </ol>
+          </div>
+          <div class="card navy">
+            <h3>You will leave with</h3>
+            <p>A working grade calculator in class + a student result calculator homework (1–2 hours).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Interactive question</p>
+        <div class="q">If a shopping site shows “3 items · $42 total”, who did the math?</div>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>HTML?</h3><p>It can show the numbers, but it cannot add them.</p></div>
+          <div class="card"><h3>CSS?</h3><p>It can color the badge. It cannot count items.</p></div>
+          <div class="card teal"><h3>JavaScript</h3><p>It stores prices, adds totals, and updates the page.</p></div>
+        </div>
+      </div>
+      <aside class="notes">Write “structure / style / behavior” on the board. Keep this triad visible all week.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What is it?</p>
+        <h2>JavaScript is the language of browser behavior</h2>
+        <p class="lede">It is a programming language that runs in the browser (and also on servers). It stores data, makes decisions, and later talks to the page.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Why we need it</h3><p>Users click, type, and expect results instantly — without a new page for every calculation.</p></div>
+          <div class="card"><h3>How it works</h3><p>The browser reads your script, executes it top to bottom, and keeps values in memory.</p></div>
+          <div class="card teal"><h3>Real world</h3><p>Google search suggestions, YouTube play/pause, and checkout totals are JavaScript.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">The three layers</p>
+        <h2>HTML, CSS, JavaScript</h2>
+        <table class="compare mt">
+          <tr><th>Layer</th><th>Job</th><th>Question it answers</th></tr>
+          <tr><td>HTML</td><td>Structure</td><td>What is on the page?</td></tr>
+          <tr><td>CSS / Tailwind</td><td>Presentation</td><td>How does it look?</td></tr>
+          <tr><td>JavaScript</td><td>Behavior</td><td>What happens when the user acts?</td></tr>
+        </table>
+        <p class="callout mt">Do not mix jobs. Keep HTML for meaning, CSS for look, JS for logic.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">How it runs</p>
+        <h2>Two places you will write JS this week</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <span class="tag">Today</span>
+            <h3 class="mt">Console + script file</h3>
+            <p>Practice logic first. Connect to buttons tomorrow.</p>
+            <pre class="code mt">&lt;script src=<span class="s">"app.js"</span>&gt;&lt;/script&gt;</pre>
+          </div>
+          <div class="card navy">
+            <span class="tag">Tomorrow</span>
+            <h3 class="mt">The DOM</h3>
+            <p>Select an element, change its text, listen for clicks. Same language, new power.</p>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">Live: open Chrome DevTools → Console. Type 2 + 2. Then typeof "hello". Celebrate the first win.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Live coding · 8 minutes</p>
+        <h2>Your first script</h2>
+        <div class="grid grid-2 mt">
+          <pre class="code"><span class="c">// index.html — before &lt;/body&gt;</span>
+&lt;script src=<span class="s">"app.js"</span>&gt;&lt;/script&gt;</pre>
+          <pre class="code"><span class="c">// app.js</span>
+<span class="k">const</span> student = <span class="s">"Amina"</span>;
+<span class="k">let</span> score = <span class="t">88</span>;
+console.log(student, score);</pre>
+        </div>
+        <p class="practice mt"><b>Do together:</b> Create the files. Open the page. Open Console (Mac: Option+Command+J). Confirm the log.</p>
+      </div>
+      <aside class="notes">If nothing logs: script path is wrong, or they put the script in &lt;head&gt; without defer. Keep it at the end of body.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What is it?</p>
+        <h2>A variable is a named box for a value</h2>
+        <p class="lede">Programs remember things: a name, a total, a list of marks. Variables are those memories.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Why</h3><p>Without names, you retype numbers and make mistakes.</p></div>
+          <div class="card"><h3>How</h3><p>Declare → assign → use. <code>let total = 0;</code></p></div>
+          <div class="card teal"><h3>Real world</h3><p>Cart total, logged-in username, current slide number.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">let and const</p>
+        <h2>Choose the smallest permission</h2>
+        <table class="compare mt">
+          <tr><th></th><th><code>const</code></th><th><code>let</code></th></tr>
+          <tr><td>Can reassign?</td><td>No</td><td>Yes</td></tr>
+          <tr><td>Use when</td><td>The name should not change</td><td>The value will change</td></tr>
+          <tr><td>Example</td><td><code>const PI = 3.14</code></td><td><code>let total = 0</code></td></tr>
+        </table>
+        <p class="callout mt">Default to <code>const</code>. Switch to <code>let</code> only when you must update the value. Avoid <code>var</code> in this course.</p>
+      </div>
+      <aside class="notes">Demo: const score = 10; score = 20; → TypeError. Then let score = 10; score = 20; logs 20.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Data types</p>
+        <h2>JavaScript needs to know what kind of value you have</h2>
+        <div class="grid grid-4 mt">
+          <div class="card"><h3>String</h3><p><code>"Amina"</code> text</p></div>
+          <div class="card"><h3>Number</h3><p><code>88</code> math</p></div>
+          <div class="card"><h3>Boolean</h3><p><code>true</code> / <code>false</code></p></div>
+          <div class="card"><h3>Later</h3><p>array, object, null, undefined</p></div>
+        </div>
+        <pre class="code mt">console.log(<span class="k">typeof</span> <span class="s">"hi"</span>);  <span class="c">// string</span>
+console.log(<span class="k">typeof</span> <span class="t">42</span>);     <span class="c">// number</span>
+console.log(<span class="k">typeof</span> <span class="t">true</span>);   <span class="c">// boolean</span></pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Operators</p>
+        <h2>Tools that combine and compare values</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Math</h3>
+            <p><code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code></p>
+            <pre class="code mt"><span class="t">10</span> % <span class="t">3</span>  <span class="c">// 1 remainder</span>
+<span class="t">2</span> ** <span class="t">3</span>  <span class="c">// 8</span></pre>
+          </div>
+          <div class="card">
+            <h3>Compare</h3>
+            <p>Always prefer <code>===</code> and <code>!==</code></p>
+            <pre class="code mt"><span class="t">5</span> === <span class="s">"5"</span>  <span class="c">// false</span>
+<span class="t">5</span> ==  <span class="s">"5"</span>  <span class="c">// true — avoid</span></pre>
+          </div>
+        </div>
+        <p class="small muted mt">Logical: <code>&amp;&amp;</code> and, <code>||</code> or, <code>!</code> not. Assignment: <code>=</code> <code>+=</code> <code>-=</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Strings</p>
+        <h2>Text is data too</h2>
+        <p class="lede">Names, emails, error messages — almost every UI is strings.</p>
+        <pre class="code mt"><span class="k">const</span> first = <span class="s">"Ada"</span>;
+<span class="k">const</span> last = <span class="s">"Lovelace"</span>;
+<span class="k">const</span> full = first + <span class="s">" "</span> + last;
+console.log(full.length);
+console.log(full.toUpperCase());
+console.log(full.includes(<span class="s">"Ada"</span>));</pre>
+        <p class="callout mt">Tomorrow you will write the same idea with template literals: <code>`Hello, ${first}`</code></p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Numbers</p>
+        <h2>Marks, prices, and averages</h2>
+        <div class="grid grid-2 mt">
+          <pre class="code"><span class="k">const</span> math = <span class="t">80</span>;
+<span class="k">const</span> english = <span class="t">90</span>;
+<span class="k">const</span> total = math + english;
+<span class="k">const</span> average = total / <span class="t">2</span>;
+console.log(average); <span class="c">// 85</span></pre>
+          <div class="card amber">
+            <h3>Watch this trap</h3>
+            <p><code>"10" + 5</code> becomes <code>"105"</code> because <code>+</code> concatenates strings.</p>
+            <p class="mt">Fix: <code>Number("10") + 5</code> or <code>Number(input.value)</code>.</p>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">Demo prompt() or a fake string from an input. Students hit this on the mini project.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Boolean</p>
+        <h2>Yes / no decisions</h2>
+        <p class="lede">Every <code>if</code> needs a true or false. Comparisons produce booleans.</p>
+        <pre class="code mt"><span class="k">const</span> passed = average &gt;= <span class="t">40</span>;
+<span class="k">const</span> honor = average &gt;= <span class="t">80</span> &amp;&amp; passed;
+console.log(passed, honor);</pre>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Why</h3><p>UI hides, shows, enables, and warns based on yes/no.</p></div>
+          <div class="card"><h3>How</h3><p>Comparisons and logical operators.</p></div>
+          <div class="card teal"><h3>Real world</h3><p>“Is the cart empty?” “Is the user logged in?”</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Practice 1 · 6 minutes</p>
+        <div class="practice">
+          <h3>Console gym</h3>
+          <p>In <code>app.js</code>, create:</p>
+          <ol class="clean">
+            <li><code>const name</code> with your name</li>
+            <li><code>let marks</code> starting at 70, then add 15</li>
+            <li>Log whether you passed (<code>&gt;= 40</code>)</li>
+            <li>Log a sentence using string concatenation</li>
+          </ol>
+          <p class="mt muted">Done when Console shows your name, 85, true, and a sentence.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Arrays</p>
+        <h2>A list in one variable</h2>
+        <p class="lede">Marks for five subjects should not be five separate variables if you want to loop them.</p>
+        <pre class="code mt"><span class="k">const</span> marks = [<span class="t">80</span>, <span class="t">72</span>, <span class="t">90</span>, <span class="t">65</span>, <span class="t">88</span>];
+console.log(marks[<span class="t">0</span>]);      <span class="c">// 80 — first item</span>
+console.log(marks.length);   <span class="c">// 5</span>
+marks.push(<span class="t">70</span>);              <span class="c">// add at end</span></pre>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Why</h3><p>Order and count matter: playlists, todos, products.</p></div>
+          <div class="card"><h3>How</h3><p>Index starts at 0. <code>.length</code> is the count.</p></div>
+          <div class="card teal"><h3>Real world</h3><p>A cart is an array of product objects.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Objects</p>
+        <h2>A thing with labeled properties</h2>
+        <p class="lede">A student is not a list of random numbers. A student has a name, marks, and a grade.</p>
+        <pre class="code mt"><span class="k">const</span> student = {
+  name: <span class="s">"Karim"</span>,
+  math: <span class="t">78</span>,
+  english: <span class="t">82</span>
+};
+console.log(student.name);
+console.log(student[<span class="s">"math"</span>]);</pre>
+        <p class="callout mt">Arrays are ordered lists. Objects are labeled records. You will combine both: an array of student objects.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Live coding · 8 minutes</p>
+        <h2>One student, then a list</h2>
+        <pre class="code mt"><span class="k">const</span> classList = [
+  { name: <span class="s">"Amina"</span>, marks: <span class="t">88</span> },
+  { name: <span class="s">"Karim"</span>, marks: <span class="t">71</span> },
+  { name: <span class="s">"Nila"</span>,  marks: <span class="t">39</span> }
+];
+console.log(classList[<span class="t">0</span>].name);
+console.log(classList.length);</pre>
+        <p class="practice mt"><b>Change it:</b> Add yourself as a fourth object. Log the last student’s marks using <code>classList.length - 1</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Conditionals</p>
+        <h2>If this is true, do that</h2>
+        <pre class="code mt"><span class="k">const</span> average = <span class="t">73</span>;
+<span class="k">let</span> grade;
+
+<span class="k">if</span> (average &gt;= <span class="t">80</span>) {
+  grade = <span class="s">"A"</span>;
+} <span class="k">else if</span> (average &gt;= <span class="t">70</span>) {
+  grade = <span class="s">"B"</span>;
+} <span class="k">else if</span> (average &gt;= <span class="t">40</span>) {
+  grade = <span class="s">"C"</span>;
+} <span class="k">else</span> {
+  grade = <span class="s">"F"</span>;
+}</pre>
+        <p class="small muted mt">Order matters. Check the highest band first so 85 is A, not C.</p>
+      </div>
+      <aside class="notes">Ask: what grade is 70? Walk the branches out loud. Then change 70 to 69.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Loops</p>
+        <h2>Repeat work without copy-paste</h2>
+        <div class="grid grid-2 mt">
+          <pre class="code"><span class="k">const</span> marks = [<span class="t">80</span>, <span class="t">72</span>, <span class="t">90</span>];
+<span class="k">let</span> total = <span class="t">0</span>;
+
+<span class="k">for</span> (<span class="k">let</span> i = <span class="t">0</span>; i &lt; marks.length; i++) {
+  total += marks[i];
+}
+
+<span class="k">const</span> avg = total / marks.length;</pre>
+          <div class="card">
+            <h3>Also useful</h3>
+            <p><code>for...of</code> reads “for each item in the list”:</p>
+            <pre class="code mt"><span class="k">for</span> (<span class="k">const</span> mark <span class="k">of</span> marks) {
+  total += mark;
+}</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Functions</p>
+        <h2>A reusable recipe with a name</h2>
+        <p class="lede">If you compute a grade in three places, you will get three slightly different bugs. Put the recipe in one function.</p>
+        <pre class="code mt"><span class="k">function</span> getGrade(average) {
+  <span class="k">if</span> (average &gt;= <span class="t">80</span>) <span class="k">return</span> <span class="s">"A"</span>;
+  <span class="k">if</span> (average &gt;= <span class="t">70</span>) <span class="k">return</span> <span class="s">"B"</span>;
+  <span class="k">if</span> (average &gt;= <span class="t">40</span>) <span class="k">return</span> <span class="s">"C"</span>;
+  <span class="k">return</span> <span class="s">"F"</span>;
+}
+
+console.log(getGrade(<span class="t">73</span>)); <span class="c">// "B"</span></pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Functions · how they work</p>
+        <div class="flow mt">
+          <div class="node">Call getGrade(73)</div><span class="arrow">→</span>
+          <div class="node">Parameter average = 73</div><span class="arrow">→</span>
+          <div class="node">Body runs</div><span class="arrow">→</span>
+          <div class="node">return "B"</div>
+        </div>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Parameters</h3><p>Inputs the recipe expects.</p></div>
+          <div class="card"><h3>Return</h3><p>The value sent back to the caller.</p></div>
+          <div class="card teal"><h3>Real world</h3><p><code>calculateTax(price)</code>, <code>formatName(user)</code>.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Live coding · 10 minutes</p>
+        <h2>From marks to a result object</h2>
+        <pre class="code mt"><span class="k">function</span> summarize(name, marks) {
+  <span class="k">let</span> total = <span class="t">0</span>;
+  <span class="k">for</span> (<span class="k">const</span> m <span class="k">of</span> marks) total += m;
+  <span class="k">const</span> average = total / marks.length;
+  <span class="k">return</span> { name, total, average, grade: getGrade(average) };
+}
+
+console.log(summarize(<span class="s">"Amina"</span>, [<span class="t">80</span>, <span class="t">90</span>, <span class="t">70</span>]));</pre>
+        <p class="muted mt">Line by line: loop adds, divide for average, reuse <code>getGrade</code>, return one object.</p>
+      </div>
+      <aside class="notes">Type this live. Do not paste a finished file. Pause after the loop and log total.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Practice 2 · 7 minutes</p>
+        <div class="practice">
+          <h3>Write <code>isEven(n)</code></h3>
+          <p>Return <code>true</code> if <code>n % 2 === 0</code>, else <code>false</code>.</p>
+          <p class="mt">Then write <code>maxOfTwo(a, b)</code> that returns the larger number using an <code>if</code>.</p>
+          <p class="mt muted">Test: <code>isEven(7)</code> → false. <code>maxOfTwo(12, 9)</code> → 12.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Practice 3 · 8 minutes</p>
+        <div class="practice">
+          <h3>Average of an array</h3>
+          <p>Write <code>average(numbers)</code> that returns the mean. Guard empty arrays: if <code>length === 0</code>, return <code>0</code>.</p>
+          <p class="mt">Then log grades for <code>[55, 60, 70]</code> using your <code>getGrade</code>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Practice 4 · predict</p>
+        <div class="q">What does this log?</div>
+        <pre class="code mt"><span class="k">const</span> a = <span class="s">"10"</span>;
+<span class="k">const</span> b = <span class="t">5</span>;
+console.log(a + b);
+console.log(Number(a) + b);
+console.log(a === <span class="t">10</span>);</pre>
+        <p class="mt muted">Write answers on paper first. Then run it.</p>
+      </div>
+      <aside class="notes">Answers: "105", 15, false. This is the #1 homework bug.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project</p>
+        <h2>Grade Calculator</h2>
+        <p class="lede">Objective: compute total, average, and letter grade from subject marks — in the console first, then optionally with <code>prompt</code>.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Requirements</h3>
+            <ul class="clean">
+              <li>At least 3 numeric marks</li>
+              <li>Functions for total, average, grade</li>
+              <li>Log a clear result object</li>
+            </ul>
+          </div>
+          <div class="card teal">
+            <h3>Features</h3>
+            <p>Name + marks → total → average → A/B/C/F. Bonus: pass/fail message.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project · steps</p>
+        <ol class="clean" style="font-size:22px">
+          <li>Create folder and <code>index.html</code> + <code>app.js</code>.</li>
+          <li>Store a student name and a marks array.</li>
+          <li>Write <code>sum</code>, <code>average</code>, <code>getGrade</code>.</li>
+          <li>Write <code>printResult(name, marks)</code> that logs everything.</li>
+          <li>Optional: <code>Number(prompt("Math mark?"))</code> for three subjects.</li>
+          <li>Test edge cases: 40, 39, 100, 0.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project · files</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Suggested folders</h3>
+            <pre class="code" style="margin-top:10px">day-05-grade-calculator/
+  index.html
+  app.js</pre>
+          </div>
+          <div class="hero-panel" style="margin-top:0">
+            <p class="small" style="opacity:.7">Expected result</p>
+            <h3 style="color:#fff;margin-top:8px">Console shows a result object</h3>
+            <p class="mt"><code>{ name: "Amina", total: 240, average: 80, grade: "A" }</code></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment</p>
+        <h2>Student Result Calculator</h2>
+        <p><span class="tag">Beginner</span> &nbsp; Estimated time: 1–2 hours &nbsp; Difficulty: ★★☆</p>
+        <p class="mt"><b>Objective:</b> Build your own result tool — not a copy of the in-class file. It must use a name, multiple marks, total, average, and grade.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Requirements</h3>
+            <ul class="clean">
+              <li>Student name stored in a variable</li>
+              <li>At least 4 subject marks (array)</li>
+              <li><code>const</code> / <code>let</code> used correctly</li>
+              <li>Functions for total, average, letter grade</li>
+              <li>A pass/fail decision (<code>&gt;= 40</code>)</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Expected features</h3>
+            <ul class="clean">
+              <li>Logs a full result (name, total, average, grade, status)</li>
+              <li>Works for at least two different students (call the function twice)</li>
+              <li>No copied mystery code you cannot explain</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment extras</p>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Bonus challenge</h3>
+            <ul class="clean">
+              <li>Highest and lowest mark functions</li>
+              <li>A second grading scale (GPA 4.0)</li>
+              <li>Tiny HTML page that uses <code>prompt</code> and <code>alert</code></li>
+            </ul>
+          </div>
+          <div class="card navy">
+            <h3>Submission</h3>
+            <p>Folder <code>day05-result-yourname</code> with HTML + JS. Bring it to Day 6. We will hook the same logic to buttons.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Recap</p>
+        <h2>What we learned</h2>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Why JS</h3><p>Behavior and calculation the page cannot do alone.</p></div>
+          <div class="card"><h3>Memory</h3><p><code>let</code> / <code>const</code>, types, operators.</p></div>
+          <div class="card"><h3>Structure</h3><p>Arrays for lists, objects for labeled records.</p></div>
+          <div class="card"><h3>Control</h3><p>if / else, loops, functions that return values.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Common mistakes</p>
+        <ul class="clean" style="font-size:22px">
+          <li>Using <code>==</code> instead of <code>===</code>.</li>
+          <li>Adding strings from <code>prompt</code> without <code>Number()</code>.</li>
+          <li>Reassigning a <code>const</code> instead of using <code>let</code>.</li>
+          <li>Forgetting arrays start at index 0.</li>
+          <li>Copying a giant calculator instead of writing small functions.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Key takeaways</p>
+        <ol class="clean" style="font-size:24px">
+          <li>JavaScript is the behavior layer of the web.</li>
+          <li>Name values. Prefer <code>const</code>.</li>
+          <li>Types matter — especially string vs number.</li>
+          <li>Functions keep logic in one place.</li>
+          <li>Objects + arrays model real data (students, products, todos).</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Quick quiz</p>
+        <div class="grid grid-2 mt">
+          <div class="q">1. Why do we need JavaScript if HTML already displays content?</div>
+          <div class="q">2. When do you choose <code>let</code> instead of <code>const</code>?</div>
+          <div class="q">3. What is the difference between an array and an object?</div>
+          <div class="q">4. Why does a function use <code>return</code>?</div>
+        </div>
+        <p class="mt muted">Discuss in pairs for 3 minutes, then share.</p>
+      </div>
+      <aside class="notes">1) HTML cannot calculate or react. 2) When the value must change. 3) ordered list vs labeled properties. 4) to send a result back to the caller.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Questions & discussion</p>
+        <h2>What still feels fuzzy?</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Prompt</h3><p>Explain a variable to someone who only knows Excel cells.</p></div>
+          <div class="card"><h3>Prompt</h3><p>When would you store students in an array of objects?</p></div>
+          <div class="card teal"><h3>Office minutes</h3><p>Stay 10 minutes for Console / file-path issues.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Tomorrow · Day 6</p>
+        <h1 class="display">The DOM: JavaScript meets the page.</h1>
+        <p class="lede">You will select elements, change text and styles, listen for clicks and input, and learn map, filter, and arrow functions. Mini project: a Todo list.</p>
+        <div class="card teal mt">
+          <h3>Bring to class</h3>
+          <p>Your Day 5 result calculator. We will attach the same logic to a form.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div class="footerbar">
+    <span id="counter"></span>
+    <div class="nav-btns">
+      <button class="nav" id="prev">Back</button>
+      <button class="nav primary" id="next">Next</button>
+    </div>
+  </div>
+</div>
+<script src="assets/slides.js"></script>
+</body>
+</html>

@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 7 — JavaScript Advanced + API</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/slides.css" />
+</head>
+<body>
+<div class="deck">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">07</div>
+      <div>Web + React Bootcamp <small>Day 7 · JS Advanced + API</small></div>
+    </div>
+    <div class="top-meta">
+      <span>Press <span class="kbd">N</span> instructor notes</span>
+      <a href="index.html" style="color:inherit">All days</a>
+    </div>
+  </header>
+  <div class="progress"><span id="bar"></span></div>
+  <main class="viewport">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 7 · 2.5–3 hours</p>
+        <h1 class="display">Your app can use data it did not invent.</h1>
+        <p class="lede">Todos lived in memory. Real products load users, weather, and products from servers. Today you learn to wait, fetch, and fail gracefully.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Learn</h3><p>Scope, callbacks, promises, async/await, JSON, REST, fetch.</p></div>
+          <div class="card"><h3>Build</h3><p>User Search with JSONPlaceholder.</p></div>
+          <div class="card teal"><h3>Mindset</h3><p>Networks are slow and they fail. UI must say so.</p></div>
+        </div>
+      </div>
+      <aside class="notes">Demo a live site going offline (DevTools Network → Offline). Students should feel why loading and error states exist.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Why today matters</p>
+        <h2>Hardcoded arrays do not scale</h2>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Problem</h3>
+            <p>You cannot ship 10,000 users in <code>app.js</code>. Data lives on servers and changes every second.</p>
+          </div>
+          <div class="card teal">
+            <h3>Solution</h3>
+            <p>Request data over HTTP, wait for the response, then render.</p>
+          </div>
+        </div>
+        <p class="lede mt">Technology: <code>fetch</code> + JSON + async/await. Result: search apps, dashboards, and every React API day.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 7 learning objectives</p>
+        <h2>By the end of today you can…</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <ol class="clean">
+              <li>Explain scope and why callbacks exist</li>
+              <li>Use promises and async/await</li>
+              <li>Catch errors with try/catch</li>
+              <li>Fetch JSON from a REST GET endpoint and show loading/error UI</li>
+            </ol>
+          </div>
+          <div class="card navy">
+            <h3>You will leave with</h3>
+            <p>A working User Search + homework that fetches and displays external data (2–3 hours).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Interactive question</p>
+        <div class="q">If weather data takes 2 seconds to arrive, what should the user see at 0.2 seconds?</div>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Blank page?</h3><p>Looks broken.</p></div>
+          <div class="card"><h3>Yesterday’s data?</h3><p>Maybe — but say it is loading first.</p></div>
+          <div class="card teal"><h3>A loading state</h3><p>Honest UI while the network works.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Scope</p>
+        <h2>Where a name is visible</h2>
+        <p class="lede">Scope is the rule: a variable lives inside the block that created it.</p>
+        <pre class="code mt"><span class="k">const</span> appName = <span class="s">"Search"</span>; <span class="c">// global to this file</span>
+
+<span class="k">function</span> search(term) {
+  <span class="k">const</span> q = term.trim(); <span class="c">// only inside search</span>
+  <span class="k">if</span> (q) {
+    <span class="k">const</span> url = <span class="s">`/users?q=${q}`</span>; <span class="c">// only inside if</span>
+  }
+  <span class="c">// console.log(url); // Error</span>
+}</pre>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Why</h3><p>Stops accidental overwrites. Keeps data private.</p></div>
+          <div class="card"><h3>How</h3><p><code>let</code>/<code>const</code> are block-scoped <code>{ }</code>.</p></div>
+          <div class="card teal"><h3>Real world</h3><p>A loop index should not leak into the next function.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Callbacks</p>
+        <h2>A function you pass to be called later</h2>
+        <pre class="code mt">btn.addEventListener(<span class="s">"click"</span>, handleClick);
+<span class="c">// handleClick is a callback — we do not call it now</span>
+
+setTimeout(() =&gt; {
+  console.log(<span class="s">"2 seconds later"</span>);
+}, <span class="t">2000</span>);</pre>
+        <p class="callout mt">Why they exist: some work finishes later (timer, click, network). You hand over a “when you’re done, run this.”</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">The callback problem</p>
+        <h2>Nested “later” becomes hard to read</h2>
+        <pre class="code mt">getUser(id, (user) =&gt; {
+  getPosts(user.id, (posts) =&gt; {
+    getComments(posts[<span class="t">0</span>].id, (comments) =&gt; {
+      render(comments);
+    });
+  });
+});</pre>
+        <p class="lede mt">This is why promises and async/await were invented: same waiting, flatter code.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Promises</p>
+        <h2>An object that represents a future value</h2>
+        <p class="lede">A promise is pending, then fulfilled (success) or rejected (failure).</p>
+        <div class="flow mt">
+          <div class="node">pending</div><span class="arrow">→</span>
+          <div class="node">fulfilled + data</div>
+        </div>
+        <div class="flow mt">
+          <div class="node">pending</div><span class="arrow">→</span>
+          <div class="node">rejected + error</div>
+        </div>
+        <pre class="code mt">fetch(url)
+  .then((res) =&gt; res.json())
+  .then((data) =&gt; console.log(data))
+  .catch((err) =&gt; console.error(err));</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">async / await</p>
+        <h2>Write async code so it looks step-by-step</h2>
+        <pre class="code mt"><span class="k">async function</span> loadUsers() {
+  <span class="k">const</span> res = <span class="k">await</span> fetch(url);
+  <span class="k">const</span> data = <span class="k">await</span> res.json();
+  <span class="k">return</span> data;
+}</pre>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>async</h3><p>Marks a function that can pause. It returns a promise.</p></div>
+          <div class="card"><h3>await</h3><p>Pause until that promise settles. Only inside async.</p></div>
+        </div>
+        <p class="callout mt">This is the style we use for the rest of the course — including React later.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">try / catch</p>
+        <h2>Networks fail. Your app should not go silent.</h2>
+        <pre class="code mt"><span class="k">async function</span> loadUsers() {
+  <span class="k">try</span> {
+    <span class="k">const</span> res = <span class="k">await</span> fetch(url);
+    <span class="k">if</span> (!res.ok) <span class="k">throw new</span> <span class="t">Error</span>(<span class="s">"Request failed"</span>);
+    <span class="k">return await</span> res.json();
+  } <span class="k">catch</span> (err) {
+    console.error(err);
+    status.textContent = <span class="s">"Could not load users."</span>;
+  }
+}</pre>
+        <p class="muted mt">try = hopeful path. catch = recovery path. Always tell the human.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Compare the three styles</p>
+        <h2>Same wait. Cleaner code over time.</h2>
+        <table class="compare mt">
+          <tr><th>Style</th><th>Feel</th><th>Use in this course</th></tr>
+          <tr><td>Callbacks</td><td>Nested, easy to tangle</td><td>Events, setTimeout</td></tr>
+          <tr><td>Promises + then</td><td>Chain of later steps</td><td>You will read this in docs</td></tr>
+          <tr><td>async/await</td><td>Top to bottom</td><td>Default for fetch</td></tr>
+        </table>
+        <p class="callout mt">You still need to understand promises — await is sugar on top of them.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">JSON</p>
+        <h2>The common language of APIs</h2>
+        <p class="lede">JSON is text that looks like a JS object. Servers send it. You parse it into real objects.</p>
+        <pre class="code mt"><span class="c">// text on the wire</span>
+<span class="s">'{ "id": 1, "name": "Leanne Graham" }'</span>
+
+<span class="k">const</span> user = JSON.parse(text);
+<span class="k">const</span> textAgain = JSON.stringify(user);</pre>
+        <p class="callout mt"><code>res.json()</code> is fetch doing parse for you. Keys are quoted. No functions inside JSON.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">REST API basics</p>
+        <h2>URLs + HTTP methods = a contract</h2>
+        <table class="compare mt">
+          <tr><th>Idea</th><th>Meaning</th><th>Today</th></tr>
+          <tr><td>Resource</td><td>A type of data</td><td><code>/users</code></td></tr>
+          <tr><td>GET</td><td>Read</td><td>Load the list</td></tr>
+          <tr><td>POST</td><td>Create</td><td>Later / backend</td></tr>
+          <tr><td>Status</td><td>200 OK, 404, 500</td><td>Check <code>res.ok</code></td></tr>
+        </table>
+        <p class="lede mt">You are a client. The API is the kitchen. GET is “please send me this dish.”</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">GET request</p>
+        <h2>Ask for a resource. Receive JSON.</h2>
+        <div class="flow mt">
+          <div class="node">Your JS</div><span class="arrow">→</span>
+          <div class="node">GET url</div><span class="arrow">→</span>
+          <div class="node">Server</div><span class="arrow">→</span>
+          <div class="node">JSON</div><span class="arrow">→</span>
+          <div class="node">Render UI</div>
+        </div>
+        <pre class="code mt"><span class="k">const</span> url = <span class="s">"https://jsonplaceholder.typicode.com/users"</span>;
+<span class="k">const</span> res = <span class="k">await</span> fetch(url);
+<span class="k">const</span> users = <span class="k">await</span> res.json();</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Status codes you will actually see</p>
+        <div class="grid grid-4 mt">
+          <div class="card"><h3>200</h3><p>OK — use the JSON.</p></div>
+          <div class="card"><h3>404</h3><p>Not found — wrong URL or id.</p></div>
+          <div class="card"><h3>500</h3><p>Server broke — retry later.</p></div>
+          <div class="card navy"><h3>Failed fetch</h3><p>No network / blocked — catch.</p></div>
+        </div>
+        <p class="lede mt">Your UI does not need to lecture HTTP. Map these to “loaded”, “not found”, or “try again.”</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Fetch API</p>
+        <h2>The browser’s built-in HTTP tool</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>What</h3><p><code>fetch(url)</code> returns a promise for a Response.</p></div>
+          <div class="card"><h3>Why</h3><p>No extra library for basic GET.</p></div>
+          <div class="card teal"><h3>How</h3><p>await fetch → check ok → await json → use data.</p></div>
+        </div>
+        <p class="amber card mt">A 404 still “succeeds” as a Response. Always check <code>res.ok</code> before trusting JSON.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Live coding · 10 minutes</p>
+        <h2>First successful GET</h2>
+        <pre class="code mt"><span class="k">async function</span> demo() {
+  <span class="k">const</span> res = <span class="k">await</span> fetch(
+    <span class="s">"https://jsonplaceholder.typicode.com/users/1"</span>
+  );
+  <span class="k">const</span> user = <span class="k">await</span> res.json();
+  console.log(user.name, user.email);
+}
+
+demo();</pre>
+        <p class="practice mt"><b>Do together:</b> Log the whole object. Then log <code>user.address.city</code>.</p>
+      </div>
+      <aside class="notes">If CORS or network fails, have a screenshot of the JSON ready. jsonplaceholder is usually fine.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Loading state</p>
+        <h2>Tell the truth while you wait</h2>
+        <pre class="code mt">status.textContent = <span class="s">"Loading…"</span>;
+<span class="k">try</span> {
+  <span class="k">const</span> users = <span class="k">await</span> loadUsers();
+  status.textContent = <span class="s">""</span>;
+  render(users);
+} <span class="k">catch</span> {
+  status.textContent = <span class="s">"Something went wrong."</span>;
+}</pre>
+        <p class="callout mt">Three UI modes: loading, success, error. Never leave the last list looking “current” if a new search failed.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Error handling</p>
+        <h2>Different failures, one user-facing message</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>No network</h3><p>fetch throws. catch it.</p></div>
+          <div class="card"><h3>Bad status</h3><p>404 / 500. throw if <code>!res.ok</code>.</p></div>
+          <div class="card"><h3>Empty result</h3><p>Not an error. Show “No users found.”</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Putting it on the page</p>
+        <h2>Same render pattern as Todo</h2>
+        <pre class="code mt"><span class="k">function</span> render(users) {
+  list.innerHTML = users
+    .map((u) =&gt; <span class="s">`
+      &lt;li&gt;
+        &lt;strong&gt;${u.name}&lt;/strong&gt;
+        &lt;p&gt;${u.email}&lt;/p&gt;
+      &lt;/li&gt;`</span>)
+    .join(<span class="s">""</span>);
+}</pre>
+        <p class="muted mt">Data source changed (API). UI skill did not (map → HTML).</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Public APIs in class</p>
+        <h2>We pick endpoints that need no secret key</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>JSONPlaceholder</h3><p>Fake users, posts, comments. Perfect for GET practice.</p></div>
+          <div class="card"><h3>Fake Store</h3><p>Products with images and prices.</p></div>
+          <div class="card teal"><h3>Rule</h3><p>Keys in frontend code leak. We avoid them until a backend exists.</p></div>
+        </div>
+        <p class="callout mt">If an API blocks the browser (CORS), switch endpoint — do not fight it for 40 minutes.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Practice 1 · 6 minutes</p>
+        <div class="practice">
+          <h3>Scope detective</h3>
+          <p>Write a function with an inner <code>if</code> that declares <code>const msg</code>. Try to log <code>msg</code> outside the if. Fix it by declaring <code>let msg</code> in the outer function.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Practice 2 · 8 minutes</p>
+        <div class="practice">
+          <h3>Posts for user 1</h3>
+          <p>GET <code>https://jsonplaceholder.typicode.com/posts?userId=1</code>. Log how many posts. Render titles into a <code>ul</code>.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Practice 3 · 8 minutes</p>
+        <div class="practice">
+          <h3>Break it on purpose</h3>
+          <p>Fetch a URL that 404s. Show an error message in the page — not only in Console. Confirm <code>res.ok</code> is false.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Practice 4 · predict</p>
+        <div class="q">Does fetch throw when the server returns 404?</div>
+        <p class="mt muted">Write yes or no, then prove it in code.</p>
+      </div>
+      <aside class="notes">No — only network failure throws. 404 is a Response with ok: false.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Live coding · search flow</p>
+        <h2>Filter after you fetch</h2>
+        <pre class="code mt"><span class="k">const</span> q = input.value.toLowerCase().trim();
+<span class="k">const</span> users = <span class="k">await</span> loadUsers();
+<span class="k">const</span> matches = users.filter((u) =&gt;
+  u.name.toLowerCase().includes(q)
+);
+render(matches);</pre>
+        <p class="callout mt">JSONPlaceholder has no search query. Client-side filter is the honest approach for this API.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project</p>
+        <h2>User Search</h2>
+        <p class="lede">Objective: fetch users from a public API and let the student search by name. Alternatives if you prefer: Product Search or a simple Weather dashboard.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Requirements</h3>
+            <ul class="clean">
+              <li>GET <code>/users</code> from JSONPlaceholder</li>
+              <li>Search input + button or live filter</li>
+              <li>Loading text while fetching</li>
+              <li>Error message on failure</li>
+              <li>Empty state when nothing matches</li>
+            </ul>
+          </div>
+          <div class="card teal">
+            <h3>UI features</h3>
+            <p>Each result: name, email, company or city. Card layout with CSS or Tailwind.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project · steps</p>
+        <ol class="clean" style="font-size:22px">
+          <li>HTML: search form, status paragraph, results list.</li>
+          <li>Write <code>async function fetchUsers()</code> with try/catch and <code>res.ok</code>.</li>
+          <li>On first load, fetch and render all users.</li>
+          <li>On submit, filter by name (case-insensitive).</li>
+          <li>Wire loading and error into <code>#status</code>.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project · files</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Suggested folders</h3>
+            <pre class="code" style="margin-top:10px">day-07-user-search/
+  index.html
+  styles.css
+  app.js</pre>
+          </div>
+          <div class="hero-panel" style="margin-top:0">
+            <p class="small" style="opacity:.7">Expected result</p>
+            <h3 style="color:#fff;margin-top:8px">Type “lean” → Leanne Graham card appears</h3>
+            <p class="mt">Unplug Wi-Fi (or use a bad URL) → friendly error, not a blank page.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Other mini options</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Weather</h3><p>Public weather API + city input. Same loading/error pattern.</p></div>
+          <div class="card"><h3>Products</h3><p>fakestoreapi.com <code>/products</code> — image, title, price.</p></div>
+          <div class="card navy"><h3>Rule</h3><p>Public GET, JSON, no API key required for class.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment</p>
+        <h2>External Data Explorer</h2>
+        <p><span class="tag">Intermediate</span> &nbsp; Estimated time: 2–3 hours &nbsp; Difficulty: ★★★</p>
+        <p class="mt"><b>Objective:</b> Fetch and display data from a public API you choose — not a clone of the in-class users file.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Requirements</h3>
+            <ul class="clean">
+              <li>At least one GET with <code>fetch</code> + async/await</li>
+              <li>try/catch and <code>res.ok</code> check</li>
+              <li>Loading, success, error, empty states</li>
+              <li>Render a list or cards from JSON fields</li>
+              <li>Some user control (search, select id, or filter)</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Expected features</h3>
+            <ul class="clean">
+              <li>Readable UI (CSS or Tailwind)</li>
+              <li>No hardcoded fake “API” array pretending to be fetch</li>
+              <li>Comments on the fetch function explaining the steps</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment extras</p>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Bonus challenge</h3>
+            <ul class="clean">
+              <li>Click a card to GET a detail URL (e.g. <code>/users/3</code>)</li>
+              <li>Disable the button while loading</li>
+              <li>Show a last-updated timestamp</li>
+            </ul>
+          </div>
+          <div class="card navy">
+            <h3>Submission</h3>
+            <p>Folder <code>day07-api-yourname</code> plus a README with the API URL you used. Bring it to Day 8.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Recap</p>
+        <h2>What we learned</h2>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Waiting</h3><p>Callbacks → promises → async/await.</p></div>
+          <div class="card"><h3>Safety</h3><p>try/catch, res.ok, user-facing errors.</p></div>
+          <div class="card"><h3>JSON + REST</h3><p>GET a resource, parse, render.</p></div>
+          <div class="card"><h3>UX</h3><p>Loading and empty are real states.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Common mistakes</p>
+        <ul class="clean" style="font-size:22px">
+          <li>Forgetting <code>await</code> — you log a Promise, not data.</li>
+          <li>Assuming fetch throws on 404.</li>
+          <li>No loading state — UI looks frozen.</li>
+          <li>Mixing search filter with a second fetch you did not need.</li>
+          <li>Putting API keys in frontend code (we avoid keyed APIs in class).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Key takeaways</p>
+        <ol class="clean" style="font-size:24px">
+          <li>Scope keeps names from leaking.</li>
+          <li>Async work returns later — await it.</li>
+          <li>JSON is data as text; parse before you render.</li>
+          <li>GET + fetch is how the browser talks to APIs.</li>
+          <li>Every request needs loading and error UI.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Quick quiz</p>
+        <div class="grid grid-2 mt">
+          <div class="q">1. Why do we need async/await instead of only synchronous code?</div>
+          <div class="q">2. What does JSON.parse do?</div>
+          <div class="q">3. Why check res.ok after fetch?</div>
+          <div class="q">4. Name three UI states for an API screen.</div>
+        </div>
+        <p class="mt muted">Discuss in pairs for 3 minutes, then share.</p>
+      </div>
+      <aside class="notes">1) Network is slow; JS would freeze or miss the result. 2) Text → object. 3) HTTP errors are not thrown. 4) loading, success, error (empty is a fourth).</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Questions & discussion</p>
+        <h2>What still feels fuzzy?</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Prompt</h3><p>Explain a promise using a restaurant pager.</p></div>
+          <div class="card"><h3>Prompt</h3><p>When is “no results” not an error?</p></div>
+          <div class="card teal"><h3>Office minutes</h3><p>CORS / wrong URL / missing await — we debug together.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Tomorrow · Day 8</p>
+        <h1 class="display">React: components instead of manual DOM.</h1>
+        <p class="lede">You will see why updating the UI by hand gets painful, then build with JSX, props, and functional components. Mini project: a profile card app. Preview: useState on Day 9.</p>
+        <div class="card teal mt">
+          <h3>Bring to class</h3>
+          <p>Node.js installed if possible. We will run Vite to create a React project.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div class="footerbar">
+    <span id="counter"></span>
+    <div class="nav-btns">
+      <button class="nav" id="prev">Back</button>
+      <button class="nav primary" id="next">Next</button>
+    </div>
+  </div>
+</div>
+<script src="assets/slides.js"></script>
+</body>
+</html>

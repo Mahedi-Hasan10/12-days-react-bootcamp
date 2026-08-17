@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 10 — React + API + useEffect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/slides.css" />
+</head>
+<body>
+<div class="deck">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">10</div>
+      <div>Web + React Bootcamp <small>Day 10 · useEffect + APIs</small></div>
+    </div>
+    <div class="top-meta">
+      <span>Press <span class="kbd">N</span> instructor notes</span>
+      <a href="index.html" style="color:inherit">All days</a>
+    </div>
+  </header>
+  <div class="progress"><span id="bar"></span></div>
+  <main class="viewport">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 10 · 2.5–3 hours</p>
+        <h1 class="display">Your app can now ask the internet for data.</h1>
+        <p class="lede">State is memory. Effects are side effects: fetch, timers, subscriptions. Today we load real JSON and show loading, error, and results.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Learn</h3><p>useEffect, fetch in React, search, reusable cards.</p></div>
+          <div class="card"><h3>Build</h3><p>A Product / Movie / User explorer.</p></div>
+          <div class="card teal"><h3>Mindset</h3><p>Network is slow and can fail. The UI must say so.</p></div>
+        </div>
+      </div>
+      <aside class="notes"><b>Instructor:</b> Recap Day 9 Todo in 2 minutes. Ask: “Where would you put fetch if you only know useState?” Typical wrong answer: at the top of the component body. That is today’s problem.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Where we are</p>
+        <h2>From memory to the network</h2>
+        <div class="flow mt">
+          <div class="node">Day 9 · state</div><span class="arrow">→</span>
+          <div class="node">Day 10 · effects + APIs</div><span class="arrow">→</span>
+          <div class="node">Day 11 · shop</div><span class="arrow">→</span>
+          <div class="node">Day 12 · ship</div>
+        </div>
+        <p class="callout mt">The Todo stored tasks in RAM. Products live on a server. Same UI idea: state drives the screen.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 10 learning objectives</p>
+        <h2>By the end of today you can…</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <ol class="clean">
+              <li>Explain when to use <code>useEffect</code></li>
+              <li>Fetch JSON after render, not during render</li>
+              <li>Model loading, success, and error states</li>
+              <li>Search and filter API data in the UI</li>
+              <li>Split a list into reusable presentational components</li>
+            </ol>
+          </div>
+          <div class="card navy">
+            <h3>You will leave with</h3>
+            <p>An explorer app in class + a homework app on a different public API (1–3 hours).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Interactive question</p>
+        <div class="q">What happens if you call <code>fetch</code> directly in the body of a function component?</div>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Guess A</h3><p>It runs once, like <code>useState</code>’s initial value.</p></div>
+          <div class="card"><h3>Guess B</h3><p>It runs every render — possibly an infinite loop.</p></div>
+          <div class="card"><h3>Guess C</h3><p>React blocks it automatically.</p></div>
+        </div>
+      </div>
+      <aside class="notes">Answer B. Render must be pure. Fetch is a side effect. If setState happens after fetch, you re-render and fetch again. That is why useEffect exists.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What is it?</p>
+        <h2><code>useEffect</code> runs after React paints the screen</h2>
+        <p class="lede">Use it for work that talks to the outside world: APIs, <code>localStorage</code>, timers, document title.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Why we need it</h3><p>Rendering should be a calculation. Effects are the “and also do this.”</p></div>
+          <div class="card"><h3>How it works</h3><p>You pass a function and a dependency array. React decides when to re-run it.</p></div>
+          <div class="card teal"><h3>Real world</h3><p>Load products when the shop page opens.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">The three dependency patterns</p>
+        <h2>When does the effect run?</h2>
+        <table class="compare mt">
+          <tr><th>Array</th><th>Runs</th><th>Use for</th></tr>
+          <tr><td><code>[]</code></td><td>Once after mount</td><td>Initial fetch</td></tr>
+          <tr><td><code>[query]</code></td><td>When <code>query</code> changes</td><td>Search as you type (or on submit)</td></tr>
+          <tr><td>omitted</td><td>After every render</td><td>Almost never — easy infinite loop</td></tr>
+        </table>
+      </div>
+      <aside class="notes">Draw the timeline: render → paint → effect. Stress empty array vs missing array. Students mix these up all week.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Simple example</p>
+        <h2>Set the tab title from state</h2>
+        <pre class="code mt"><span class="k">import</span> { useState, useEffect } <span class="k">from</span> <span class="s">"react"</span>;
+
+<span class="k">function</span> <span class="t">TitleDemo</span>() {
+  <span class="k">const</span> [name, setName] = useState(<span class="s">"Guest"</span>);
+  useEffect(() =&gt; {
+    document.title = <span class="s">"Hello, "</span> + name;
+  }, [name]);
+  <span class="k">return</span> &lt;<span class="k">input</span> <span class="t">value</span>={name} <span class="t">onChange</span>={e =&gt; setName(e.target.value)} /&gt;;
+}</pre>
+        <p class="mt muted">No network yet. Same hook. Same rules.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Cleanup</p>
+        <h2>Return a function to undo the effect</h2>
+        <pre class="code mt">useEffect(() =&gt; {
+  <span class="k">const</span> id = setInterval(() =&gt; console.log(<span class="s">"tick"</span>), <span class="s">1000</span>);
+  <span class="k">return</span> () =&gt; clearInterval(id);
+}, []);</pre>
+        <p class="callout mt">For fetch, cleanup often means an <code>AbortController</code> or an <code>ignore</code> flag so a slow response does not overwrite newer data.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What is it?</p>
+        <h2>An API call in React is still just <code>fetch</code></h2>
+        <p class="lede">You already did this on Day 7 in vanilla JS. The new part is where it lives and how the UI waits.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Why</h3><p>Products, weather, and users do not ship inside your JS bundle.</p></div>
+          <div class="card"><h3>How</h3><p>Effect runs → fetch → parse JSON → <code>setItems</code>.</p></div>
+          <div class="card teal"><h3>Today’s API</h3><p><code>fakestoreapi.com</code> or a movie/user public API.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Data flow</p>
+        <h2>App → API → state → UI</h2>
+        <div class="flow mt">
+          <div class="node">Mount</div><span class="arrow">→</span>
+          <div class="node">useEffect</div><span class="arrow">→</span>
+          <div class="node">fetch</div><span class="arrow">→</span>
+          <div class="node">setProducts</div><span class="arrow">→</span>
+          <div class="node">Cards</div>
+        </div>
+        <p class="lede mt">The component does not “contain” products. It asks, then remembers the answer in state.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Loading and error</p>
+        <h2>Three rooms. Only one is open.</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Loading</h3><p><code>true</code> until the first response. Spinner or “Loading…”</p></div>
+          <div class="card"><h3>Error</h3><p>Network fail or <code>!res.ok</code>. Message + Retry.</p></div>
+          <div class="card teal"><h3>Success</h3><p>Array in state. Map to cards. Empty array is still success.</p></div>
+        </div>
+        <p class="q mt">Is an empty product list an error?</p>
+        <p class="mt muted">Usually no. Show an empty state, not a red banner.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">How fetching looks</p>
+        <pre class="code mt">useEffect(() =&gt; {
+  <span class="k">let</span> ignore = <span class="k">false</span>;
+  <span class="k">async function</span> <span class="t">load</span>() {
+    setLoading(<span class="k">true</span>);
+    setError(<span class="s">""</span>);
+    <span class="k">try</span> {
+      <span class="k">const</span> res = <span class="k">await</span> fetch(<span class="s">"https://fakestoreapi.com/products"</span>);
+      <span class="k">if</span> (!res.ok) <span class="k">throw new</span> Error(<span class="s">"Request failed"</span>);
+      <span class="k">const</span> data = <span class="k">await</span> res.json();
+      <span class="k">if</span> (!ignore) setProducts(data);
+    } <span class="k">catch</span> (err) {
+      <span class="k">if</span> (!ignore) setError(err.message);
+    } <span class="k">finally</span> {
+      <span class="k">if</span> (!ignore) setLoading(<span class="k">false</span>);
+    }
+  }
+  load();
+  <span class="k">return</span> () =&gt; { ignore = <span class="k">true</span>; };
+}, []);</pre>
+      </div>
+      <aside class="notes">Do not put async directly on the effect callback — React expects a cleanup function or nothing. Inner async function is the classroom pattern.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Instructor live coding</p>
+        <h2>Fetch products together</h2>
+        <ol class="clean mt">
+          <li>New Vite app <code>day-10-explorer</code></li>
+          <li>Three pieces of state: <code>items</code>, <code>loading</code>, <code>error</code></li>
+          <li>Effect with empty deps; log the JSON in the console first</li>
+          <li>Then render titles in a list</li>
+          <li>Add loading paragraph and error paragraph</li>
+        </ol>
+        <p class="callout mt">Disconnect Wi-Fi once on purpose so students see the error path.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Displaying API data</p>
+        <h2>Map JSON fields to a card, not to the whole page</h2>
+        <pre class="code mt">{products.map(p =&gt; (
+  &lt;<span class="t">ProductCard</span>
+    <span class="t">key</span>={p.id}
+    <span class="t">title</span>={p.title}
+    <span class="t">price</span>={p.price}
+    <span class="t">image</span>={p.image}
+  /&gt;
+))}</pre>
+        <p class="mt">The card should not fetch. It only displays. That keeps fetch in one place.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Reusable components</p>
+        <h2>Presentational vs container</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <span class="tag">Container</span>
+            <h3 class="mt">ExplorerPage</h3>
+            <p>Owns fetch, loading, error, search state. Passes props down.</p>
+          </div>
+          <div class="card navy">
+            <span class="tag">Presentational</span>
+            <h3 class="mt">ProductCard, Spinner, ErrorBanner</h3>
+            <p>Receive data. Emit events like <code>onRetry</code>. Easy to reuse tomorrow in the shop.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Search</p>
+        <h2>Two valid designs. Pick one on purpose.</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Filter locally</h3>
+            <p>Fetch once. <code>items.filter</code> by title. Fast. Needs the full list.</p>
+          </div>
+          <div class="card">
+            <h3>Search on the server</h3>
+            <p>Effect depends on <code>query</code>. New request each search. Needed when the list is huge.</p>
+          </div>
+        </div>
+        <p class="callout mt">Today: fetch all Fake Store products, then filter in memory. Tomorrow’s shop can reuse the same idea.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Controlled search box</p>
+        <pre class="code mt"><span class="k">const</span> [query, setQuery] = useState(<span class="s">""</span>);
+<span class="k">const</span> visible = products.filter(p =&gt;
+  p.title.toLowerCase().includes(query.toLowerCase())
+);</pre>
+        <p class="mt">Derived data again: do not store <code>visible</code> in state unless you have a strong reason.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Search on submit</p>
+        <h2>When the API is large, do not fetch on every keystroke</h2>
+        <pre class="code mt"><span class="k">function</span> <span class="t">handleSearch</span>(e) {
+  e.preventDefault();
+  setSubmittedQuery(query);
+}
+
+useEffect(() =&gt; {
+  <span class="c">// fetch using submittedQuery</span>
+}, [submittedQuery]);</pre>
+        <p class="mt">Draft text in <code>query</code>. Network in an effect that depends on the submitted value.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Render the three rooms</p>
+        <h2>Order matters: loading, then error, then data</h2>
+        <pre class="code mt">{loading &amp;&amp; &lt;<span class="t">StatusMessage</span> <span class="t">kind</span>=<span class="s">"loading"</span> /&gt;}
+{!loading &amp;&amp; error &amp;&amp; &lt;<span class="t">StatusMessage</span> <span class="t">kind</span>=<span class="s">"error"</span> <span class="t">onRetry</span>={retry} /&gt;}
+{!loading &amp;&amp; !error &amp;&amp; (
+  &lt;<span class="t">ProductGrid</span> <span class="t">items</span>={visible} /&gt;
+)}</pre>
+        <p class="callout mt">Do not map <code>undefined</code>. Start <code>products</code> as <code>[]</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Public APIs in the browser</p>
+        <h2>CORS is a browser rule, not a React bug</h2>
+        <p class="lede">If the Network tab shows a CORS error, your fetch code may be fine. The server refused the browser origin.</p>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Classroom fix</h3><p>Switch to an API that allows public GET from browsers (Fake Store, JSONPlaceholder).</p></div>
+          <div class="card navy"><h3>Not today</h3><p>Do not disable the browser’s security. Do not paste random CORS-proxy URLs you do not understand.</p></div>
+        </div>
+      </div>
+      <aside class="notes">If a student’s chosen homework API fails CORS, help them pick another. This is a common Day 10 panic.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #1 · 7 minutes</p>
+        <div class="practice">
+          <h2>Document title + fetch status</h2>
+          <ul class="clean">
+            <li>While loading, set <code>document.title</code> to “Loading…”</li>
+            <li>On success, set it to “N products”</li>
+            <li>What do you think will happen if the dependency array is missing? Try, then restore <code>[]</code> or <code>[products.length]</code>.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #2 · 8 minutes</p>
+        <div class="practice">
+          <h2>Retry button</h2>
+          <p>Add <code>retryCount</code> state. Put it in the effect deps.</p>
+          <ol class="clean">
+            <li>Error banner includes “Try again”</li>
+            <li>Clicking increments <code>retryCount</code></li>
+            <li>Effect re-runs and fetches again</li>
+          </ol>
+        </div>
+      </div>
+      <aside class="notes">This teaches deps without introducing a library. Alternative: extract load() and call it from both effect and button — also fine; mention both.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #3 · 8 minutes</p>
+        <div class="practice">
+          <h2>Category chips from the API</h2>
+          <ul class="clean">
+            <li>Fake Store: <code>/products/categories</code> or unique <code>category</code> fields</li>
+            <li>Chip sets <code>category</code> state: <code>"all"</code> or a name</li>
+            <li>Filter by both query and category</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #4 · 5 minutes</p>
+        <div class="practice">
+          <h2>Empty search results</h2>
+          <p>If <code>visible.length === 0</code> and you are not loading, show “No matches for …” with the current query. Do not show a spinner.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Common API shapes</p>
+        <h2>Read the JSON before you map</h2>
+        <table class="compare mt">
+          <tr><th>API</th><th>Array lives at</th><th>Good for</th></tr>
+          <tr><td>Fake Store</td><td>the root array</td><td>products</td></tr>
+          <tr><td>JSONPlaceholder</td><td>root array of users</td><td>directory</td></tr>
+          <tr><td>Many movie APIs</td><td><code>data.results</code></td><td>posters + titles</td></tr>
+        </table>
+        <p class="mt muted">Log once. Guessing field names wastes half a class.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Component architecture</p>
+        <h2>Name folders by job, not by accident</h2>
+        <pre class="code mt">src/
+  components/
+    ProductCard.jsx
+    SearchBar.jsx
+    StatusMessage.jsx
+  pages/
+    ExplorerPage.jsx
+  App.jsx</pre>
+        <p class="callout mt">If a file both fetches and draws a 200-line card, split it before Day 11.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project</p>
+        <h2>React API explorer</h2>
+        <p class="lede">Pick one: Product Explorer, Movie Explorer, or User Directory. Same skills. Different JSON.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Must include</h3>
+            <ul class="clean">
+              <li>Fetch on mount</li>
+              <li>Loading UI</li>
+              <li>Error UI + retry</li>
+              <li>Search</li>
+              <li>Reusable card component</li>
+              <li>Responsive grid (Tailwind OK)</li>
+            </ul>
+          </div>
+          <div class="card navy">
+            <h3>Folder structure</h3>
+            <pre class="code" style="margin-top:10px">day-10-explorer/
+  src/
+    App.jsx
+    components/
+      Card.jsx
+      SearchBar.jsx
+      StatusMessage.jsx
+    api.js</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Optional <code>api.js</code></p>
+        <h2>Keep fetch out of the JSX file if it grows</h2>
+        <pre class="code mt"><span class="k">export async function</span> <span class="t">getProducts</span>() {
+  <span class="k">const</span> res = <span class="k">await</span> fetch(<span class="s">"https://fakestoreapi.com/products"</span>);
+  <span class="k">if</span> (!res.ok) <span class="k">throw new</span> Error(<span class="s">"Could not load products"</span>);
+  <span class="k">return</span> res.json();
+}</pre>
+        <p class="mt">The effect then calls <code>getProducts()</code>. Easier to test and reuse on Day 11.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project steps · 1–4</p>
+        <ol class="clean" style="font-size:22px">
+          <li>Scaffold Vite + Tailwind (or reuse Day 8 setup).</li>
+          <li>Fetch and <code>console.log</code> the payload. Find the array.</li>
+          <li>Wire loading / error / success in <code>App</code> or <code>ExplorerPage</code>.</li>
+          <li>Extract <code>Card</code>. Pass only the fields you display.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project steps · 5–8</p>
+        <ol class="clean" style="font-size:22px" start="5">
+          <li>Add controlled <code>SearchBar</code>.</li>
+          <li>Derive the visible list. Handle zero matches.</li>
+          <li>Optional category filter.</li>
+          <li>Retry path. Check a slow network in DevTools.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Expected result</p>
+        <h2>A grid that tells the truth about the network</h2>
+        <div class="hero-panel">
+          <p class="small" style="opacity:.7">Loading → cards → type to filter → throttle network → error → retry</p>
+          <h3 style="color:#fff;margin-top:8px">If the API is down, the app still looks intentional.</h3>
+          <p class="mt">No blank white page. No uncaught red overlay as the only UI.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment</p>
+        <h2>Public API React app</h2>
+        <p><span class="tag">Intermediate</span> &nbsp; Estimated time: 1–3 hours &nbsp; Difficulty: ★★☆</p>
+        <p class="mt"><b>Objective:</b> Consume a public API you did not use in class. Same architecture, new data.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Requirements</h3>
+            <ul class="clean">
+              <li>At least one GET request in <code>useEffect</code></li>
+              <li>Loading, error, empty, and success views</li>
+              <li>Search or filter</li>
+              <li>Reusable list item / card</li>
+              <li>README with the API URL</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Expected features</h3>
+            <ul class="clean">
+              <li>No fetch during render</li>
+              <li>Dependency array chosen on purpose</li>
+              <li>Keys from real ids</li>
+              <li>Readable error messages</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Suggested APIs (public, no secret keys in git)</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>JSONPlaceholder</h3><p>Users, posts, comments.</p></div>
+          <div class="card"><h3>PokeAPI</h3><p>Names, sprites, types.</p></div>
+          <div class="card"><h3>REST Countries</h3><p>Flags, population, region.</p></div>
+        </div>
+        <p class="mt small muted">If an API requires a key, keep it out of the repo. Day 12 covers env vars. Prefer key-free APIs tonight.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment extras</p>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Bonus challenge</h3>
+            <ul class="clean">
+              <li>Detail view when a card is clicked (second fetch by id)</li>
+              <li>Debounce search (wait 300ms before filtering or fetching)</li>
+              <li>Abort in-flight requests on query change</li>
+            </ul>
+          </div>
+          <div class="card navy">
+            <h3>Submission</h3>
+            <p>Folder <code>day10-api-yourname</code>. Bring it to Day 11 — we assemble a mini shop from these pieces.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Recap</p>
+        <h2>What we learned</h2>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>useEffect</h3><p>After paint. Deps decide how often.</p></div>
+          <div class="card"><h3>Fetch</h3><p>Async inside the effect, not in render.</p></div>
+          <div class="card"><h3>Status UI</h3><p>Loading, error, empty, success.</p></div>
+          <div class="card"><h3>Architecture</h3><p>Fetch high. Cards stay dumb. Search derives.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Common mistakes to avoid tonight</p>
+        <ul class="clean" style="font-size:22px">
+          <li>Fetching in the component body.</li>
+          <li>Missing dependency array (loop) or wrong deps (stale query).</li>
+          <li>Ignoring <code>res.ok</code> and treating HTML error pages as JSON.</li>
+          <li>Putting fetch inside every card.</li>
+          <li>Leaving the user on a blank screen while the network thinks.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Key takeaways</p>
+        <ol class="clean" style="font-size:24px">
+          <li>Render is pure. Effects do the messy work.</li>
+          <li>Always design loading and error, not only the happy grid.</li>
+          <li>Read the JSON shape before you write JSX.</li>
+          <li>Reusable cards make Day 11 faster.</li>
+          <li>Derived search beats a second stored list.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Quick quiz</p>
+        <div class="grid grid-2 mt">
+          <div class="q">1. Why is an empty dependency array useful for an initial fetch?</div>
+          <div class="q">2. What should you show when <code>fetch</code> rejects?</div>
+          <div class="q">3. Where should the product array live — Card or Page?</div>
+          <div class="q">4. Why might you abort or ignore a response?</div>
+        </div>
+        <p class="mt muted">Discuss in pairs for 3 minutes, then share.</p>
+      </div>
+      <aside class="notes">1) Run once on mount. 2) Error UI + retry. 3) Page / container. 4) Slow responses arriving out of order after the user changed search.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Questions &amp; discussion</p>
+        <h2>What still feels fuzzy?</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Prompt</h3><p>Explain useEffect to someone who only knows useState.</p></div>
+          <div class="card"><h3>Prompt</h3><p>When is local filter better than a new request?</p></div>
+          <div class="card teal"><h3>Office minutes</h3><p>CORS, HTTPS mixed content, and JSON parse errors.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Tomorrow · Day 11</p>
+        <h1 class="display">Build day: a mini e-commerce product app.</h1>
+        <p class="lede">Navbar, listing, cards, search, category filter, details, add to cart, cart counter, responsive Tailwind. We plan first, then assemble what you already know.</p>
+        <div class="card teal mt">
+          <h3>Bring to class</h3>
+          <p>Your explorer components and a working fetch. We will think like developers: component trees before extra libraries.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div class="footerbar">
+    <span id="counter"></span>
+    <div class="nav-btns">
+      <button class="nav" id="prev">Back</button>
+      <button class="nav primary" id="next">Next</button>
+    </div>
+  </div>
+</div>
+<script src="assets/slides.js"></script>
+</body>
+</html>

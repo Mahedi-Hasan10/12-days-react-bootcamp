@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 12 — Final project + Deploy + Roadmap</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/slides.css" />
+</head>
+<body>
+<div class="deck">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">12</div>
+      <div>Web + React Bootcamp <small>Day 12 · Ship + Roadmap</small></div>
+    </div>
+    <div class="top-meta">
+      <span>Press <span class="kbd">N</span> instructor notes</span>
+      <a href="index.html" style="color:inherit">All days</a>
+    </div>
+  </header>
+  <div class="progress"><span id="bar"></span></div>
+  <main class="viewport">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 12 · 2.5–3 hours</p>
+        <h1 class="display">Today we ship, present, and choose what comes next.</h1>
+        <p class="lede">Review and refactor. Git without secrets. Build and deploy a React app. Then a short demo and a learning roadmap.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Finish</h3><p>Your shop or another final project option.</p></div>
+          <div class="card"><h3>Ship</h3><p>GitHub + Netlify or Vercel (drag-and-drop or CLI idea).</p></div>
+          <div class="card teal"><h3>Grow</h3><p>Portfolio, practice, what to learn after React.</p></div>
+        </div>
+      </div>
+      <aside class="notes"><b>Instructor:</b> Split the room: 40 min polish, 30 min git/deploy demo on the projector, remaining time presentations (3 min + 2 min feedback). Have a USB / hotspot plan for weak wifi.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">The 12-day arc</p>
+        <h2>You did not skip to React. You earned it.</h2>
+        <div class="flow mt">
+          <div class="node">HTML</div><span class="arrow">→</span>
+          <div class="node">CSS</div><span class="arrow">→</span>
+          <div class="node">JS</div><span class="arrow">→</span>
+          <div class="node">API</div><span class="arrow">→</span>
+          <div class="node">React</div><span class="arrow">→</span>
+          <div class="node">Shop</div><span class="arrow">→</span>
+          <div class="node">Live URL</div>
+        </div>
+        <p class="callout mt">A public URL is a better souvenir than a zip file on the desktop.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 12 learning objectives</p>
+        <h2>By the end of today you can…</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <ol class="clean">
+              <li>Review and refactor a React project with a checklist</li>
+              <li>Explain git init, add, commit, push at a high level</li>
+              <li>Describe <code>npm run build</code> and static hosting</li>
+              <li>Deploy a frontend without putting secrets in git</li>
+              <li>Present your work in 3 minutes</li>
+              <li>Name a 30-day learning plan after class</li>
+            </ol>
+          </div>
+          <div class="card navy">
+            <h3>You will leave with</h3>
+            <p>A presented project, a repo (if network allows), a live link, and a written next-step plan.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Interactive question</p>
+        <div class="q">What is the difference between <code>npm run dev</code> and <code>npm run build</code>?</div>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>A</h3><p>They are the same. Build is a nickname.</p></div>
+          <div class="card"><h3>B</h3><p>Dev is a local server with hot reload. Build outputs static files for hosting.</p></div>
+          <div class="card"><h3>C</h3><p>Build uploads the app to GitHub automatically.</p></div>
+        </div>
+      </div>
+      <aside class="notes">B. C is a common mix-up with CI. GitHub stores source; Netlify/Vercel (or Pages) can host the build.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Final project options</p>
+        <h2>Complete and present one React app</h2>
+        <p class="lede">The Day 11 shop is the default. You may present a sibling project if it is yours and demo-able.</p>
+        <div class="grid grid-4 mt">
+          <div class="card"><h3>E-commerce</h3><p>Catalog + cart.</p></div>
+          <div class="card"><h3>Expense tracker</h3><p>Add, total, filter.</p></div>
+          <div class="card"><h3>Task app</h3><p>Todo Plus quality.</p></div>
+          <div class="card"><h3>Movie explorer</h3><p>Search + details.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">More options</p>
+        <div class="grid grid-4 mt">
+          <div class="card"><h3>Recipe app</h3><p>Search meals, show ingredients.</p></div>
+          <div class="card"><h3>Student manager</h3><p>List, add, filter by class.</p></div>
+          <div class="card"><h3>Job board</h3><p>Listings + search.</p></div>
+          <div class="card teal"><h3>Course platform</h3><p>Course cards + detail.</p></div>
+        </div>
+        <p class="mt muted">Same bar: components, state, clear UI, README, no copied black-box templates.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Project review</p>
+        <h2>Read your app like a teammate, not like its author</h2>
+        <ol class="clean mt" style="font-size:22px">
+          <li>Can a new person run it from the README?</li>
+          <li>Do component names match the UI?</li>
+          <li>Is there one source of truth for each piece of state?</li>
+          <li>Are loading and error visible?</li>
+          <li>Does 375px width still work?</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What is it?</p>
+        <h2>Refactoring is improving code without changing what it does</h2>
+        <p class="lede">Rename, extract, delete duplication. The shopper still adds to cart. You can still explain every file.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Why</h3><p>Presentation day is when messy App.jsx fights you on stage.</p></div>
+          <div class="card"><h3>How</h3><p>One change, then run the app. Repeat.</p></div>
+          <div class="card teal"><h3>Real world</h3><p>Teams refactor before adding the next feature.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Safe refactors today</p>
+        <ul class="clean mt" style="font-size:22px">
+          <li>Extract a 80-line card into <code>ProductCard.jsx</code>.</li>
+          <li>Move fetch into <code>api/</code>.</li>
+          <li>Rename <code>data</code> to <code>products</code>.</li>
+          <li>Delete unused imports and commented-out experiments.</li>
+          <li>Do not rewrite in TypeScript an hour before you present.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Debugging on ship day</p>
+        <h2>Blank deploy vs blank localhost</h2>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Local only</h3><p>Wrong folder, crashed Vite, API blocked, React error overlay.</p></div>
+          <div class="card navy"><h3>Live only</h3><p>Wrong build folder, SPA refresh 404, mixed HTTP API, missing env.</p></div>
+        </div>
+        <p class="callout mt">Always reproduce locally with a production build: <code>npm run build</code> then preview.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What is it?</p>
+        <h2>Git is a history of your project. GitHub is a remote copy.</h2>
+        <p class="lede">You snapshot working moments. You can go back. You can share without emailing zip files.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Why</h3><p>Jobs, teams, and your future self all read history.</p></div>
+          <div class="card"><h3>How</h3><p>Init → add → commit → remote repo → push.</p></div>
+          <div class="card teal"><h3>Classroom rule</h3><p>Never commit passwords, API keys, or <code>.env</code> with secrets.</p></div>
+        </div>
+      </div>
+      <aside class="notes">High level only. Do not deep-dive rebase. If someone has never installed git, pair them. Demo GitHub.com new repo UI.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">The four verbs</p>
+        <table class="compare mt">
+          <tr><th>Command</th><th>Meaning</th></tr>
+          <tr><td><code>git init</code></td><td>Start history in this folder</td></tr>
+          <tr><td><code>git add .</code></td><td>Stage files (respect <code>.gitignore</code>)</td></tr>
+          <tr><td><code>git commit -m "…"</code></td><td>Save a snapshot with a message</td></tr>
+          <tr><td><code>git push</code></td><td>Send commits to GitHub</td></tr>
+        </table>
+        <p class="mt muted">A “repo” is that folder with history — local, remote, or both.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What belongs in git</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Commit these</h3>
+            <p>Source, <code>package.json</code>, README, public assets, <code>.gitignore</code>.</p>
+          </div>
+          <div class="card amber">
+            <h3>Never commit these</h3>
+            <p><code>node_modules</code>, <code>dist</code> (usually), <code>.env</code> with keys, personal tokens, private student data.</p>
+          </div>
+        </div>
+        <pre class="code mt"><span class="c"># .gitignore</span>
+node_modules
+dist
+.env
+.env.local</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Instructor live coding</p>
+        <h2>From folder to GitHub (happy path)</h2>
+        <ol class="clean mt">
+          <li>Confirm <code>.gitignore</code> exists</li>
+          <li><code>git init</code></li>
+          <li><code>git add .</code> then <code>git status</code> — scan for secrets</li>
+          <li><code>git commit -m "Add shop v1"</code></li>
+          <li>Create empty GitHub repo → follow the shown <code>remote add</code> + <code>push</code></li>
+        </ol>
+        <p class="callout mt">If auth fails, screenshot the error and continue the deploy with a zip. Do not leak tokens in chat.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Build process</p>
+        <h2>Vite turns React into files a browser understands</h2>
+        <div class="flow mt">
+          <div class="node">JSX + CSS</div><span class="arrow">→</span>
+          <div class="node">npm run build</div><span class="arrow">→</span>
+          <div class="node">dist/</div><span class="arrow">→</span>
+          <div class="node">Static host</div>
+        </div>
+        <p class="lede mt">The host does not run <code>useState</code> on a server. It serves HTML, JS, and CSS. React runs in the visitor’s browser.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Deployment concepts</p>
+        <h2>Hosting is “put dist on a public URL”</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>What</h3><p>A company serves your static files over HTTPS.</p></div>
+          <div class="card"><h3>Why</h3><p>Classmates and employers can open the app without cloning.</p></div>
+          <div class="card teal"><h3>How</h3><p>Drag the <code>dist</code> folder, or connect the GitHub repo so every push rebuilds.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Deploy React</p>
+        <h2>Netlify or Vercel — pick one for class</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Drag and drop</h3>
+            <p>Run <code>npm run build</code> locally. Upload <code>dist</code>. Fastest first win.</p>
+          </div>
+          <div class="card navy">
+            <h3>Git-connected (concept)</h3>
+            <p>Connect repo. Build command <code>npm run build</code>. Publish directory <code>dist</code>. Later pushes update the site.</p>
+          </div>
+        </div>
+        <p class="mt small muted">Exact buttons change. The idea does not: build output + public URL.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">SPA refreshes</p>
+        <h2>If you add real routes later, configure redirects</h2>
+        <p class="lede">A static host looks for a file named like the path. React Router paths are not real files. Tell the host: “serve <code>index.html</code>.”</p>
+        <p class="callout mt">If you stayed on <code>selectedId</code> state with no router, refresh on the home URL already works.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Environment variables basics</p>
+        <h2>Config that should not be pasted into source</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Local</h3>
+            <p><code>.env</code> / <code>.env.local</code> — listed in gitignore. Vite exposes only names that start with <code>VITE_</code>.</p>
+          </div>
+          <div class="card navy">
+            <h3>Host dashboard</h3>
+            <p>Set the same names in Netlify/Vercel UI. Rebuild after changes.</p>
+          </div>
+        </div>
+        <p class="callout mt">Anything in a Vite frontend is visible to the browser. Never put a secret private key in frontend env. Public read-only API keys are a judgment call; prefer key-free APIs when you can.</p>
+      </div>
+      <aside class="notes">Keep this conceptual. Do not have students paste keys into the chat. If they used only Fake Store, they may have zero env vars — that is success.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #1 · 8 minutes</p>
+        <div class="practice">
+          <h2>Review checklist on your own repo</h2>
+          <ul class="clean">
+            <li>README: name, screenshot or GIF optional, <code>npm i</code>, <code>npm run dev</code></li>
+            <li>No <code>node_modules</code> in git status</li>
+            <li>One known bug written down honestly</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #2 · 10 minutes</p>
+        <div class="practice">
+          <h2>Production preview locally</h2>
+          <p>Run <code>npm run build</code>. Fix errors. Preview the <code>dist</code> output (Vite preview or instructor’s method). Click search, details, cart. Note anything that only broke in the build.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #3 · 12 minutes</p>
+        <div class="practice">
+          <h2>First live URL</h2>
+          <p>Deploy <code>dist</code> with drag-and-drop or a connected repo. Open the URL on your phone. If it fails, write the error on a sticky note — that is a valid presentation story.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #4 · 8 minutes</p>
+        <div class="practice">
+          <h2>Presentation outline</h2>
+          <ol class="clean">
+            <li>Problem (one sentence)</li>
+            <li>Demo (happy path + error or empty if you have it)</li>
+            <li>One component or state decision you are proud of</li>
+            <li>What you would add next week</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Project presentation</p>
+        <h2>3 minutes on stage. 2 minutes of notes.</h2>
+        <div class="hero-panel">
+          <p class="small" style="opacity:.7">Timebox is kindness to the room</p>
+          <h3 style="color:#fff;margin-top:8px">Show the URL. Click, do not scroll code for 3 minutes.</h3>
+          <p class="mt">Audience: one specific compliment + one specific question. Instructor captures feedback on a shared doc.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Code review</p>
+        <h2>We look for thinking, not perfection</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Structure</h3><p>Files match the UI. Names are honest.</p></div>
+          <div class="card"><h3>State</h3><p>Lifted when shared. Derived when filtered.</p></div>
+          <div class="card teal"><h3>Resilience</h3><p>Loading, error, empty. No secret keys in git.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Instructor feedback</p>
+        <h2>You will hear one strength and one next step</h2>
+        <p class="lede">Example: “Cart merge is solid. Next, extract the 200-line App.” That is a gift, not a grade theater.</p>
+        <p class="callout mt">Write the next step in your README. Future you will forget the hallway conversation.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Common presentation mistakes</p>
+        <ul class="clean mt" style="font-size:22px">
+          <li>Apologizing for 90 seconds before the first click.</li>
+          <li>Reading every line of <code>App.jsx</code> instead of showing the user path.</li>
+          <li>Claiming “it works on my machine” with no README.</li>
+          <li>Hiding the loading and error states — those are features.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Portfolio</p>
+        <h2>Three links beat a vague “I learned React”</h2>
+        <ol class="clean mt" style="font-size:22px">
+          <li>Live demo URL</li>
+          <li>GitHub repo with README</li>
+          <li>2–4 sentences: problem, stack, your role</li>
+        </ol>
+        <p class="mt">Put them on a simple HTML page — you already built one on Day 1.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">How to continue learning</p>
+        <h2>Small apps, on a calendar, in public</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Weekly</h3><p>One tiny feature on the shop, or a new API screen.</p></div>
+          <div class="card"><h3>Monthly</h3><p>One project you can demo without notes.</p></div>
+          <div class="card teal"><h3>Habit</h3><p>Read errors out loud. Write READMEs. Ask for one review.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Frontend developer roadmap</p>
+        <h2>You are on the map. Here is north.</h2>
+        <div class="flow mt">
+          <div class="node">HTML/CSS/JS</div><span class="arrow">→</span>
+          <div class="node">React</div><span class="arrow">→</span>
+          <div class="node">Router + forms</div><span class="arrow">→</span>
+          <div class="node">Testing</div><span class="arrow">→</span>
+          <div class="node">TypeScript</div><span class="arrow">→</span>
+          <div class="node">A backend</div>
+        </div>
+        <p class="mt muted">Do not learn all of this this week. Sequence beats FOMO.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What to learn after React</p>
+        <table class="compare mt">
+          <tr><th>Next</th><th>Why</th></tr>
+          <tr><td>React Router</td><td>Real URLs and shareable product pages</td></tr>
+          <tr><td>Accessibility + forms</td><td>Jobs care; users need it</td></tr>
+          <tr><td>TypeScript basics</td><td>Fewer “undefined is not a function” surprises</td></tr>
+          <tr><td>A backend (Node or BaaS)</td><td>Your own data, not only Fake Store</td></tr>
+          <tr><td>Testing (Vitest / RTL)</td><td>Refactors without fear</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment</p>
+        <h2>Ship pack — after the last class</h2>
+        <p><span class="tag">Capstone</span> &nbsp; Estimated time: 1–3 hours &nbsp; Difficulty: ★★★</p>
+        <p class="mt"><b>Objective:</b> Leave a public, explainable trail of this project.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Requirements</h3>
+            <ul class="clean">
+              <li>GitHub repo with README</li>
+              <li>Live URL (or a written blocker if deploy failed)</li>
+              <li>Portfolio blurb (4 sentences max)</li>
+              <li>30-day learning list (5 bullets)</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Expected features</h3>
+            <ul class="clean">
+              <li>Project still runs locally</li>
+              <li>.gitignore correct</li>
+              <li>No secrets in history you know of</li>
+              <li>Honest “known issues” section</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment extras</p>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Bonus challenge</h3>
+            <ul class="clean">
+              <li>Custom domain later</li>
+              <li>Screenshot + short loom/video walkthrough</li>
+              <li>Open a GitHub Issue for your own next feature</li>
+            </ul>
+          </div>
+          <div class="card navy">
+            <h3>Submission</h3>
+            <p>Send the instructor: repo link, live link, and your 30-day list. That is the course closeout.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Recap</p>
+        <h2>What we learned</h2>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Review</h3><p>Readme, structure, state, resilience.</p></div>
+          <div class="card"><h3>Git</h3><p>Snapshots and a remote — never secrets.</p></div>
+          <div class="card"><h3>Build + host</h3><p><code>dist</code> on a static URL.</p></div>
+          <div class="card"><h3>Career loop</h3><p>Demo, write, learn the next layer.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Common mistakes to avoid after class</p>
+        <ul class="clean" style="font-size:22px">
+          <li>Force-pushing to rewrite history you already shared — ask first.</li>
+          <li>Committing <code>.env</code> “just for now.”</li>
+          <li>Only ever running <code>dev</code> and being surprised by production.</li>
+          <li>Collecting 20 tutorials instead of finishing one app.</li>
+          <li>Hiding broken deploys instead of writing the error down.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Key takeaways</p>
+        <ol class="clean" style="font-size:24px">
+          <li>Working software plus a URL is a real portfolio piece.</li>
+          <li>Git is history; GitHub is the shared copy.</li>
+          <li>Build, then host static files. React still runs in the browser.</li>
+          <li>Secrets do not belong in frontend git.</li>
+          <li>After React: router, a11y, TypeScript, a backend — in that spirit of sequence.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Quick quiz</p>
+        <div class="grid grid-2 mt">
+          <div class="q">1. What does <code>git commit</code> save?</div>
+          <div class="q">2. Why ignore <code>node_modules</code>?</div>
+          <div class="q">3. What folder does Vite usually emit for hosting?</div>
+          <div class="q">4. Why is a private API key unsafe in Vite env?</div>
+        </div>
+        <p class="mt muted">Discuss in pairs for 3 minutes, then share.</p>
+      </div>
+      <aside class="notes">1) A snapshot of staged files + message. 2) Huge, reproducible from package.json. 3) dist. 4) It ships to the browser; anyone can read it.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Questions &amp; discussion</p>
+        <h2>What will you build in the next 30 days?</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Prompt</h3><p>Name one feature the shop still deserves.</p></div>
+          <div class="card"><h3>Prompt</h3><p>Which roadmap item scares you — and why start smaller?</p></div>
+          <div class="card teal"><h3>Office minutes</h3><p>Stay for GitHub auth and deploy 404s.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Keep building · after this bootcamp</p>
+        <h1 class="display">There is no Day 13 on the calendar. There is a career loop.</h1>
+        <p class="lede">Ship small. Write it down. Learn the next layer when the current app demands it. You already know how websites, JavaScript, APIs, and React fit together.</p>
+        <div class="card teal mt">
+          <h3>Your job from here</h3>
+          <p>Protect a weekly build hour. Keep the live URL updated. Help the person one week behind you — teaching is review.</p>
+        </div>
+      </div>
+      <aside class="notes">Close with names and applause. Collect links. Remind: you are available for a defined office-hour window, not forever-on-Slack unless that is the actual policy.</aside>
+    </section>
+
+  </main>
+  <div class="footerbar">
+    <span id="counter"></span>
+    <div class="nav-btns">
+      <button class="nav" id="prev">Back</button>
+      <button class="nav primary" id="next">Next</button>
+    </div>
+  </div>
+</div>
+<script src="assets/slides.js"></script>
+</body>
+</html>

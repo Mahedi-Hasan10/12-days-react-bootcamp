@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 1 — Introduction to Web Development & HTML</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/slides.css" />
+</head>
+<body>
+<div class="deck">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">01</div>
+      <div>Web + React Bootcamp <small>Day 1 · Web Development & HTML</small></div>
+    </div>
+    <div class="top-meta">
+      <span>Press <span class="kbd">N</span> instructor notes</span>
+      <a href="index.html" style="color:inherit">All days</a>
+    </div>
+  </header>
+  <div class="progress"><span id="bar"></span></div>
+  <main class="viewport">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 1 · 2.5–3 hours</p>
+        <h1 class="display">Welcome. Today we start building the web.</h1>
+        <p class="lede">You do not need prior experience. By the end of this class you will publish your first real webpage.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Learn</h3><p>How websites actually work.</p></div>
+          <div class="card"><h3>Build</h3><p>A personal profile page in HTML.</p></div>
+          <div class="card teal"><h3>Mindset</h3><p>You will code in class — not only watch.</p></div>
+        </div>
+      </div>
+      <aside class="notes"><b>Instructor:</b> Take 3 minutes for names and comfort level. Ask: “Has anyone built a website before?” Normalize beginners. Promise: no one leaves without a working HTML page.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Course welcome</p>
+        <h2>This is a 12-day builder course</h2>
+        <table class="compare mt">
+          <tr><th>Days</th><th>Focus</th><th>You will feel like…</th></tr>
+          <tr><td>1–3</td><td>Web, HTML, CSS, layout</td><td>“I understand how pages are built.”</td></tr>
+          <tr><td>4</td><td>Tailwind CSS</td><td>“I can style faster.”</td></tr>
+          <tr><td>5–7</td><td>JavaScript, DOM, APIs</td><td>“I can make pages interactive.”</td></tr>
+          <tr><td>8–10</td><td>React</td><td>“I can build apps with components.”</td></tr>
+          <tr><td>11–12</td><td>Real project + deploy</td><td>“I can ship something.”</td></tr>
+        </table>
+      </div>
+      <aside class="notes">Show this as a map, not a syllabus dump. Point to Day 12: deploy a React app. That is the destination.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What you will build across 12 days</p>
+        <h2>One path. Many upgrades.</h2>
+        <div class="flow mt">
+          <div class="node">Profile HTML</div><span class="arrow">→</span>
+          <div class="node">Styled CSS</div><span class="arrow">→</span>
+          <div class="node">Landing page</div><span class="arrow">→</span>
+          <div class="node">Tailwind</div><span class="arrow">→</span>
+          <div class="node">JS apps</div><span class="arrow">→</span>
+          <div class="node">React</div><span class="arrow">→</span>
+          <div class="node">Shop + Deploy</div>
+        </div>
+        <p class="callout mt">Projects evolve. We do not throw work away every day — we add power.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 1 learning objectives</p>
+        <h2>By the end of today you can…</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <ol class="clean">
+              <li>Explain what happens when you visit a website</li>
+              <li>Tell frontend from backend in plain language</li>
+              <li>Write a valid HTML document</li>
+              <li>Use headings, links, images, lists, tables, forms</li>
+            </ol>
+          </div>
+          <div class="card navy">
+            <h3>You will leave with</h3>
+            <p>A personal profile webpage + a homework portfolio page to finish at home (1–2 hours).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Interactive question</p>
+        <div class="q">What happens when you type a URL into the browser and press Enter?</div>
+        <p class="mt muted">Do not worry about being “correct”. We will draw the real path together.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Guess 1</h3><p>“The website lives inside my laptop.”</p></div>
+          <div class="card"><h3>Guess 2</h3><p>“Google sends the page.”</p></div>
+          <div class="card"><h3>Guess 3</h3><p>“A computer somewhere sends files back.”</p></div>
+        </div>
+      </div>
+      <aside class="notes">Collect 3 answers on the board. Typical mix: magic, Google, “the cloud”. Then reveal the request/response model next.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What is it?</p>
+        <h2>Web development is building experiences that run in a browser</h2>
+        <p class="lede">A website is files (HTML, CSS, JS, images) delivered over the internet and rendered by a browser.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Why we need it</h3><p>Businesses, schools, shops, and apps all meet users through the web.</p></div>
+          <div class="card"><h3>How it works</h3><p>You write code → a server stores/sends it → the browser displays it.</p></div>
+          <div class="card teal"><h3>Real world</h3><p>YouTube, your university portal, and a restaurant menu site all use this model.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Frontend vs backend</p>
+        <h2>Two jobs. One product.</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <span class="tag">Frontend</span>
+            <h3 class="mt">What the user sees</h3>
+            <p>Layout, colors, buttons, forms. HTML, CSS, JavaScript, React.</p>
+            <p class="mt small muted">Analogy: the dining room, menu, and waiter’s tray.</p>
+          </div>
+          <div class="card navy">
+            <span class="tag">Backend</span>
+            <h3 class="mt">What happens behind the scenes</h3>
+            <p>Accounts, databases, payments, emails. Servers and APIs.</p>
+            <p class="mt small" style="opacity:.8">Analogy: the kitchen, inventory, and recipes.</p>
+          </div>
+        </div>
+        <p class="callout mt">This course is frontend-first. We will still talk to backends using APIs from Day 7.</p>
+      </div>
+      <aside class="notes">Ask: “If a ‘Pay Now’ button does nothing, is that frontend or backend?” Answer: could be either — UI might be broken, or the server might reject the payment. That’s why teams debug both sides.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">How websites work</p>
+        <h2>Browser, internet, server</h2>
+        <div class="flow mt">
+          <div class="node">You</div><span class="arrow">→</span>
+          <div class="node">Browser</div><span class="arrow">→</span>
+          <div class="node">Internet</div><span class="arrow">→</span>
+          <div class="node">Server</div><span class="arrow">→</span>
+          <div class="node">Files come back</div><span class="arrow">→</span>
+          <div class="node">Page appears</div>
+        </div>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Browser</h3><p>Chrome, Firefox, Safari. A program that requests and paints pages.</p></div>
+          <div class="card"><h3>Server</h3><p>A computer that is always on, waiting for requests.</p></div>
+          <div class="card"><h3>Internet</h3><p>The network that carries the request and the response.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What happens when we enter a URL</p>
+        <h2>Request → Response → Render</h2>
+        <ol class="clean mt" style="font-size:20px">
+          <li>Browser looks up the address (DNS: name → number).</li>
+          <li>Browser sends an <b>HTTP request</b>: “Please give me this page.”</li>
+          <li>Server sends an <b>HTTP response</b>: HTML (then CSS, images, JS).</li>
+          <li>Browser reads HTML and <b>renders</b> the visual page.</li>
+        </ol>
+        <pre class="code mt"><span class="c">// Simplified conversation</span>
+You:  GET https://example.com
+Server: 200 OK
+&lt;html&gt;...the page...&lt;/html&gt;</pre>
+      </div>
+      <aside class="notes">Live demo: open DevTools → Network, reload a simple site, click the first document. Show status 200 and the HTML. Do not go deep into DNS.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Static vs dynamic</p>
+        <h2>Same HTML idea. Different sources.</h2>
+        <table class="compare mt">
+          <tr><th></th><th>Static</th><th>Dynamic</th></tr>
+          <tr><td>What it is</td><td>Same files for everyone</td><td>Content can change per user/time</td></tr>
+          <tr><td>Why it exists</td><td>Simple, fast, cheap</td><td>Login, carts, feeds, dashboards</td></tr>
+          <tr><td>Example</td><td>Your Day 1 profile page</td><td>Facebook feed, Gmail inbox</td></tr>
+        </table>
+        <p class="mt callout">Today we build static HTML. Later, JavaScript and APIs make pages dynamic.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Problem → solution → technology</p>
+        <h2>Why HTML exists</h2>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Problem</h3>
+            <p>A browser cannot guess your heading, your photo, or your contact form. It needs a shared language for structure.</p>
+          </div>
+          <div class="card">
+            <h3>Solution</h3>
+            <p><b>HTML</b> — HyperText Markup Language — labels pieces of content so the browser knows what they are.</p>
+          </div>
+        </div>
+        <p class="mt lede">HTML is not a programming language. It is a <b>structure</b> language.</p>
+      </div>
+      <aside class="notes">Analogy: HTML is the skeleton, CSS is clothing, JavaScript is muscles. Repeat this triad all course.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Introduction to HTML</p>
+        <h2>Tags wrap content and give it meaning</h2>
+        <pre class="code mt">&lt;<span class="k">h1</span>&gt;Mahedi&lt;/<span class="k">h1</span>&gt;
+&lt;<span class="k">p</span>&gt;I am learning web development.&lt;/<span class="k">p</span>&gt;
+&lt;<span class="k">a</span> <span class="t">href</span>=<span class="s">"https://github.com"</span>&gt;My GitHub&lt;/<span class="k">a</span>&gt;</pre>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Opening tag</h3><p><code>&lt;p&gt;</code></p></div>
+          <div class="card"><h3>Content</h3><p>the text inside</p></div>
+          <div class="card"><h3>Closing tag</h3><p><code>&lt;/p&gt;</code></p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Element anatomy</p>
+        <h2>Element = tag + content + (optional) attributes</h2>
+        <pre class="code mt">&lt;<span class="k">img</span> <span class="t">src</span>=<span class="s">"me.jpg"</span> <span class="t">alt</span>=<span class="s">"Photo of Mahedi"</span>&gt;</pre>
+        <ul class="clean mt">
+          <li><b>src</b> tells the browser which file to load.</li>
+          <li><b>alt</b> describes the image if it cannot be seen.</li>
+          <li>Some elements are empty: they have no closing tag (<code>img</code>, <code>br</code>, <code>hr</code>, <code>input</code>).</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Document structure</p>
+        <h2>Every page starts with this skeleton</h2>
+        <pre class="code mt">&lt;!DOCTYPE html&gt;
+&lt;<span class="k">html</span> <span class="t">lang</span>=<span class="s">"en"</span>&gt;
+  &lt;<span class="k">head</span>&gt;
+    &lt;<span class="k">meta</span> <span class="t">charset</span>=<span class="s">"UTF-8"</span>&gt;
+    &lt;<span class="k">title</span>&gt;My Profile&lt;/<span class="k">title</span>&gt;
+  &lt;/<span class="k">head</span>&gt;
+  &lt;<span class="k">body</span>&gt;
+    &lt;<span class="k">h1</span>&gt;Hello&lt;/<span class="k">h1</span>&gt;
+  &lt;/<span class="k">body</span>&gt;
+&lt;/<span class="k">html</span>&gt;</pre>
+      </div>
+      <aside class="notes">Live type this from empty file. Save as index.html. Open in browser. Change title — show the browser tab update. That “aha” is gold.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Head vs body</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>&lt;head&gt;</h3>
+            <p>Instructions for the browser: title, character set, CSS links. Users do not see this directly.</p>
+          </div>
+          <div class="card navy">
+            <h3>&lt;body&gt;</h3>
+            <p>Everything visible: text, images, links, forms.</p>
+          </div>
+        </div>
+        <p class="q mt">If you put an &lt;h1&gt; only in the head, will the user see it?</p>
+        <p class="mt muted">Expected answer: No. Visible content belongs in <code>body</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Headings</p>
+        <h2>Headings create outline, not decoration</h2>
+        <pre class="code mt">&lt;<span class="k">h1</span>&gt;Mahedi Hasan&lt;/<span class="k">h1</span>&gt;
+&lt;<span class="k">h2</span>&gt;About me&lt;/<span class="k">h2</span>&gt;
+&lt;<span class="k">h2</span>&gt;Skills&lt;/<span class="k">h2</span>&gt;
+&lt;<span class="k">h3</span>&gt;Frontend&lt;/<span class="k">h3</span>&gt;</pre>
+        <div class="callout mt">Use one <code>h1</code> per page. Do not skip levels just to make text look smaller. CSS will handle size tomorrow.</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Paragraphs and text</p>
+        <h2>Browsers collapse extra spaces. Tags create structure.</h2>
+        <pre class="code mt">&lt;<span class="k">p</span>&gt;I am a student learning HTML.&lt;/<span class="k">p</span>&gt;
+&lt;<span class="k">p</span>&gt;I like &lt;<span class="k">strong</span>&gt;football&lt;/<span class="k">strong</span>&gt; and &lt;<span class="k">em</span>&gt;photography&lt;/<span class="k">em</span>&gt;.&lt;/<span class="k">p</span>&gt;
+&lt;<span class="k">br</span>&gt;  <span class="c">&lt;!-- line break, use sparingly --&gt;</span>
+&lt;<span class="k">hr</span>&gt;  <span class="c">&lt;!-- thematic divider --&gt;</span></pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Links</p>
+        <h2>Hypertext means documents can connect</h2>
+        <pre class="code mt">&lt;<span class="k">a</span> <span class="t">href</span>=<span class="s">"https://developer.mozilla.org"</span>&gt;MDN Docs&lt;/<span class="k">a</span>&gt;
+&lt;<span class="k">a</span> <span class="t">href</span>=<span class="s">"projects.html"</span>&gt;My projects&lt;/<span class="k">a</span>&gt;
+&lt;<span class="k">a</span> <span class="t">href</span>=<span class="s">"mailto:you@email.com"</span>&gt;Email me&lt;/<span class="k">a</span>&gt;
+&lt;<span class="k">a</span> <span class="t">href</span>=<span class="s">"#skills"</span>&gt;Jump to skills&lt;/<span class="k">a</span>&gt;</pre>
+        <p class="mt">Absolute URLs start with <code>https://</code>. Relative URLs point to files beside yours.</p>
+      </div>
+      <aside class="notes">Common confusion: href vs the clickable text. Demo a link that says “Click here” vs a descriptive link. Accessibility preview.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Images</p>
+        <h2>Always pair src with alt</h2>
+        <pre class="code mt">&lt;<span class="k">img</span>
+  <span class="t">src</span>=<span class="s">"profile.jpg"</span>
+  <span class="t">alt</span>=<span class="s">"Portrait of Mahedi smiling"</span>
+  <span class="t">width</span>=<span class="s">"240"</span>
+&gt;</pre>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>If the image fails</h3><p>alt text still explains the picture to people and to search engines.</p></div>
+          <div class="card"><h3>File location</h3><p>If the photo is in an <code>images</code> folder: <code>src="images/profile.jpg"</code>.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #1 · 5 minutes</p>
+        <div class="practice">
+          <h2>Try this yourself</h2>
+          <p>Create <code>practice-1.html</code> with:</p>
+          <ol class="clean">
+            <li>A page title with your name</li>
+            <li>One <code>h1</code> and two paragraphs</li>
+            <li>A link to your favorite website</li>
+            <li>An image (any jpg/png, or a placeholder URL)</li>
+          </ol>
+          <p class="mt"><b>Success:</b> file opens in the browser and the link works.</p>
+        </div>
+      </div>
+      <aside class="notes">Walk the room. Typical bugs: forgotten closing tags, image path wrong, file opened as text. Pair struggling students.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Lists</p>
+        <h2>Use lists for groups, not for layout hacks</h2>
+        <div class="grid grid-2 mt">
+          <pre class="code">&lt;<span class="k">ul</span>&gt;
+  &lt;<span class="k">li</span>&gt;HTML&lt;/<span class="k">li</span>&gt;
+  &lt;<span class="k">li</span>&gt;CSS&lt;/<span class="k">li</span>&gt;
+&lt;/<span class="k">ul</span>&gt;</pre>
+          <pre class="code">&lt;<span class="k">ol</span>&gt;
+  &lt;<span class="k">li</span>&gt;Learn&lt;/<span class="k">li</span>&gt;
+  &lt;<span class="k">li</span>&gt;Practice&lt;/<span class="k">li</span>&gt;
+&lt;/<span class="k">ol</span>&gt;</pre>
+        </div>
+        <p class="mt"><code>ul</code> = unordered (bullets). <code>ol</code> = ordered (numbers). Nested lists are allowed.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Tables</p>
+        <h2>Tables are for tabular data — not page layout</h2>
+        <pre class="code mt">&lt;<span class="k">table</span>&gt;
+  &lt;<span class="k">tr</span>&gt;&lt;<span class="k">th</span>&gt;Skill&lt;/<span class="k">th</span>&gt;&lt;<span class="k">th</span>&gt;Level&lt;/<span class="k">th</span>&gt;&lt;/<span class="k">tr</span>&gt;
+  &lt;<span class="k">tr</span>&gt;&lt;<span class="k">td</span>&gt;HTML&lt;/<span class="k">td</span>&gt;&lt;<span class="k">td</span>&gt;Beginner&lt;/<span class="k">td</span>&gt;&lt;/<span class="k">tr</span>&gt;
+&lt;/<span class="k">table</span>&gt;</pre>
+        <p class="mt"><code>th</code> = header cell. <code>td</code> = data cell. <code>tr</code> = row.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Forms</p>
+        <h2>Forms collect information from humans</h2>
+        <pre class="code mt">&lt;<span class="k">form</span>&gt;
+  &lt;<span class="k">label</span> <span class="t">for</span>=<span class="s">"email"</span>&gt;Email&lt;/<span class="k">label</span>&gt;
+  &lt;<span class="k">input</span> <span class="t">id</span>=<span class="s">"email"</span> <span class="t">type</span>=<span class="s">"email"</span> <span class="t">required</span>&gt;
+  &lt;<span class="k">button</span> <span class="t">type</span>=<span class="s">"submit"</span>&gt;Join&lt;/<span class="k">button</span>&gt;
+&lt;/<span class="k">form</span>&gt;</pre>
+        <p class="callout mt">Always connect <code>label</code> and <code>input</code> with matching <code>for</code> / <code>id</code>. That is accessibility and usability.</p>
+      </div>
+      <aside class="notes">Today forms will not “send” anywhere. That’s OK. Explain action/method will matter when we have a backend. For now, structure is the skill.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Useful input types</p>
+        <div class="grid grid-4 mt">
+          <div class="card"><h3>text</h3><p>Name, title</p></div>
+          <div class="card"><h3>email</h3><p>Validates format</p></div>
+          <div class="card"><h3>password</h3><p>Hides characters</p></div>
+          <div class="card"><h3>number</h3><p>Age, marks</p></div>
+        </div>
+        <pre class="code mt">&lt;<span class="k">textarea</span> <span class="t">rows</span>=<span class="s">"4"</span>&gt;Your bio&lt;/<span class="k">textarea</span>&gt;
+&lt;<span class="k">select</span>&gt;&lt;<span class="k">option</span>&gt;Student&lt;/<span class="k">option</span>&gt;&lt;/<span class="k">select</span>&gt;
+&lt;<span class="k">input</span> <span class="t">type</span>=<span class="s">"checkbox"</span>&gt; I agree</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Semantic HTML</p>
+        <h2>Choose tags for meaning, not only for boxes</h2>
+        <div class="grid grid-2 mt">
+          <div class="card amber"><h3>Old habit</h3><pre class="code" style="margin-top:10px">&lt;div&gt;Home&lt;/div&gt;
+&lt;div&gt;Article&lt;/div&gt;
+&lt;div&gt;Footer&lt;/div&gt;</pre></div>
+          <div class="card"><h3>Clearer meaning</h3><pre class="code" style="margin-top:10px">&lt;<span class="k">header</span>&gt;Home&lt;/<span class="k">header</span>&gt;
+&lt;<span class="k">article</span>&gt;...&lt;/<span class="k">article</span>&gt;
+&lt;<span class="k">footer</span>&gt;...&lt;/<span class="k">footer</span>&gt;</pre></div>
+        </div>
+        <p class="mt">Common landmarks: <code>header</code> <code>nav</code> <code>main</code> <code>section</code> <code>article</code> <code>aside</code> <code>footer</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Why semantics matter</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Accessibility</h3><p>Screen readers can jump to <code>nav</code> and <code>main</code>.</p></div>
+          <div class="card"><h3>SEO</h3><p>Search engines understand your outline.</p></div>
+          <div class="card"><h3>Teamwork</h3><p>Other developers can read your intent.</p></div>
+        </div>
+        <p class="q mt">Is a &lt;div&gt; “wrong”? When is it OK?</p>
+        <p class="mt muted">It is a generic box. Use it when no semantic tag fits — not as your only tool.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Accessibility basics</p>
+        <h2>HTML is already an accessibility tool — if we use it well</h2>
+        <ul class="clean mt" style="font-size:20px">
+          <li>Use real headings, not big bold paragraphs.</li>
+          <li>Write useful <code>alt</code> text. Decorative images can use <code>alt=""</code>.</li>
+          <li>Never use color alone to mean “error”.</li>
+          <li>Make link text descriptive: “Open my resume”, not “click here”.</li>
+          <li>Give the page a language: <code>&lt;html lang="en"&gt;</code>.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Common HTML mistakes</p>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Unclosed tags</h3><p>The page “kind of works” then breaks later. Validate as you go.</p></div>
+          <div class="card"><h3>Wrong file paths</h3><p><code>img</code> and <code>a href</code> fail silently-looking. Check spelling and folders.</p></div>
+          <div class="card"><h3>Using tables for layout</h3><p>We will use CSS for layout on Days 2–3.</p></div>
+          <div class="card"><h3>Skipping labels on inputs</h3><p>Placeholder is not a label.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Instructor live coding</p>
+        <h2>We build a tiny profile together</h2>
+        <ol class="clean mt">
+          <li>Create folder <code>day-01-profile</code></li>
+          <li>Create <code>index.html</code> from the skeleton</li>
+          <li>Add name, photo, about, skills list, contact link</li>
+          <li>Add a small “contact me” form (structure only)</li>
+          <li>Refresh the browser after every change</li>
+        </ol>
+        <p class="callout mt">Instructor types. Students type along. Pause after each section.</p>
+      </div>
+      <aside class="notes">Keep it ugly on purpose. Tomorrow CSS makes it pretty. If you polish too much today, students think HTML = design.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Live coding target</p>
+        <pre class="code mt">&lt;<span class="k">body</span>&gt;
+  &lt;<span class="k">header</span>&gt;
+    &lt;<span class="k">h1</span>&gt;Amina Rahman&lt;/<span class="k">h1</span>&gt;
+    &lt;<span class="k">p</span>&gt;Aspiring frontend developer&lt;/<span class="k">p</span>&gt;
+  &lt;/<span class="k">header</span>&gt;
+  &lt;<span class="k">main</span>&gt;
+    &lt;<span class="k">img</span> <span class="t">src</span>=<span class="s">"amina.jpg"</span> <span class="t">alt</span>=<span class="s">"Portrait of Amina"</span>&gt;
+    &lt;<span class="k">h2</span>&gt;Skills&lt;/<span class="k">h2</span>&gt;
+    &lt;<span class="k">ul</span>&gt;&lt;<span class="k">li</span>&gt;HTML&lt;/<span class="k">li</span>&gt;&lt;<span class="k">li</span>&gt;Teamwork&lt;/<span class="k">li</span>&gt;&lt;/<span class="k">ul</span>&gt;
+  &lt;/<span class="k">main</span>&gt;
+  &lt;<span class="k">footer</span>&gt;&lt;<span class="k">a</span> <span class="t">href</span>=<span class="s">"mailto:amina@email.com"</span>&gt;Email&lt;/<span class="k">a</span>&gt;&lt;/<span class="k">footer</span>&gt;
+&lt;/<span class="k">body</span>&gt;</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #2 · 8 minutes</p>
+        <div class="practice">
+          <h2>Change this page to produce YOUR story</h2>
+          <ul class="clean">
+            <li>Replace the name and bio</li>
+            <li>Add an ordered list: “My learning goals”</li>
+            <li>Add a 2-column table: Skill / Confidence (Beginner/Learning)</li>
+            <li>Add a form with name + message</li>
+          </ul>
+          <p class="mt">What do you think will happen if two elements share the same <code>id</code>? Try it, then fix it.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #3 · 5 minutes</p>
+        <div class="practice">
+          <h2>Accessibility mini-audit</h2>
+          <p>On your page, check:</p>
+          <ol class="clean">
+            <li>Is there exactly one <code>h1</code>?</li>
+            <li>Does every image have <code>alt</code>?</li>
+            <li>Does every input have a <code>label</code>?</li>
+            <li>Is there a <code>lang</code> on <code>html</code>?</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project</p>
+        <h2>Personal profile / introduction webpage</h2>
+        <p class="lede">Objective: introduce yourself with structured HTML only. No CSS required.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Must include</h3>
+            <ul class="clean">
+              <li>Header with name + one-line role</li>
+              <li>Photo with alt text</li>
+              <li>About section (2–3 paragraphs)</li>
+              <li>Skills list</li>
+              <li>Simple table (education or skills)</li>
+              <li>Contact form (name, email, message)</li>
+              <li>Footer with a link</li>
+            </ul>
+          </div>
+          <div class="card navy">
+            <h3>Folder structure</h3>
+            <pre class="code" style="margin-top:10px">day-01-profile/
+  index.html
+  images/
+    photo.jpg</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project steps</p>
+        <ol class="clean" style="font-size:22px">
+          <li>Write the skeleton and title.</li>
+          <li>Add semantic landmarks: header, main, footer.</li>
+          <li>Fill content section by section. Save. Refresh.</li>
+          <li>Add media and links. Test every link.</li>
+          <li>Add form + labels.</li>
+          <li>Read the page top to bottom. Fix heading order.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Expected result</p>
+        <h2>A complete, readable, unstyled profile</h2>
+        <div class="hero-panel">
+          <p class="small" style="opacity:.7">Looks like a structured document, not a pretty website yet.</p>
+          <h3 style="color:#fff;margin-top:8px">Name → About → Skills → Table → Form → Footer</h3>
+          <p class="mt">If a classmate can understand who you are without you speaking, the HTML did its job.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment</p>
+        <h2>My Portfolio — HTML only</h2>
+        <p><span class="tag">Beginner</span> &nbsp; Estimated time: 1–2 hours &nbsp; Difficulty: ★☆☆</p>
+        <p class="mt"><b>Objective:</b> Practice semantic HTML on a page that is <i>not</i> a copy of the in-class profile.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Requirements</h3>
+            <ul class="clean">
+              <li>Page title: Your Name — Portfolio</li>
+              <li>Nav with 3 internal links (#about, #projects, #contact)</li>
+              <li>About section</li>
+              <li>Projects list (at least 3 fictional or real ideas)</li>
+              <li>One table (tools you want to learn)</li>
+              <li>Contact form with validation attributes (<code>required</code>, <code>type="email"</code>)</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Expected features</h3>
+            <ul class="clean">
+              <li>Semantic tags throughout</li>
+              <li>Working in-page jump links</li>
+              <li>No CSS file yet</li>
+              <li>Valid nesting (no block inside unexpected places)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment extras</p>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Bonus challenge</h3>
+            <ul class="clean">
+              <li>Add a second page <code>project-one.html</code> and link between pages</li>
+              <li>Use <code>&lt;blockquote&gt;</code> for a favorite quote</li>
+              <li>Add a definition list <code>dl/dt/dd</code> for 3 tech terms you learned today</li>
+            </ul>
+          </div>
+          <div class="card navy">
+            <h3>Submission</h3>
+            <p>Folder named <code>day01-portfolio-yourname</code> with HTML (+ images). Bring it to Day 2. We will style it.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Recap</p>
+        <h2>What we learned</h2>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Web model</h3><p>Browser requests. Server responds. Browser renders.</p></div>
+          <div class="card"><h3>HTML job</h3><p>Structure and meaning — not colors.</p></div>
+          <div class="card"><h3>Document</h3><p>doctype, html, head, body.</p></div>
+          <div class="card"><h3>Content tools</h3><p>Headings, media, lists, tables, forms, semantics.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Common mistakes to avoid tonight</p>
+        <ul class="clean" style="font-size:22px">
+          <li>Styling with random tags instead of waiting for CSS.</li>
+          <li>Copy-pasting huge templates you do not understand.</li>
+          <li>Broken image paths — always test locally.</li>
+          <li>Multiple <code>h1</code>s or skipped heading levels.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Key takeaways</p>
+        <ol class="clean" style="font-size:24px">
+          <li>Websites are files delivered on request.</li>
+          <li>Frontend is what users see; backend is the kitchen.</li>
+          <li>HTML describes structure and meaning.</li>
+          <li>Semantic tags and labels help humans and machines.</li>
+          <li>Save → refresh → check. That is the developer loop.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Quick quiz</p>
+        <div class="grid grid-2 mt">
+          <div class="q">1. Why do we need CSS if HTML already displays content?</div>
+          <div class="q">2. What is the difference between &lt;ul&gt; and &lt;ol&gt;?</div>
+          <div class="q">3. Where does visible content belong?</div>
+          <div class="q">4. Why is alt text required for meaningful images?</div>
+        </div>
+        <p class="mt muted">Discuss in pairs for 3 minutes, then share.</p>
+      </div>
+      <aside class="notes">Answers: 1) HTML is structure, CSS is presentation. 2) unordered vs ordered. 3) body. 4) when image missing / screen readers / context.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Questions & discussion</p>
+        <h2>What still feels fuzzy?</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Prompt</h3><p>Explain a website visit to a 10-year-old.</p></div>
+          <div class="card"><h3>Prompt</h3><p>When would you choose <code>section</code> vs <code>div</code>?</p></div>
+          <div class="card teal"><h3>Office minutes</h3><p>Stay 10 minutes after class for install/file issues.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Tomorrow · Day 2</p>
+        <h1 class="display">CSS: making structure look like a product.</h1>
+        <p class="lede">We will take today’s HTML and learn colors, fonts, the box model, margin, padding, and basic layout.</p>
+        <div class="card teal mt">
+          <h3>Bring to class</h3>
+          <p>Your Day 1 profile HTML. We will turn it into a styled profile card.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div class="footerbar">
+    <span id="counter"></span>
+    <div class="nav-btns">
+      <button class="nav" id="prev">Back</button>
+      <button class="nav primary" id="next">Next</button>
+    </div>
+  </div>
+</div>
+<script src="assets/slides.js"></script>
+</body>
+</html>

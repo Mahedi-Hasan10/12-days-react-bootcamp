@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Day 2 — CSS Fundamentals</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Sora:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/slides.css" />
+</head>
+<body>
+<div class="deck">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">02</div>
+      <div>Web + React Bootcamp <small>Day 2 · CSS Fundamentals</small></div>
+    </div>
+    <div class="top-meta">
+      <span>Press <span class="kbd">N</span> instructor notes</span>
+      <a href="index.html" style="color:inherit">All days</a>
+    </div>
+  </header>
+  <div class="progress"><span id="bar"></span></div>
+  <main class="viewport">
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 2 · 2.5–3 hours</p>
+        <h1 class="display">Today we make HTML look like a product.</h1>
+        <p class="lede">Yesterday you built structure. Today you learn presentation — colors, type, and the box model.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Learn</h3><p>How CSS paints, spaces, and sizes every element.</p></div>
+          <div class="card"><h3>Build</h3><p>Turn the Day 1 profile into a styled profile card.</p></div>
+          <div class="card teal"><h3>Mindset</h3><p>Style in small steps. Save. Refresh. Compare.</p></div>
+        </div>
+      </div>
+      <aside class="notes"><b>Instructor:</b> Ask who finished the Day 1 assignment. Pair anyone without HTML with a neighbor. Promise: by break they will have a colored, padded card.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Day 2 learning objectives</p>
+        <h2>By the end of today you can…</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <ol class="clean">
+              <li>Explain why CSS exists separately from HTML</li>
+              <li>Write selectors and declarations</li>
+              <li>Style color, background, font, and text</li>
+              <li>Use the box model: margin, padding, border, width</li>
+              <li>Choose display, position, and units with intent</li>
+            </ol>
+          </div>
+          <div class="card navy">
+            <h3>You will leave with</h3>
+            <p>A styled profile card + homework to finish a small portfolio section in HTML + CSS (1–2 hours).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Why today matters</p>
+        <h2>Users never “see HTML”. They see design.</h2>
+        <p class="lede">A café menu that looks like a Word document loses trust. CSS is how we communicate brand, hierarchy, and comfort.</p>
+        <div class="flow mt">
+          <div class="node">Day 1 HTML</div><span class="arrow">→</span>
+          <div class="node">Day 2 CSS</div><span class="arrow">→</span>
+          <div class="node">Readable card</div><span class="arrow">→</span>
+          <div class="node">Trust</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Interactive question</p>
+        <div class="q">Why do we need CSS if HTML already displays content?</div>
+        <p class="mt muted">Talk for 60 seconds. Then we name the real job of each language.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Guess 1</h3><p>“HTML can already use color tags.”</p></div>
+          <div class="card"><h3>Guess 2</h3><p>“CSS is only for experts.”</p></div>
+          <div class="card"><h3>Guess 3</h3><p>“HTML is meaning. CSS is look.”</p></div>
+        </div>
+      </div>
+      <aside class="notes">Collect answers. Point to old &lt;font&gt; / bgcolor habits. The win is one stylesheet controlling many pages.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Problem → solution</p>
+        <h2>HTML alone cannot keep a brand consistent</h2>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Problem</h3>
+            <p>If every heading has its own color in HTML, changing the café brand from green to navy means editing every page.</p>
+          </div>
+          <div class="card">
+            <h3>Solution</h3>
+            <p>One stylesheet. Change <code>h1</code> once. The whole site updates.</p>
+          </div>
+        </div>
+        <p class="callout mt">Technology: CSS. Result: look is reusable, not copy-pasted.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">What is it?</p>
+        <h2>CSS is the language of presentation</h2>
+        <p class="lede">Cascading Style Sheets describe how HTML should look: color, type, space, and placement.</p>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>What</h3><p>Rules that target elements and set properties.</p></div>
+          <div class="card"><h3>Why</h3><p>Separate meaning (HTML) from appearance (CSS).</p></div>
+          <div class="card teal"><h3>How</h3><p>Link a <code>.css</code> file. The browser applies matching rules.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Real world</p>
+        <h2>Same HTML. Different CSS. Different product.</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>News site</h3><p>Dense type, thin margins, high contrast.</p></div>
+          <div class="card"><h3>Café menu</h3><p>Warm colors, large headings, photo backgrounds.</p></div>
+          <div class="card"><h3>Bank app</h3><p>Calm navy, tight spacing, clear buttons.</p></div>
+        </div>
+        <p class="mt muted">The structure can be similar. The CSS is the personality.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">How we attach CSS</p>
+        <h2>Three ways. One professional habit.</h2>
+        <table class="compare mt">
+          <tr><th>Method</th><th>When</th><th>Beginner rule</th></tr>
+          <tr><td>Inline <code>style=""</code></td><td>Quick test</td><td>Avoid in real pages</td></tr>
+          <tr><td>&lt;style&gt; in &lt;head&gt;</td><td>Tiny demos</td><td>OK for 10 lines</td></tr>
+          <tr><td>External <code>.css</code> file</td><td>Every project</td><td>This is the default</td></tr>
+        </table>
+        <pre class="code mt">&lt;<span class="k">link</span> <span class="t">rel</span>=<span class="s">"stylesheet"</span> <span class="t">href</span>=<span class="s">"styles.css"</span>&gt;</pre>
+      </div>
+      <aside class="notes">Show the link in head. If CSS “does nothing”, first check the path — same mistake as broken images on Day 1.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Syntax</p>
+        <h2>Selector, then a block of declarations</h2>
+        <pre class="code mt"><span class="t">h1</span> {
+  <span class="k">color</span>: <span class="s">#0d6b56</span>;
+  <span class="k">font-size</span>: <span class="s">32px</span>;
+}</pre>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Selector</h3><p><code>h1</code> — who we target</p></div>
+          <div class="card"><h3>Property</h3><p><code>color</code> — what we change</p></div>
+          <div class="card"><h3>Value</h3><p><code>#0d6b56</code> — the choice</p></div>
+        </div>
+        <p class="callout mt">Forget a semicolon and the next line may silently fail. Always close declarations.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Selectors</p>
+        <h2>Name the element, the group, or the one-off</h2>
+        <pre class="code mt"><span class="t">p</span> { <span class="k">color</span>: <span class="s">#5b677a</span>; }        <span class="c">/* all paragraphs */</span>
+<span class="t">.card</span> { <span class="k">padding</span>: <span class="s">20px</span>; }    <span class="c">/* class="card" */</span>
+<span class="t">#hero</span> { <span class="k">min-height</span>: <span class="s">240px</span>; } <span class="c">/* id="hero" */</span></pre>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Element</h3><p>Broad. Good for body, headings.</p></div>
+          <div class="card teal"><h3>Class</h3><p>Reusable. This is your daily tool.</p></div>
+          <div class="card"><h3>ID</h3><p>Unique. Use rarely in CSS.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Interactive question</p>
+        <div class="q">If both <code>p { color: navy }</code> and <code>.bio { color: teal }</code> match a paragraph, which color wins?</div>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Hint</h3><p>Classes are more specific than element names.</p></div>
+          <div class="card navy"><h3>Rule of thumb</h3><p>Prefer classes. Avoid <code>!important</code> as a beginner habit.</p></div>
+        </div>
+      </div>
+      <aside class="notes">Demo in DevTools: toggle classes. Mention cascade = last equal-specificity rule wins, plus source order.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Colors</p>
+        <h2>Name it, number it, or mix it</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Names</h3><pre class="code" style="margin-top:10px"><span class="k">color</span>: <span class="s">teal</span>;</pre></div>
+          <div class="card"><h3>Hex</h3><pre class="code" style="margin-top:10px"><span class="k">color</span>: <span class="s">#0d6b56</span>;</pre></div>
+          <div class="card"><h3>RGB / RGBA</h3><pre class="code" style="margin-top:10px"><span class="k">color</span>: <span class="s">rgb(13, 107, 86)</span>;</pre></div>
+        </div>
+        <p class="lede mt">Pick a small palette: ink, muted, accent, background. Do not invent a new color for every heading.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Backgrounds</p>
+        <h2>Fill the box behind the content</h2>
+        <pre class="code mt"><span class="t">.hero</span> {
+  <span class="k">background-color</span>: <span class="s">#1c2740</span>;
+  <span class="k">background-image</span>: <span class="s">url("beans.jpg")</span>;
+  <span class="k">background-size</span>: <span class="s">cover</span>;
+  <span class="k">background-position</span>: <span class="s">center</span>;
+}</pre>
+        <p class="callout mt">If text sits on a photo, darken the image or add a solid overlay. Contrast is accessibility, not decoration.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Fonts</p>
+        <h2>Type is 90% of a beginner’s “design”</h2>
+        <pre class="code mt"><span class="t">body</span> {
+  <span class="k">font-family</span>: <span class="s">"Figtree", sans-serif</span>;
+  <span class="k">font-size</span>: <span class="s">18px</span>;
+  <span class="k">font-weight</span>: <span class="s">400</span>;
+  <span class="k">line-height</span>: <span class="s">1.5</span>;
+}</pre>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Why</h3><p>A readable body font + one heading font feels like a brand.</p></div>
+          <div class="card"><h3>How</h3><p>Link Google Fonts in <code>head</code>, then name the family in CSS.</p></div>
+        </div>
+      </div>
+      <aside class="notes">Live-add Figtree like this deck. Warn: system fonts work offline; Google Fonts need network.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Text styling</p>
+        <h2>Guide the eye without shouting</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <pre class="code"><span class="t">h1</span> { <span class="k">letter-spacing</span>: <span class="s">-0.03em</span>; }
+<span class="t">.lede</span> { <span class="k">text-align</span>: <span class="s">left</span>; }
+<span class="t">a</span> { <span class="k">text-decoration</span>: <span class="s">none</span>; }
+<span class="t">.muted</span> { <span class="k">text-transform</span>: <span class="s">none</span>; }</pre>
+          </div>
+          <div class="card navy">
+            <h3>Real world</h3>
+            <p>Café tagline: slightly larger, muted color, extra line-height. Price: bold. Legal text: smaller.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Instructor live coding</p>
+        <h2>First stylesheet on Amina’s profile</h2>
+        <ol class="clean mt">
+          <li>Create <code>styles.css</code> next to <code>index.html</code></li>
+          <li>Link it in <code>head</code></li>
+          <li>Set body font, background, and text color</li>
+          <li>Style <code>h1</code> and a class <code>.role</code></li>
+          <li>Refresh after every property</li>
+        </ol>
+        <p class="callout mt">Instructor types. Students type along. If nothing changes, check the file name and the link href.</p>
+      </div>
+      <aside class="notes">Keep the HTML from Day 1. Do not rewrite structure. Goal: students feel CSS as a layer, not a new page.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Live coding target</p>
+        <pre class="code mt"><span class="t">body</span> {
+  <span class="k">font-family</span>: <span class="s">system-ui, sans-serif</span>;
+  <span class="k">background</span>: <span class="s">#f4f1ea</span>;
+  <span class="k">color</span>: <span class="s">#172033</span>;
+}
+<span class="t">h1</span> { <span class="k">color</span>: <span class="s">#0d6b56</span>; }
+<span class="t">.role</span> { <span class="k">color</span>: <span class="s">#5b677a</span>; }</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #1 · 8 minutes</p>
+        <div class="practice">
+          <h2>Give your profile a color system</h2>
+          <ul class="clean">
+            <li>Link <code>styles.css</code></li>
+            <li>Choose a background, text color, and accent for <code>h1</code></li>
+            <li>Add a class to your bio paragraph and change its color</li>
+            <li>Remove underline from links; keep a hover color if you know <code>:hover</code></li>
+          </ul>
+          <p class="mt">What happens if two classes on the same element set different colors? Try it.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Problem</p>
+        <h2>Elements are boxes. Spacing fights feel “random” until you see the model.</h2>
+        <p class="lede">Margin, padding, border, and content width are not decoration. They are the geometry of the page.</p>
+        <div class="q mt">If a card feels cramped, should you grow margin or padding first?</div>
+      </div>
+      <aside class="notes">Let them guess. Reveal next: padding = inner air; margin = space between boxes.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Box model</p>
+        <h2>Every element is a rectangle</h2>
+        <div class="flow mt">
+          <div class="node">Margin</div><span class="arrow">→</span>
+          <div class="node">Border</div><span class="arrow">→</span>
+          <div class="node">Padding</div><span class="arrow">→</span>
+          <div class="node">Content</div>
+        </div>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>What</h3><p>How the browser sizes and spaces a box.</p></div>
+          <div class="card"><h3>Why</h3><p>So cards, buttons, and photos align predictably.</p></div>
+          <div class="card teal"><h3>How</h3><p>Inspect an element. DevTools draws the four layers.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Margin</p>
+        <h2>Space <em>outside</em> the border — between neighbors</h2>
+        <pre class="code mt"><span class="t">.card</span> {
+  <span class="k">margin-top</span>: <span class="s">24px</span>;
+  <span class="k">margin</span>: <span class="s">0 auto 32px</span>; <span class="c">/* top | horizontal | bottom */</span>
+}</pre>
+        <p class="callout mt">Vertical margins can collapse. Two 20px margins stacked may become 20px, not 40px. That surprises everyone once.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Padding</p>
+        <h2>Space <em>inside</em> the border — around the content</h2>
+        <pre class="code mt"><span class="t">.card</span> {
+  <span class="k">padding</span>: <span class="s">20px</span>;
+  <span class="k">padding</span>: <span class="s">16px 24px</span>; <span class="c">/* vertical | horizontal */</span>
+}</pre>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Real world</h3><p>A profile card without padding glues the photo to the edge. Uncomfortable.</p></div>
+          <div class="card"><h3>Tip</h3><p>Buttons need padding more than huge font size.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Border</p>
+        <h2>The edge of the box — line, radius, or none</h2>
+        <pre class="code mt"><span class="t">.card</span> {
+  <span class="k">border</span>: <span class="s">1px solid #d8d2c6</span>;
+  <span class="k">border-radius</span>: <span class="s">16px</span>;
+}
+<span class="t">img</span> { <span class="k">border-radius</span>: <span class="s">50%</span>; } <span class="c">/* circular avatar */</span></pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Width and height</p>
+        <h2>Size the box — then decide what “100%” means</h2>
+        <pre class="code mt"><span class="t">.card</span> {
+  <span class="k">width</span>: <span class="s">380px</span>;
+  <span class="k">max-width</span>: <span class="s">100%</span>;
+  <span class="k">box-sizing</span>: <span class="s">border-box</span>;
+}
+<span class="t">img</span> { <span class="k">width</span>: <span class="s">120px</span>; <span class="k">height</span>: <span class="s">120px</span>; <span class="k">object-fit</span>: <span class="s">cover</span>; }</pre>
+        <p class="callout mt"><code>border-box</code> includes padding and border in the width. Set it on <code>*</code> early. You will thank yourself.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Interactive question</p>
+        <div class="q">What is the difference between margin and padding?</div>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Margin</h3><p>Pushes other elements away. Background does not fill it.</p></div>
+          <div class="card teal"><h3>Padding</h3><p>Grows the clickable/colored area. Background does fill it.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Display</p>
+        <h2>How the box participates in the page flow</h2>
+        <table class="compare mt">
+          <tr><th>Value</th><th>Behavior</th><th>Example</th></tr>
+          <tr><td><code>block</code></td><td>Full row, stacked</td><td><code>div</code>, <code>p</code>, <code>h1</code></td></tr>
+          <tr><td><code>inline</code></td><td>Sits in a line; width/height ignored</td><td><code>span</code>, <code>a</code></td></tr>
+          <tr><td><code>inline-block</code></td><td>In a line, but can size</td><td>tags, small buttons</td></tr>
+          <tr><td><code>none</code></td><td>Removed from layout</td><td>hide a banner</td></tr>
+        </table>
+        <p class="mt muted">Tomorrow we add <code>flex</code> and <code>grid</code>. Today: know these four.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Position</p>
+        <h2>Most of the time, stay in normal flow</h2>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <ul class="clean">
+              <li><code>static</code> — default</li>
+              <li><code>relative</code> — nudge; also an anchor</li>
+              <li><code>absolute</code> — taken out; relative to nearest positioned ancestor</li>
+              <li><code>fixed</code> — sticks to the viewport</li>
+            </ul>
+          </div>
+          <div class="card amber">
+            <h3>Beginner trap</h3>
+            <p>Do not <code>position: absolute</code> every box to “make layout”. That is how pages shatter on a phone.</p>
+          </div>
+        </div>
+      </div>
+      <aside class="notes">Demo a small badge on an avatar with relative parent + absolute child. Then stop. Layout systems come Day 3.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Units</p>
+        <h2>Pixels are easy. Relative units scale.</h2>
+        <div class="grid grid-4 mt">
+          <div class="card"><h3>px</h3><p>Fixed. Borders, tiny offsets.</p></div>
+          <div class="card"><h3>%</h3><p>Of the parent. Widths.</p></div>
+          <div class="card"><h3>rem</h3><p>Of root font size. Type and spacing.</p></div>
+          <div class="card"><h3>vw</h3><p>1% of viewport width. Use sparingly.</p></div>
+        </div>
+        <pre class="code mt"><span class="t">html</span> { <span class="k">font-size</span>: <span class="s">16px</span>; }
+<span class="t">h1</span> { <span class="k">font-size</span>: <span class="s">2rem</span>; } <span class="c">/* 32px if root is 16 */</span></pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Basic responsive</p>
+        <h2>Do not force a 380px card on a 360px phone</h2>
+        <pre class="code mt"><span class="t">.card</span> {
+  <span class="k">width</span>: <span class="s">380px</span>;
+  <span class="k">max-width</span>: <span class="s">100%</span>;
+}
+<span class="t">img</span> { <span class="k">max-width</span>: <span class="s">100%</span>; <span class="k">height</span>: <span class="s">auto</span>; }</pre>
+        <p class="lede mt">This is not full responsive layout yet. It is the minimum so nothing overflows. Media queries arrive tomorrow.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Instructor live coding</p>
+        <h2>Build the profile card box</h2>
+        <ol class="clean mt">
+          <li>Wrap the profile in <code>&lt;article class="card"&gt;</code></li>
+          <li><code>max-width</code>, center with <code>margin: 40px auto</code></li>
+          <li>Padding, border, radius, background white</li>
+          <li>Circle the photo; add a skill tag with padding</li>
+          <li>Resize the window — confirm <code>max-width: 100%</code></li>
+        </ol>
+      </div>
+      <aside class="notes">Talk out loud: “padding first, then border, then margin to the page.” Open DevTools box model panel.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Live coding target</p>
+        <pre class="code mt"><span class="t">.card</span> {
+  <span class="k">max-width</span>: <span class="s">420px</span>;
+  <span class="k">margin</span>: <span class="s">40px auto</span>;
+  <span class="k">padding</span>: <span class="s">24px</span>;
+  <span class="k">background</span>: <span class="s">#fffdf8</span>;
+  <span class="k">border</span>: <span class="s">1px solid #d8d2c6</span>;
+  <span class="k">border-radius</span>: <span class="s">22px</span>;
+}
+<span class="t">.tag</span> {
+  <span class="k">display</span>: <span class="s">inline-block</span>;
+  <span class="k">padding</span>: <span class="s">4px 10px</span>;
+  <span class="k">background</span>: <span class="s">#e4f3ee</span>;
+  <span class="k">color</span>: <span class="s">#0d6b56</span>;
+}</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #2 · 10 minutes</p>
+        <div class="practice">
+          <h2>Box-model your card</h2>
+          <ul class="clean">
+            <li>Add padding so text never touches the edge</li>
+            <li>Add a 1px border and radius</li>
+            <li>Give headings a bottom margin; lists a left padding</li>
+            <li>Make the photo a fixed size with <code>object-fit: cover</code></li>
+          </ul>
+          <p class="mt">Turn on DevTools. Click the card. Read the numbers. Do they match what you wrote?</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Student practice #3 · 6 minutes</p>
+        <div class="practice">
+          <h2>Display + units experiment</h2>
+          <ol class="clean">
+            <li>Style skill items as <code>inline-block</code> tags with padding</li>
+            <li>Set body font in <code>rem</code>, card width in <code>px</code> + <code>max-width: 100%</code></li>
+            <li>Temporarily set a paragraph to <code>display: none</code>. Refresh. Restore it.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project</p>
+        <h2>Style the Day 1 profile into a profile card</h2>
+        <p class="lede">Objective: one focused card that looks intentional on a laptop and does not overflow on a phone.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Must include</h3>
+            <ul class="clean">
+              <li>External CSS file</li>
+              <li>Color palette (bg, text, accent)</li>
+              <li>Readable font and heading hierarchy</li>
+              <li>Card: padding, border, radius</li>
+              <li>Avatar sizing</li>
+              <li>Styled links / button-like contact</li>
+            </ul>
+          </div>
+          <div class="card navy">
+            <h3>Folder structure</h3>
+            <pre class="code" style="margin-top:10px">day-02-profile-card/
+  index.html
+  styles.css
+  images/
+    photo.jpg</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Mini project steps</p>
+        <ol class="clean" style="font-size:22px">
+          <li>Copy (or keep) Day 1 HTML. Add classes where needed.</li>
+          <li>Link CSS. Reset with <code>box-sizing: border-box</code>.</li>
+          <li>Style the page background, then the card, then type, then the photo.</li>
+          <li>Style lists and the form inputs last.</li>
+          <li>Narrow the browser. Fix overflow with <code>max-width</code>.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Expected result</p>
+        <h2>A single centered card that feels designed</h2>
+        <div class="hero-panel">
+          <p class="small" style="opacity:.7">Not a full website yet — one strong component.</p>
+          <h3 style="color:#fff;margin-top:8px">Photo + name + role → bio → skill tags → contact</h3>
+          <p class="mt">A classmate should say “this looks like a product card”, not “this is default Times New Roman”.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment</p>
+        <h2>Styled Profile / Portfolio — HTML + CSS</h2>
+        <p><span class="tag">Beginner</span> &nbsp; Estimated time: 1–2 hours &nbsp; Difficulty: ★★☆</p>
+        <p class="mt"><b>Objective:</b> Practice selectors and the box model on a small portfolio section, not a copy-paste of the in-class card only.</p>
+        <div class="grid grid-2 mt">
+          <div class="card">
+            <h3>Requirements</h3>
+            <ul class="clean">
+              <li>Valid HTML + one <code>styles.css</code></li>
+              <li>Header with name, role, and accent color</li>
+              <li>About section with readable line-height</li>
+              <li>At least 3 skill tags (padding + radius)</li>
+              <li>One “project” block with border and padding</li>
+              <li>Styled contact form (labels, inputs, button)</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Expected features</h3>
+            <ul class="clean">
+              <li>Classes used more than IDs</li>
+              <li><code>box-sizing: border-box</code></li>
+              <li>Images never overflow</li>
+              <li>Consistent spacing (repeat 8px/16px/24px)</li>
+              <li>No inline styles</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Assignment extras</p>
+        <div class="grid grid-2 mt">
+          <div class="card amber">
+            <h3>Bonus</h3>
+            <ul class="clean">
+              <li>Google Font for headings</li>
+              <li>Hover state on the contact button</li>
+              <li>A circular avatar using <code>border-radius: 50%</code></li>
+            </ul>
+          </div>
+          <div class="card navy">
+            <h3>Submission</h3>
+            <p>Folder <code>day02-portfolio-yourname</code> with HTML, CSS, images. Bring it to Day 3 — we will lay it out with Flexbox and Grid.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Recap</p>
+        <h2>What we learned</h2>
+        <div class="grid grid-2 mt">
+          <div class="card"><h3>Job of CSS</h3><p>Presentation, separate from HTML meaning.</p></div>
+          <div class="card"><h3>Rules</h3><p>Selector + properties. Classes are the workhorse.</p></div>
+          <div class="card"><h3>Look</h3><p>Color, background, font, text.</p></div>
+          <div class="card"><h3>Geometry</h3><p>Box model, display, position, units, max-width.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Common mistakes</p>
+        <ul class="clean" style="font-size:22px">
+          <li>Styling with inline <code>style</code> everywhere — unmaintainable.</li>
+          <li>Confusing margin (outside) with padding (inside).</li>
+          <li>Setting width 400px with no <code>max-width: 100%</code>.</li>
+          <li>Using <code>position: absolute</code> to fake a layout.</li>
+          <li>Forgetting the CSS file path — “CSS is broken” is often a 404.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Key takeaways</p>
+        <ol class="clean" style="font-size:24px">
+          <li>HTML structures. CSS presents. Keep them apart.</li>
+          <li>Prefer classes. Keep selectors simple.</li>
+          <li>Every element is a box: margin, border, padding, content.</li>
+          <li><code>border-box</code> + <code>max-width: 100%</code> prevent early chaos.</li>
+          <li>Save → refresh → inspect. DevTools is part of CSS.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Quick quiz</p>
+        <div class="grid grid-2 mt">
+          <div class="q">1. Why not put all colors in HTML attributes?</div>
+          <div class="q">2. Margin vs padding — which one fills with background?</div>
+          <div class="q">3. Why is a class usually better than an ID in CSS?</div>
+          <div class="q">4. What does <code>max-width: 100%</code> protect you from?</div>
+        </div>
+        <p class="mt muted">Pairs, 3 minutes, then share.</p>
+      </div>
+      <aside class="notes">1) Maintainability / cascade. 2) Padding. 3) Reuse + lower specificity. 4) Horizontal overflow on small screens.</aside>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Questions & discussion</p>
+        <h2>What still feels fuzzy?</h2>
+        <div class="grid grid-3 mt">
+          <div class="card"><h3>Prompt</h3><p>Explain the box model using a picture frame.</p></div>
+          <div class="card"><h3>Prompt</h3><p>When would <code>display: none</code> be the wrong way to hide something?</p></div>
+          <div class="card teal"><h3>Office minutes</h3><p>Stay after if your CSS file will not load.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <p class="eyebrow">Tomorrow · Day 3</p>
+        <h1 class="display">Flexbox, Grid, and pages that survive phones.</h1>
+        <p class="lede">We will arrange navbars, card rows, and a landing page. Bring today’s styled profile.</p>
+        <div class="card teal mt">
+          <h3>Bring to class</h3>
+          <p>Day 2 CSS. We will not throw it away — we will place those boxes in real layouts.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div class="footerbar">
+    <span id="counter"></span>
+    <div class="nav-btns">
+      <button class="nav" id="prev">Back</button>
+      <button class="nav primary" id="next">Next</button>
+    </div>
+  </div>
+</div>
+<script src="assets/slides.js"></script>
+</body>
+</html>
